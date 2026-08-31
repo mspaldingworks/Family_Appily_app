@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "source": "Transcribed from Arthur's HOW TO EARN / HOW TO SPEND TICKETS sheet and his REWARD CHART. Finley and Maryn versions are derived — see derivationNotes.",
+
+  "rewardChart": {
+    "note": "Structure is identical for all three children. Only the palette and mascot change.",
+    "rows": 5,
+    "slotsPerRow": 6,
+    "totalSlots": 30,
+    "milestoneSlotIndex": 6,
+    "milestoneMarker": "star-token",
+    "vault": {
+      "asset": "vault",
+      "position": "bottom-trailing",
+      "label": "VAULT"
+    },
+    "completionMark": "Same hand-drawn black check used on the weekly chore charts. Consistency across both artifacts matters — it is the same gesture to the child.",
+    "openQuestion": "Rows of 6 with a star in the last slot, against spend tiers of 5/10/15/20, suggests each row is 5 earned tickets plus 1 milestone star. Confirm before building: is the star slot a free bonus, a savings marker, or something that goes into the Vault?"
+  },
+
+  "spendTiers": {
+    "scope": "family",
+    "note": "Identical for all three children. Keep it that way unless you deliberately want a per-child economy — differing prices between siblings is the fastest way to make this feel unfair.",
+    "tiers": [
+      { "id": "shared-screen", "cost": 5, "label": "30 minutes of TV or collaborative videogame", "sfSymbol": "tv" },
+      { "id": "solo-screen", "cost": 10, "label": "30 minutes of individual screens", "sfSymbol": "ipad" },
+      { "id": "fast-food", "cost": 15, "label": "Fast food", "sfSymbol": "takeoutbag.and.cup.and.straw" },
+      { "id": "shopping-spree", "cost": 20, "label": "$20 shopping spree", "sfSymbol": "bag" }
+    ]
+  },
+
+  "earnCatalog": {
+    "shared": [
+      { "id": "eat-meals", "label": "Eating meals", "bonus": { "amount": 1, "condition": "Trying new food" }, "sfSymbol": "fork.knife" },
+      { "id": "hygiene", "label": "Brushing teeth, taking showers, hygiene", "sfSymbol": "shower" },
+      { "id": "polite-respectful", "label": "Polite and respectful to others", "sfSymbol": "hands.sparkles" },
+      { "id": "go-outside", "label": "Go Outside", "examples": ["Jump on Trampoline", "Monkey Bars", "Bike Riding", "Roller Skating"], "sfSymbol": "figure.outdoor.cycle" },
+      { "id": "complete-chores", "label": "Completing my chores", "sfSymbol": "checklist", "linksTo": "weekly chore chart + family rotation" }
+    ],
+
+    "perChild": {
+      "arthur": [
+        { "id": "proprioception-activity", "label": "Do a Proprioception Sensory Activity", "sfSymbol": "figure.flexibility", "private": true },
+        { "id": "therapeutic-listening", "label": "Complete the Therapeutic Listening Activity", "sfSymbol": "headphones", "private": true }
+      ],
+      "finley": [
+        { "id": "practice-dance", "label": "Practice Dance", "sfSymbol": "figure.dance", "derived": true }
+      ],
+      "maryn": [
+        { "id": "practice-dance", "label": "Practice Dance", "sfSymbol": "figure.dance", "derived": true }
+      ]
+    },
+
+    "privacyRule": "Any earn item flagged private:true is health-adjacent and must not appear in shared family views, exports, widgets on a shared device, or anywhere outside that child's own profile. It renders only for that child and for adults."
+  },
+
+  "derivationNotes": {
+    "whatWasActuallyPhotographed": "Only Arthur's earn/spend sheet and only Arthur's reward chart.",
+    "howFinleyAndMarynWereBuilt": [
+      "The five shared earn items are copied verbatim — they read as household-wide expectations, not Arthur-specific ones.",
+      "Spend tiers are copied verbatim and kept at family scope.",
+      "Reward chart structure (5 rows x 6, star at slot 6, vault) is copied exactly; only palette and mascot differ.",
+      "Practice Dance was pulled from Finley's and Maryn's existing weekly chore charts, where it already appears. It is the one earn item grounded in real data rather than invented.",
+      "Arthur's two therapy items were deliberately NOT copied to the other two children."
+    ],
+    "needsConfirmation": [
+      "Do Finley and Maryn have their own sensory, therapy, or individual-goal items that belong on their earn lists? I did not assume they do.",
+      "Should Practice Dance actually earn a ticket, or is it already covered under 'Completing my chores' since it sits on their chore charts?",
+      "The yellow '13' handwritten in the corner of Arthur's sheet — page number in a binder, or his current ticket count?"
+    ]
+  },
+
+  "chartPalettes": {
+    "note": "Row fill colors cycle down the reward chart. Row N uses cycle[(N-1) mod 3].",
+    "arthur": { "cycle": ["#E8B44A", "#4FA83D", "#9FCFC4"], "titleColor": "#2E7D4F", "mascot": "arthur-panda" },
+    "finley": { "cycle": ["#D9642E", "#F0B440", "#2E3A80"], "titleColor": "#3F6B2B", "mascot": "finley-pizza" },
+    "maryn":  { "cycle": ["#CE3626", "#9ED2EE", "#E08A5A"], "titleColor": "#CE3626", "mascot": "maryn-penguin" }
+  }
+}

@@ -277,7 +277,7 @@ That last item is the real acceptance criterion. The rest are how we get there.
 
 - [ ] Confirm the oldest device in the house meets the D5 minimums
 - [ ] **`rotationEpoch`** — the Sunday that WK1 began. Hard blocker for Phase 5; the app cannot compute the current rotation week without it.
-- [ ] **Backend decision.** A separate API repo exists (`Famiy_Appily_api`), which contradicts D4's no-server, CloudKit-only architecture. Given the health-adjacent items on the earn lists, this needs a deliberate answer before Phase 0, not a default.
+- [x] **Backend decision — resolved 2026-08-31.** D4 stands unchanged for all household data (chores, rotation, tickets): local SwiftData + CloudKit private database, no server. `Famiy_Appily_api`'s `api/` directory is a real Django service, but it is a deliberate, scoped exception for the new Job Search feature only (the adult user's own data, not a child's, with a genuine need for a server to receive n8n-pushed RSS postings). See `ARCHITECTURE_DECISION.md` in the API repo.
 - [ ] Whether Finley and Maryn have their own individual-goal earn items — Arthur's therapy items were deliberately not copied across
 - [ ] Answers to `openQuestions` in `family.json`, `derivationNotes.needsConfirmation` in `tickets.json`, and the Vault question in `tickets.json`
 - [ ] List of the calendars to aggregate and who owns each

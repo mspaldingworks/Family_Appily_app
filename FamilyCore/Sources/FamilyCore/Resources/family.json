@@ -1,0 +1,241 @@
+{
+  "schemaVersion": 1,
+  "source": "Transcribed from photographs of the three physical WEEKLY CHORES charts.",
+  "weekStartsOn": "sunday",
+  "children": [
+    {
+      "id": "finley",
+      "name": "Finley",
+      "motif": "pizza",
+      "avatars": {
+        "primary": "finley-pizza",
+        "alternate": "finley-pasta",
+        "alternationRule": "The physical chart alternates pizza slice and pasta bowl across the seven day cards. Alternate by day index so no two adjacent cards repeat."
+      },
+      "cardFrame": "open-book",
+      "decorations": {
+        "topCorners": "finley-cap",
+        "bottomCorners": "finley-hoodie"
+      },
+      "titleColorToken": "chartTitleGreen"
+    },
+    {
+      "id": "arthur",
+      "name": "Arthur",
+      "motif": "panda",
+      "avatars": {
+        "primary": "arthur-panda",
+        "alternate": null,
+        "alternationRule": null
+      },
+      "cardFrame": "bamboo-fence",
+      "decorations": {
+        "topCorners": "arthur-hat",
+        "bottomCorners": "arthur-bamboo"
+      },
+      "titleColorToken": "chartTitleGreen"
+    },
+    {
+      "id": "maryn",
+      "name": "Maryn",
+      "motif": "penguin",
+      "avatars": {
+        "primary": "maryn-penguin",
+        "alternate": null,
+        "alternationRule": null
+      },
+      "cardFrame": "held-sign",
+      "decorations": {
+        "topCorners": "maryn-flower",
+        "bottomCorners": "maryn-icecube"
+      },
+      "titleColorToken": "chartTitleRed"
+    }
+  ],
+  "chores": [
+    {
+      "id": "weekly-chore",
+      "type": "rotation-resolved",
+      "defaultLabel": "Weekly Chore",
+      "sfSymbol": "star.circle",
+      "note": "RESOLVED. This slot is filled by the FAMILY CHORE CHART rotation in data/rotation.json. Look up the current rotation week, find the chores assigned to this child, and render their real labels here. Do not ask an adult to type it in each week.",
+      "resolvesFrom": "rotation.json"
+    },
+    {
+      "id": "empty-dishwasher",
+      "type": "fixed",
+      "defaultLabel": "Empty Dishwasher",
+      "childLabels": {
+        "finley": "Empty Dishes"
+      },
+      "sfSymbol": "dishwasher",
+      "category": "kitchen"
+    },
+    {
+      "id": "help-load-dishes",
+      "type": "fixed",
+      "defaultLabel": "Help Load Dishes",
+      "sfSymbol": "dishwasher.fill",
+      "category": "kitchen"
+    },
+    {
+      "id": "tidy-belongings",
+      "type": "fixed",
+      "defaultLabel": "Pick Up Room",
+      "childLabels": {
+        "finley": "Pick Up Room",
+        "arthur": "Pick up Belongings",
+        "maryn": "Pick Up Toys"
+      },
+      "sfSymbol": "shippingbox",
+      "category": "tidying",
+      "note": "Same underlying task, worded differently on each child's chart. Merged to one ID with per-child display labels so the printed wording is preserved exactly. Split into three IDs if you consider these genuinely different jobs."
+    },
+    {
+      "id": "clean-room",
+      "type": "fixed",
+      "defaultLabel": "Clean Room",
+      "sfSymbol": "bed.double",
+      "category": "tidying"
+    },
+    {
+      "id": "put-away-clothes",
+      "type": "fixed",
+      "defaultLabel": "Put away Clothes",
+      "sfSymbol": "tshirt",
+      "category": "laundry"
+    },
+    {
+      "id": "fold-towels",
+      "type": "fixed",
+      "defaultLabel": "Fold Towels",
+      "sfSymbol": "square.stack.3d.up",
+      "category": "laundry"
+    },
+    {
+      "id": "start-laundry",
+      "type": "fixed",
+      "defaultLabel": "Start Laundry",
+      "sfSymbol": "washer",
+      "category": "laundry"
+    },
+    {
+      "id": "fold-put-away-laundry",
+      "type": "fixed",
+      "defaultLabel": "Fold & Put Away Laundry",
+      "sfSymbol": "washer.fill",
+      "category": "laundry"
+    },
+    {
+      "id": "clean-out-car",
+      "type": "fixed",
+      "defaultLabel": "Clean out Car",
+      "sfSymbol": "car",
+      "category": "outside"
+    },
+    {
+      "id": "practice-dance",
+      "type": "fixed",
+      "defaultLabel": "Practice Dance",
+      "sfSymbol": "figure.dance",
+      "category": "activity"
+    }
+  ],
+  "schedule": {
+    "finley": {
+      "sunday": [
+        "weekly-chore",
+        "practice-dance"
+      ],
+      "monday": [
+        "empty-dishwasher",
+        "help-load-dishes"
+      ],
+      "tuesday": [
+        "empty-dishwasher",
+        "tidy-belongings"
+      ],
+      "wednesday": [
+        "empty-dishwasher",
+        "practice-dance"
+      ],
+      "thursday": [
+        "empty-dishwasher",
+        "tidy-belongings"
+      ],
+      "friday": [
+        "empty-dishwasher",
+        "start-laundry"
+      ],
+      "saturday": [
+        "weekly-chore",
+        "fold-put-away-laundry"
+      ]
+    },
+    "arthur": {
+      "sunday": [
+        "weekly-chore"
+      ],
+      "monday": [
+        "empty-dishwasher",
+        "tidy-belongings"
+      ],
+      "tuesday": [
+        "empty-dishwasher",
+        "clean-out-car"
+      ],
+      "wednesday": [
+        "empty-dishwasher",
+        "clean-room"
+      ],
+      "thursday": [
+        "empty-dishwasher",
+        "put-away-clothes"
+      ],
+      "friday": [
+        "empty-dishwasher",
+        "tidy-belongings"
+      ],
+      "saturday": [
+        "weekly-chore",
+        "clean-room"
+      ]
+    },
+    "maryn": {
+      "sunday": [
+        "weekly-chore",
+        "practice-dance"
+      ],
+      "monday": [
+        "empty-dishwasher",
+        "tidy-belongings"
+      ],
+      "tuesday": [
+        "empty-dishwasher",
+        "clean-room"
+      ],
+      "wednesday": [
+        "empty-dishwasher",
+        "practice-dance"
+      ],
+      "thursday": [
+        "empty-dishwasher",
+        "tidy-belongings"
+      ],
+      "friday": [
+        "empty-dishwasher",
+        "fold-towels"
+      ],
+      "saturday": [
+        "weekly-chore",
+        "clean-room"
+      ]
+    }
+  },
+  "openQuestions": [
+    "Each child draws 2 of the 6 rotation chores per week and has exactly 2 'Weekly Chore' slots. Confirm that alignment is intentional.",
+    "All three children empty the dishwasher on the same five days. Is that a rotation in practice, or does everyone genuinely do it?",
+    "Arthur's Sunday has only one chore while the others have two. Intentional, or is a second one missing?",
+    "rotationEpoch in rotation.json must be set before build \u2014 see that file."
+  ]
+}

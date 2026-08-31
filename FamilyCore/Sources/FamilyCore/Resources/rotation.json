@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "source": "Transcribed from the FAMILY CHORE CHART (colored-dot rotation grid).",
+
+  "keyFinding": "The printed chart shows seven week columns, but it is really a 3-week rotation displayed 2⅓ times. Every row cycles Finley → Maryn → Arthur; rows differ only in where they start. WK7 is identical to WK1. The app should COMPUTE assignments from the formula below rather than storing a 7-column grid — that way the rotation runs forever instead of expiring after seven weeks.",
+
+  "cycle": ["finley", "maryn", "arthur"],
+
+  "formula": "assignee(chore, weekIndex) = cycle[(chore.offset + weekIndex) mod 3], where weekIndex is 0-based from rotationEpoch.",
+
+  "rotationEpoch": {
+    "value": null,
+    "note": "REQUIRED BEFORE BUILD. Set this to the Sunday that WK1 began. Without it the app cannot know which week the household is currently on. The photographed chart has a hand-drawn arrow over WK2, so at photo time the family was in week 2."
+  },
+
+  "siblingLegend": {
+    "finley": { "dotFill": "#1B4F9C", "name": "Blue" },
+    "arthur": { "dotFill": "#5CB85C", "name": "Green" },
+    "maryn":  { "dotFill": "#E04E2C", "name": "Orange" }
+  },
+
+  "chores": [
+    { "id": "collect-trash",    "label": "Collect Trash & Take Out",  "offset": 0, "sfSymbol": "trash" },
+    { "id": "wipe-sinks",       "label": "Wipe down sinks",           "offset": 2, "sfSymbol": "sink" },
+    { "id": "vacuum-living",    "label": "Vacuum Living Room",        "offset": 2, "sfSymbol": "wind" },
+    { "id": "sweep-kitchen",    "label": "Sweep Kitchen",             "offset": 1, "sfSymbol": "sparkles" },
+    { "id": "feed-cats-pm",     "label": "Feed Cats PM",              "offset": 0, "sfSymbol": "cat" },
+    { "id": "backyard-toys",    "label": "Pick up Toys in Backyard",  "offset": 1, "sfSymbol": "leaf" }
+  ],
+
+  "verification": {
+    "note": "Formula reproduces all 42 printed cells exactly. Spot-check against the photo before trusting it.",
+    "week1": { "collect-trash": "finley", "wipe-sinks": "arthur", "vacuum-living": "arthur", "sweep-kitchen": "maryn", "feed-cats-pm": "finley", "backyard-toys": "maryn" },
+    "week2": { "collect-trash": "maryn",  "wipe-sinks": "finley", "vacuum-living": "finley", "sweep-kitchen": "arthur", "feed-cats-pm": "maryn",  "backyard-toys": "arthur" },
+    "week3": { "collect-trash": "arthur", "wipe-sinks": "maryn",  "vacuum-living": "maryn",  "sweep-kitchen": "finley", "feed-cats-pm": "arthur", "backyard-toys": "finley" }
+  },
+
+  "relationshipToWeeklyChoreCharts": {
+    "finding": "This resolves the open question about the 'Weekly Chore' placeholder. Each child's personal WEEKLY CHORES chart has a 'Weekly Chore' slot on Sunday and Saturday. This rotation grid is what fills that slot.",
+    "implication": "Do NOT make 'Weekly Chore' a free-text field an adult types in each week. Resolve it automatically: look up the current rotation week, find every chore assigned to that child, and render it in their Sunday/Saturday slot with the real label. Zero weekly maintenance for the adults, which is most of the value of digitizing this.",
+    "confirmNeeded": "Each child draws 2 of the 6 rotation chores per week. Their chart shows 'Weekly Chore' in exactly 2 slots (Sunday and Saturday). That lines up perfectly — confirm it's intentional and not a coincidence."
+  }
+}

@@ -1,0 +1,62 @@
+name: FamilyAppily
+options:
+  bundleIdPrefix: com.mspaldingworks
+  deploymentTarget:
+    iOS: "17.0"
+
+packages:
+  FamilyCore:
+    path: FamilyCore
+  JobSearchCore:
+    path: JobSearchCore
+
+targets:
+  FamilyAppily:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: Platforms/iOS
+      - path: Features/Profiles
+      - path: Features/Chores
+      - path: Features/JobSearch
+    dependencies:
+      - package: FamilyCore
+      - package: JobSearchCore
+    info:
+      path: Platforms/iOS/Info.plist
+      properties:
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.mspaldingworks.FamilyAppily
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SWIFT_VERSION: "5.10"
+        CODE_SIGN_STYLE: Automatic
+    entitlements:
+      path: Platforms/iOS/FamilyAppily.entitlements
+      properties:
+        com.apple.developer.icloud-container-identifiers:
+          - iCloud.com.mspaldingworks.FamilyAppily
+        com.apple.developer.icloud-services:
+          - CloudKit
+
+schemes:
+  FamilyAppily:
+    build:
+      targets:
+        FamilyAppily: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      gatherCoverageData: false
