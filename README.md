@@ -20,8 +20,12 @@ Native SwiftUI family-management app for iPhone, iPad, Apple Watch, and Mac. Bri
 
 ## Current state
 
-Pre-Phase-0. Nothing has been built yet. See §11 of `CLAUDE.md` for the open blockers — most importantly `rotationEpoch` and the backend architecture decision.
+Phase 0 (foundation) and Phase 1 (profile picker, weekly chart, card frames, completion mark) are built, per `PHASE0_PROMPT.md`. `rotationEpoch` still needs to be set once by an adult in-app (there's a setup prompt for it) — see §11 of `CLAUDE.md` for the remaining open items.
+
+Also built out of sequence: **Job Search**, a new tab with its own scoped backend (see `ARCHITECTURE_DECISION.md` in the API repo) — applications board, RSS-sourced job feed, and identity/profile view, behind the same inline adult gate as other adult actions.
+
+Open the project with `FamilyAppily.xcodeproj`, or regenerate it from `project.yml` via `xcodegen generate` (`brew install xcodegen`) if you change the project structure.
 
 ## Build order
 
-Phases are defined in §9 of `CLAUDE.md`. Run them in order; each is a self-contained prompt for Claude Code. Do not skip ahead — later phases assume the data layer from earlier ones.
+Phases are defined in §9 of `CLAUDE.md`. Run them in order; each is a self-contained prompt for Claude Code. Do not skip ahead — later phases assume the data layer from earlier ones. Remaining: Phase 2/3 (calendar), Phase 5 (reward system UI), Phase 6's widgets, Phase 7 (Mac), Phase 8 (Watch), Phase 9 (cross-platform audit).
