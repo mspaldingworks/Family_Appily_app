@@ -1,0 +1,495 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Family Hub — asset preview</title><style>
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#F4F2EE;margin:0;padding:32px;color:#1F1F26}
+h1{font-size:21px;margin:0 0 6px} .sub{color:#6b6b70;font-size:14px;margin:0 0 26px;max-width:80ch;line-height:1.55}
+.chart{background:#fff;border-radius:16px;padding:20px 24px;margin-bottom:22px;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.ttl{font-size:27px;margin:0;letter-spacing:.5px;font-weight:800}
+.cap{font-size:12px;color:#6b6b70;margin:4px 0 16px} code{font-size:11px;background:#F0EFEB;padding:1px 4px;border-radius:3px}
+h3{font-size:11px;text-transform:uppercase;letter-spacing:1.1px;color:#8a8a90;margin:18px 0 8px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.day{display:flex;flex-direction:column;align-items:center} .av{margin-bottom:-12px;z-index:2}
+.frame{list-style:none;margin:0;padding:14px 8px 8px;border:2px solid;border-radius:8px;width:100%;box-sizing:border-box;min-height:64px;text-align:center;font-size:12px;line-height:1.35}
+.frame li{margin:3px 0} .rot{color:#5a5a60}
+.tag{display:inline-block;font-size:8.5px;letter-spacing:.6px;text-transform:uppercase;background:#EAE7E0;color:#6b6b70;border-radius:3px;padding:1px 4px;margin-left:4px;vertical-align:1px}
+.tag.priv{background:#FBE9E7;color:#B03318} .tag.drv{background:#E8F0FB;color:#1B4F9C}
+.dl{font-size:9.5px;font-weight:800;letter-spacing:1px;margin-top:5px}
+.cols{display:grid;grid-template-columns:auto 1fr;gap:32px;align-items:start}
+.crow{display:flex;gap:9px;margin-bottom:9px}
+.slot{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.vault{display:flex;align-items:center;gap:6px;justify-content:flex-end;font-weight:800;letter-spacing:1px;font-size:13px}
+.plain{margin:0;padding-left:17px;font-size:13px;line-height:1.75} .plain em{color:#6b6b70;font-size:12px}
+.tiers b{display:inline-block;min-width:22px}
+table{border-collapse:collapse;width:100%;font-size:12px} table th,table td{padding:5px 4px;text-align:center}
+.rl{text-align:left;font-weight:600;white-space:nowrap;padding-right:12px}
+.dot{display:inline-block;width:17px;height:17px;border-radius:50%} .dot.sm{width:11px;height:11px;vertical-align:-1px}
+.legend{font-size:12px;color:#4a4a50;margin-top:12px}
+</style></head><body>
+<h1>Family Hub — asset preview</h1>
+<p class="sub">Everything below is SVG and JSON. The rotation grid is <em>computed</em> from a 3-week formula. Each child's Sunday/Saturday "Weekly Chore" slot is auto-filled from that rotation — shown here for week 1. Layout is a stand-in; real SwiftUI layout is Phase 4.</p>
+<section class="chart wide">
+<h2 class="ttl" style="color:#3F3F46">FAMILY CHORE CHART</h2>
+<p class="cap">Computed from the 3-week cycle, not stored as a grid. WK7 repeats WK1 — the formula runs forever.</p>
+<table><tr><th></th><th>WK 1</th><th>WK 2</th><th>WK 3</th><th>WK 4</th><th>WK 5</th><th>WK 6</th><th>WK 7</th></tr><tr><th class="rl">Collect Trash & Take Out</th><td><span class="dot" style="background:#1B4F9C" title="finley"></span></td><td><span class="dot" style="background:#E04E2C" title="maryn"></span></td><td><span class="dot" style="background:#5CB85C" title="arthur"></span></td><td><span class="dot" style="background:#1B4F9C" title="finley"></span></td><td><span class="dot" style="background:#E04E2C" title="maryn"></span></td><td><span class="dot" style="background:#5CB85C" title="arthur"></span></td><td><span class="dot" style="background:#1B4F9C" title="finley"></span></td></tr><tr><th class="rl">Wipe down sinks</th><td><span class="dot" style="background:#5CB85C" title="arthur"></span></td><td><span class="dot" style="background:#1B4F9C" title="finley"></span></td><td><span class="dot" style="background:#E04E2C" title="maryn"></span></td><td><span class="dot" style="background:#5CB85C" title="arthur"></span></td><td><span class="dot" style="background:#1B4F9C" title="finley"></span></td><td><span class="dot" style="background:#E04E2C" title="maryn"></span></td><td><span class="dot" style="background:#5CB85C" title="arthur"></span></td></tr><tr><th class="rl">Vacuum Living Room</th><td><span class="dot" style="background:#5CB85C" title="arthur"></span></td><td><span class="dot" style="background:#1B4F9C" title="finley"></span></td><td><span class="dot" style="background:#E04E2C" title="maryn"></span></td><td><span class="dot" style="background:#5CB85C" title="arthur"></span></td><td><span class="dot" style="background:#1B4F9C" title="finley"></span></td><td><span class="dot" style="background:#E04E2C" title="maryn"></span></td><td><span class="dot" style="background:#5CB85C" title="arthur"></span></td></tr><tr><th class="rl">Sweep Kitchen</th><td><span class="dot" style="background:#E04E2C" title="maryn"></span></td><td><span class="dot" style="background:#5CB85C" title="arthur"></span></td><td><span class="dot" style="background:#1B4F9C" title="finley"></span></td><td><span class="dot" style="background:#E04E2C" title="maryn"></span></td><td><span class="dot" style="background:#5CB85C" title="arthur"></span></td><td><span class="dot" style="background:#1B4F9C" title="finley"></span></td><td><span class="dot" style="background:#E04E2C" title="maryn"></span></td></tr><tr><th class="rl">Feed Cats PM</th><td><span class="dot" style="background:#1B4F9C" title="finley"></span></td><td><span class="dot" style="background:#E04E2C" title="maryn"></span></td><td><span class="dot" style="background:#5CB85C" title="arthur"></span></td><td><span class="dot" style="background:#1B4F9C" title="finley"></span></td><td><span class="dot" style="background:#E04E2C" title="maryn"></span></td><td><span class="dot" style="background:#5CB85C" title="arthur"></span></td><td><span class="dot" style="background:#1B4F9C" title="finley"></span></td></tr><tr><th class="rl">Pick up Toys in Backyard</th><td><span class="dot" style="background:#E04E2C" title="maryn"></span></td><td><span class="dot" style="background:#5CB85C" title="arthur"></span></td><td><span class="dot" style="background:#1B4F9C" title="finley"></span></td><td><span class="dot" style="background:#E04E2C" title="maryn"></span></td><td><span class="dot" style="background:#5CB85C" title="arthur"></span></td><td><span class="dot" style="background:#1B4F9C" title="finley"></span></td><td><span class="dot" style="background:#E04E2C" title="maryn"></span></td></tr></table>
+<p class="legend"><span class="dot sm" style="background:#1B4F9C"></span> Finley &nbsp; <span class="dot sm" style="background:#5CB85C"></span> Arthur &nbsp; <span class="dot sm" style="background:#E04E2C"></span> Maryn</p></section><section class="chart">
+      <h2 class="ttl" style="color:#3F6B2B">FINLEY</h2>
+      <p class="cap">pizza &middot; open-book frame &middot; identity <span class="dot sm" style="background:#1B4F9C"></span> <code>#1B4F9C</code> fill / <code>#1B4F9C</code> text</p>
+      <h3>Weekly chores</h3>
+      <div class="grid"><div class="day"><div class="av"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="58" height="58" role="img" aria-label="Pizza slice">
+  <g id="finley-pizza">
+    <path d="M100 178L36 62c-4-7 0-14 8-14h112c8 0 12 7 8 14z" fill="#F0B440"/>
+    <path d="M44 48h112c8 0 12 7 8 14l-6 11H42l-6-11c-4-7 0-14 8-14z" fill="#D98A4E"/>
+    <circle cx="72" cy="104" r="13" fill="#C4372F"/>
+    <circle cx="128" cy="104" r="13" fill="#C4372F"/>
+    <circle cx="100" cy="148" r="11" fill="#C4372F"/>
+    <circle cx="82" cy="122" r="7.5" fill="#1F1F26"/>
+    <circle cx="118" cy="122" r="7.5" fill="#1F1F26"/>
+    <circle cx="84.5" cy="119.5" r="2.4" fill="#FFFFFF"/>
+    <circle cx="120.5" cy="119.5" r="2.4" fill="#FFFFFF"/>
+    <path d="M90 134c4 6 16 6 20 0" stroke="#1F1F26" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <ellipse cx="66" cy="132" rx="8" ry="5.5" fill="#E08A7E" opacity=".8"/>
+    <ellipse cx="134" cy="132" rx="8" ry="5.5" fill="#E08A7E" opacity=".8"/>
+  </g>
+</svg>
+</div>
+        <ul class="frame" style="border-color:#1B4F9C"><li class="rot">Collect Trash & Take Out / Feed Cats PM<span class="tag">rotation</span></li><li>Practice Dance</li></ul><div class="dl">SUNDAY</div></div><div class="day"><div class="av"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="58" height="58" role="img" aria-label="Bowl of pasta">
+  <g id="finley-pasta">
+    <path d="M34 96h132c0 42-30 72-66 72S34 138 34 96z" fill="#E9A83F"/>
+    <ellipse cx="100" cy="96" rx="66" ry="16" fill="#F2BE63"/>
+    <path d="M62 88c0-10 8-17 18-17s18 7 18 17" stroke="#E9A83F" stroke-width="11" fill="none" stroke-linecap="round"/>
+    <path d="M104 86c0-10 8-17 18-17s18 7 18 17" stroke="#E9A83F" stroke-width="11" fill="none" stroke-linecap="round"/>
+    <circle cx="82" cy="122" r="7.5" fill="#1F1F26"/>
+    <circle cx="118" cy="122" r="7.5" fill="#1F1F26"/>
+    <circle cx="84.5" cy="119.5" r="2.4" fill="#FFFFFF"/>
+    <circle cx="120.5" cy="119.5" r="2.4" fill="#FFFFFF"/>
+    <path d="M88 136c5 8 19 8 24 0" stroke="#1F1F26" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <ellipse cx="64" cy="130" rx="8" ry="5.5" fill="#D9736B" opacity=".75"/>
+    <ellipse cx="136" cy="130" rx="8" ry="5.5" fill="#D9736B" opacity=".75"/>
+  </g>
+</svg>
+</div>
+        <ul class="frame" style="border-color:#1B4F9C"><li>Empty Dishes</li><li>Help Load Dishes</li></ul><div class="dl">MONDAY</div></div><div class="day"><div class="av"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="58" height="58" role="img" aria-label="Pizza slice">
+  <g id="finley-pizza">
+    <path d="M100 178L36 62c-4-7 0-14 8-14h112c8 0 12 7 8 14z" fill="#F0B440"/>
+    <path d="M44 48h112c8 0 12 7 8 14l-6 11H42l-6-11c-4-7 0-14 8-14z" fill="#D98A4E"/>
+    <circle cx="72" cy="104" r="13" fill="#C4372F"/>
+    <circle cx="128" cy="104" r="13" fill="#C4372F"/>
+    <circle cx="100" cy="148" r="11" fill="#C4372F"/>
+    <circle cx="82" cy="122" r="7.5" fill="#1F1F26"/>
+    <circle cx="118" cy="122" r="7.5" fill="#1F1F26"/>
+    <circle cx="84.5" cy="119.5" r="2.4" fill="#FFFFFF"/>
+    <circle cx="120.5" cy="119.5" r="2.4" fill="#FFFFFF"/>
+    <path d="M90 134c4 6 16 6 20 0" stroke="#1F1F26" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <ellipse cx="66" cy="132" rx="8" ry="5.5" fill="#E08A7E" opacity=".8"/>
+    <ellipse cx="134" cy="132" rx="8" ry="5.5" fill="#E08A7E" opacity=".8"/>
+  </g>
+</svg>
+</div>
+        <ul class="frame" style="border-color:#1B4F9C"><li>Empty Dishes</li><li>Pick Up Room</li></ul><div class="dl">TUESDAY</div></div><div class="day"><div class="av"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="58" height="58" role="img" aria-label="Bowl of pasta">
+  <g id="finley-pasta">
+    <path d="M34 96h132c0 42-30 72-66 72S34 138 34 96z" fill="#E9A83F"/>
+    <ellipse cx="100" cy="96" rx="66" ry="16" fill="#F2BE63"/>
+    <path d="M62 88c0-10 8-17 18-17s18 7 18 17" stroke="#E9A83F" stroke-width="11" fill="none" stroke-linecap="round"/>
+    <path d="M104 86c0-10 8-17 18-17s18 7 18 17" stroke="#E9A83F" stroke-width="11" fill="none" stroke-linecap="round"/>
+    <circle cx="82" cy="122" r="7.5" fill="#1F1F26"/>
+    <circle cx="118" cy="122" r="7.5" fill="#1F1F26"/>
+    <circle cx="84.5" cy="119.5" r="2.4" fill="#FFFFFF"/>
+    <circle cx="120.5" cy="119.5" r="2.4" fill="#FFFFFF"/>
+    <path d="M88 136c5 8 19 8 24 0" stroke="#1F1F26" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <ellipse cx="64" cy="130" rx="8" ry="5.5" fill="#D9736B" opacity=".75"/>
+    <ellipse cx="136" cy="130" rx="8" ry="5.5" fill="#D9736B" opacity=".75"/>
+  </g>
+</svg>
+</div>
+        <ul class="frame" style="border-color:#1B4F9C"><li>Empty Dishes</li><li>Practice Dance</li></ul><div class="dl">WEDNESDAY</div></div><div class="day"><div class="av"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="58" height="58" role="img" aria-label="Pizza slice">
+  <g id="finley-pizza">
+    <path d="M100 178L36 62c-4-7 0-14 8-14h112c8 0 12 7 8 14z" fill="#F0B440"/>
+    <path d="M44 48h112c8 0 12 7 8 14l-6 11H42l-6-11c-4-7 0-14 8-14z" fill="#D98A4E"/>
+    <circle cx="72" cy="104" r="13" fill="#C4372F"/>
+    <circle cx="128" cy="104" r="13" fill="#C4372F"/>
+    <circle cx="100" cy="148" r="11" fill="#C4372F"/>
+    <circle cx="82" cy="122" r="7.5" fill="#1F1F26"/>
+    <circle cx="118" cy="122" r="7.5" fill="#1F1F26"/>
+    <circle cx="84.5" cy="119.5" r="2.4" fill="#FFFFFF"/>
+    <circle cx="120.5" cy="119.5" r="2.4" fill="#FFFFFF"/>
+    <path d="M90 134c4 6 16 6 20 0" stroke="#1F1F26" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <ellipse cx="66" cy="132" rx="8" ry="5.5" fill="#E08A7E" opacity=".8"/>
+    <ellipse cx="134" cy="132" rx="8" ry="5.5" fill="#E08A7E" opacity=".8"/>
+  </g>
+</svg>
+</div>
+        <ul class="frame" style="border-color:#1B4F9C"><li>Empty Dishes</li><li>Pick Up Room</li></ul><div class="dl">THURSDAY</div></div><div class="day"><div class="av"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="58" height="58" role="img" aria-label="Bowl of pasta">
+  <g id="finley-pasta">
+    <path d="M34 96h132c0 42-30 72-66 72S34 138 34 96z" fill="#E9A83F"/>
+    <ellipse cx="100" cy="96" rx="66" ry="16" fill="#F2BE63"/>
+    <path d="M62 88c0-10 8-17 18-17s18 7 18 17" stroke="#E9A83F" stroke-width="11" fill="none" stroke-linecap="round"/>
+    <path d="M104 86c0-10 8-17 18-17s18 7 18 17" stroke="#E9A83F" stroke-width="11" fill="none" stroke-linecap="round"/>
+    <circle cx="82" cy="122" r="7.5" fill="#1F1F26"/>
+    <circle cx="118" cy="122" r="7.5" fill="#1F1F26"/>
+    <circle cx="84.5" cy="119.5" r="2.4" fill="#FFFFFF"/>
+    <circle cx="120.5" cy="119.5" r="2.4" fill="#FFFFFF"/>
+    <path d="M88 136c5 8 19 8 24 0" stroke="#1F1F26" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <ellipse cx="64" cy="130" rx="8" ry="5.5" fill="#D9736B" opacity=".75"/>
+    <ellipse cx="136" cy="130" rx="8" ry="5.5" fill="#D9736B" opacity=".75"/>
+  </g>
+</svg>
+</div>
+        <ul class="frame" style="border-color:#1B4F9C"><li>Empty Dishes</li><li>Start Laundry</li></ul><div class="dl">FRIDAY</div></div><div class="day"><div class="av"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="58" height="58" role="img" aria-label="Pizza slice">
+  <g id="finley-pizza">
+    <path d="M100 178L36 62c-4-7 0-14 8-14h112c8 0 12 7 8 14z" fill="#F0B440"/>
+    <path d="M44 48h112c8 0 12 7 8 14l-6 11H42l-6-11c-4-7 0-14 8-14z" fill="#D98A4E"/>
+    <circle cx="72" cy="104" r="13" fill="#C4372F"/>
+    <circle cx="128" cy="104" r="13" fill="#C4372F"/>
+    <circle cx="100" cy="148" r="11" fill="#C4372F"/>
+    <circle cx="82" cy="122" r="7.5" fill="#1F1F26"/>
+    <circle cx="118" cy="122" r="7.5" fill="#1F1F26"/>
+    <circle cx="84.5" cy="119.5" r="2.4" fill="#FFFFFF"/>
+    <circle cx="120.5" cy="119.5" r="2.4" fill="#FFFFFF"/>
+    <path d="M90 134c4 6 16 6 20 0" stroke="#1F1F26" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <ellipse cx="66" cy="132" rx="8" ry="5.5" fill="#E08A7E" opacity=".8"/>
+    <ellipse cx="134" cy="132" rx="8" ry="5.5" fill="#E08A7E" opacity=".8"/>
+  </g>
+</svg>
+</div>
+        <ul class="frame" style="border-color:#1B4F9C"><li class="rot">Collect Trash & Take Out / Feed Cats PM<span class="tag">rotation</span></li><li>Fold & Put Away Laundry</li></ul><div class="dl">SATURDAY</div></div></div>
+      <div class="cols">
+        <div><h3>Reward chart</h3><div class="rchart"><div class="crow"><span class="slot" style="background:#D9642E"></span><span class="slot" style="background:#D9642E"></span><span class="slot" style="background:#D9642E"></span><span class="slot" style="background:#D9642E"></span><span class="slot" style="background:#D9642E"></span><span class="slot" style="background:#D9642E"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="22" height="22" role="presentation" aria-hidden="true">
+  <path id="star-token" d="M50 12l11.2 24.4 26.8 3.2-19.8 18.2 5.2 26.4L50 71.6 26.6 84.2l5.2-26.4L12 39.6l26.8-3.2z" fill="#FDF6E3" stroke="#E4D9B8" stroke-width="2.5"/>
+</svg>
+</span></div><div class="crow"><span class="slot" style="background:#F0B440"></span><span class="slot" style="background:#F0B440"></span><span class="slot" style="background:#F0B440"></span><span class="slot" style="background:#F0B440"></span><span class="slot" style="background:#F0B440"></span><span class="slot" style="background:#F0B440"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="22" height="22" role="presentation" aria-hidden="true">
+  <path id="star-token" d="M50 12l11.2 24.4 26.8 3.2-19.8 18.2 5.2 26.4L50 71.6 26.6 84.2l5.2-26.4L12 39.6l26.8-3.2z" fill="#FDF6E3" stroke="#E4D9B8" stroke-width="2.5"/>
+</svg>
+</span></div><div class="crow"><span class="slot" style="background:#2E3A80"></span><span class="slot" style="background:#2E3A80"></span><span class="slot" style="background:#2E3A80"></span><span class="slot" style="background:#2E3A80"></span><span class="slot" style="background:#2E3A80"></span><span class="slot" style="background:#2E3A80"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="22" height="22" role="presentation" aria-hidden="true">
+  <path id="star-token" d="M50 12l11.2 24.4 26.8 3.2-19.8 18.2 5.2 26.4L50 71.6 26.6 84.2l5.2-26.4L12 39.6l26.8-3.2z" fill="#FDF6E3" stroke="#E4D9B8" stroke-width="2.5"/>
+</svg>
+</span></div><div class="crow"><span class="slot" style="background:#D9642E"></span><span class="slot" style="background:#D9642E"></span><span class="slot" style="background:#D9642E"></span><span class="slot" style="background:#D9642E"></span><span class="slot" style="background:#D9642E"></span><span class="slot" style="background:#D9642E"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="22" height="22" role="presentation" aria-hidden="true">
+  <path id="star-token" d="M50 12l11.2 24.4 26.8 3.2-19.8 18.2 5.2 26.4L50 71.6 26.6 84.2l5.2-26.4L12 39.6l26.8-3.2z" fill="#FDF6E3" stroke="#E4D9B8" stroke-width="2.5"/>
+</svg>
+</span></div><div class="crow"><span class="slot" style="background:#F0B440"></span><span class="slot" style="background:#F0B440"></span><span class="slot" style="background:#F0B440"></span><span class="slot" style="background:#F0B440"></span><span class="slot" style="background:#F0B440"></span><span class="slot" style="background:#F0B440"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="22" height="22" role="presentation" aria-hidden="true">
+  <path id="star-token" d="M50 12l11.2 24.4 26.8 3.2-19.8 18.2 5.2 26.4L50 71.6 26.6 84.2l5.2-26.4L12 39.6l26.8-3.2z" fill="#FDF6E3" stroke="#E4D9B8" stroke-width="2.5"/>
+</svg>
+</span></div>
+          <div class="vault"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" width="96" height="77" role="img" aria-label="Vault">
+  <g id="vault">
+    <circle cx="118" cy="80" r="62" fill="none" stroke="#8A9099" stroke-width="12"/>
+    <circle cx="96" cy="80" r="58" fill="#6E747D"/>
+    <circle cx="96" cy="80" r="47" fill="#7D838C"/>
+    <g fill="#4F555D">
+      <circle cx="96" cy="30" r="4.5"/><circle cx="131" cy="45" r="4.5"/>
+      <circle cx="146" cy="80" r="4.5"/><circle cx="131" cy="115" r="4.5"/>
+      <circle cx="96" cy="130" r="4.5"/><circle cx="61" cy="115" r="4.5"/>
+      <circle cx="46" cy="80" r="4.5"/><circle cx="61" cy="45" r="4.5"/>
+    </g>
+    <circle cx="96" cy="80" r="17" fill="#575D65"/>
+    <rect x="92" y="46" width="8" height="68" rx="4" fill="#4F555D" transform="rotate(35 96 80)"/>
+    <rect x="92" y="46" width="8" height="68" rx="4" fill="#4F555D" transform="rotate(-55 96 80)"/>
+  </g>
+</svg>
+<span style="color:#3F6B2B">VAULT</span></div></div></div>
+        <div><h3>How to earn</h3><ul class="plain"><li>Eating meals <em>(+1 trying new food)</em></li><li>Brushing teeth, taking showers, hygiene</li><li>Polite and respectful to others</li><li>Go Outside</li><li>Completing my chores</li><li>Practice Dance <span class="tag drv">derived</span></li></ul>
+             <h3>How to spend</h3><ul class="plain tiers"><li><b>5</b> — 30 minutes of TV or collaborative videogame</li><li><b>10</b> — 30 minutes of individual screens</li><li><b>15</b> — Fast food</li><li><b>20</b> — $20 shopping spree</li></ul></div>
+      </div></section><section class="chart">
+      <h2 class="ttl" style="color:#2E7D4F">ARTHUR</h2>
+      <p class="cap">panda &middot; bamboo-fence frame &middot; identity <span class="dot sm" style="background:#5CB85C"></span> <code>#5CB85C</code> fill / <code>#3E7D36</code> text</p>
+      <h3>Weekly chores</h3>
+      <div class="grid"><div class="day"><div class="av"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="58" height="58" role="img" aria-label="Panda">
+  <g id="arthur-panda">
+    <circle cx="56" cy="54" r="24" fill="#1F1F26"/>
+    <circle cx="144" cy="54" r="24" fill="#1F1F26"/>
+    <circle cx="100" cy="104" r="64" fill="#FFFFFF"/>
+    <ellipse cx="74" cy="98" rx="20" ry="25" fill="#1F1F26" transform="rotate(-16 74 98)"/>
+    <ellipse cx="126" cy="98" rx="20" ry="25" fill="#1F1F26" transform="rotate(16 126 98)"/>
+    <circle cx="76" cy="97" r="9.5" fill="#FFFFFF"/>
+    <circle cx="124" cy="97" r="9.5" fill="#FFFFFF"/>
+    <circle cx="76" cy="99" r="5.2" fill="#1F1F26"/>
+    <circle cx="124" cy="99" r="5.2" fill="#1F1F26"/>
+    <path d="M100 122c-7 0-11 4-11 8s5 7 11 7 11-3 11-7-4-8-11-8z" fill="#1F1F26"/>
+    <path d="M100 137c-4 6-11 6-15 1M100 137c4 6 11 6 15 1" stroke="#1F1F26" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  </g>
+</svg>
+</div>
+        <ul class="frame" style="border-color:#5CB85C"><li class="rot">Wipe down sinks / Vacuum Living Room<span class="tag">rotation</span></li></ul><div class="dl">SUNDAY</div></div><div class="day"><div class="av"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="58" height="58" role="img" aria-label="Panda">
+  <g id="arthur-panda">
+    <circle cx="56" cy="54" r="24" fill="#1F1F26"/>
+    <circle cx="144" cy="54" r="24" fill="#1F1F26"/>
+    <circle cx="100" cy="104" r="64" fill="#FFFFFF"/>
+    <ellipse cx="74" cy="98" rx="20" ry="25" fill="#1F1F26" transform="rotate(-16 74 98)"/>
+    <ellipse cx="126" cy="98" rx="20" ry="25" fill="#1F1F26" transform="rotate(16 126 98)"/>
+    <circle cx="76" cy="97" r="9.5" fill="#FFFFFF"/>
+    <circle cx="124" cy="97" r="9.5" fill="#FFFFFF"/>
+    <circle cx="76" cy="99" r="5.2" fill="#1F1F26"/>
+    <circle cx="124" cy="99" r="5.2" fill="#1F1F26"/>
+    <path d="M100 122c-7 0-11 4-11 8s5 7 11 7 11-3 11-7-4-8-11-8z" fill="#1F1F26"/>
+    <path d="M100 137c-4 6-11 6-15 1M100 137c4 6 11 6 15 1" stroke="#1F1F26" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  </g>
+</svg>
+</div>
+        <ul class="frame" style="border-color:#5CB85C"><li>Empty Dishwasher</li><li>Pick up Belongings</li></ul><div class="dl">MONDAY</div></div><div class="day"><div class="av"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="58" height="58" role="img" aria-label="Panda">
+  <g id="arthur-panda">
+    <circle cx="56" cy="54" r="24" fill="#1F1F26"/>
+    <circle cx="144" cy="54" r="24" fill="#1F1F26"/>
+    <circle cx="100" cy="104" r="64" fill="#FFFFFF"/>
+    <ellipse cx="74" cy="98" rx="20" ry="25" fill="#1F1F26" transform="rotate(-16 74 98)"/>
+    <ellipse cx="126" cy="98" rx="20" ry="25" fill="#1F1F26" transform="rotate(16 126 98)"/>
+    <circle cx="76" cy="97" r="9.5" fill="#FFFFFF"/>
+    <circle cx="124" cy="97" r="9.5" fill="#FFFFFF"/>
+    <circle cx="76" cy="99" r="5.2" fill="#1F1F26"/>
+    <circle cx="124" cy="99" r="5.2" fill="#1F1F26"/>
+    <path d="M100 122c-7 0-11 4-11 8s5 7 11 7 11-3 11-7-4-8-11-8z" fill="#1F1F26"/>
+    <path d="M100 137c-4 6-11 6-15 1M100 137c4 6 11 6 15 1" stroke="#1F1F26" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  </g>
+</svg>
+</div>
+        <ul class="frame" style="border-color:#5CB85C"><li>Empty Dishwasher</li><li>Clean out Car</li></ul><div class="dl">TUESDAY</div></div><div class="day"><div class="av"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="58" height="58" role="img" aria-label="Panda">
+  <g id="arthur-panda">
+    <circle cx="56" cy="54" r="24" fill="#1F1F26"/>
+    <circle cx="144" cy="54" r="24" fill="#1F1F26"/>
+    <circle cx="100" cy="104" r="64" fill="#FFFFFF"/>
+    <ellipse cx="74" cy="98" rx="20" ry="25" fill="#1F1F26" transform="rotate(-16 74 98)"/>
+    <ellipse cx="126" cy="98" rx="20" ry="25" fill="#1F1F26" transform="rotate(16 126 98)"/>
+    <circle cx="76" cy="97" r="9.5" fill="#FFFFFF"/>
+    <circle cx="124" cy="97" r="9.5" fill="#FFFFFF"/>
+    <circle cx="76" cy="99" r="5.2" fill="#1F1F26"/>
+    <circle cx="124" cy="99" r="5.2" fill="#1F1F26"/>
+    <path d="M100 122c-7 0-11 4-11 8s5 7 11 7 11-3 11-7-4-8-11-8z" fill="#1F1F26"/>
+    <path d="M100 137c-4 6-11 6-15 1M100 137c4 6 11 6 15 1" stroke="#1F1F26" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  </g>
+</svg>
+</div>
+        <ul class="frame" style="border-color:#5CB85C"><li>Empty Dishwasher</li><li>Clean Room</li></ul><div class="dl">WEDNESDAY</div></div><div class="day"><div class="av"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="58" height="58" role="img" aria-label="Panda">
+  <g id="arthur-panda">
+    <circle cx="56" cy="54" r="24" fill="#1F1F26"/>
+    <circle cx="144" cy="54" r="24" fill="#1F1F26"/>
+    <circle cx="100" cy="104" r="64" fill="#FFFFFF"/>
+    <ellipse cx="74" cy="98" rx="20" ry="25" fill="#1F1F26" transform="rotate(-16 74 98)"/>
+    <ellipse cx="126" cy="98" rx="20" ry="25" fill="#1F1F26" transform="rotate(16 126 98)"/>
+    <circle cx="76" cy="97" r="9.5" fill="#FFFFFF"/>
+    <circle cx="124" cy="97" r="9.5" fill="#FFFFFF"/>
+    <circle cx="76" cy="99" r="5.2" fill="#1F1F26"/>
+    <circle cx="124" cy="99" r="5.2" fill="#1F1F26"/>
+    <path d="M100 122c-7 0-11 4-11 8s5 7 11 7 11-3 11-7-4-8-11-8z" fill="#1F1F26"/>
+    <path d="M100 137c-4 6-11 6-15 1M100 137c4 6 11 6 15 1" stroke="#1F1F26" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  </g>
+</svg>
+</div>
+        <ul class="frame" style="border-color:#5CB85C"><li>Empty Dishwasher</li><li>Put away Clothes</li></ul><div class="dl">THURSDAY</div></div><div class="day"><div class="av"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="58" height="58" role="img" aria-label="Panda">
+  <g id="arthur-panda">
+    <circle cx="56" cy="54" r="24" fill="#1F1F26"/>
+    <circle cx="144" cy="54" r="24" fill="#1F1F26"/>
+    <circle cx="100" cy="104" r="64" fill="#FFFFFF"/>
+    <ellipse cx="74" cy="98" rx="20" ry="25" fill="#1F1F26" transform="rotate(-16 74 98)"/>
+    <ellipse cx="126" cy="98" rx="20" ry="25" fill="#1F1F26" transform="rotate(16 126 98)"/>
+    <circle cx="76" cy="97" r="9.5" fill="#FFFFFF"/>
+    <circle cx="124" cy="97" r="9.5" fill="#FFFFFF"/>
+    <circle cx="76" cy="99" r="5.2" fill="#1F1F26"/>
+    <circle cx="124" cy="99" r="5.2" fill="#1F1F26"/>
+    <path d="M100 122c-7 0-11 4-11 8s5 7 11 7 11-3 11-7-4-8-11-8z" fill="#1F1F26"/>
+    <path d="M100 137c-4 6-11 6-15 1M100 137c4 6 11 6 15 1" stroke="#1F1F26" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  </g>
+</svg>
+</div>
+        <ul class="frame" style="border-color:#5CB85C"><li>Empty Dishwasher</li><li>Pick up Belongings</li></ul><div class="dl">FRIDAY</div></div><div class="day"><div class="av"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="58" height="58" role="img" aria-label="Panda">
+  <g id="arthur-panda">
+    <circle cx="56" cy="54" r="24" fill="#1F1F26"/>
+    <circle cx="144" cy="54" r="24" fill="#1F1F26"/>
+    <circle cx="100" cy="104" r="64" fill="#FFFFFF"/>
+    <ellipse cx="74" cy="98" rx="20" ry="25" fill="#1F1F26" transform="rotate(-16 74 98)"/>
+    <ellipse cx="126" cy="98" rx="20" ry="25" fill="#1F1F26" transform="rotate(16 126 98)"/>
+    <circle cx="76" cy="97" r="9.5" fill="#FFFFFF"/>
+    <circle cx="124" cy="97" r="9.5" fill="#FFFFFF"/>
+    <circle cx="76" cy="99" r="5.2" fill="#1F1F26"/>
+    <circle cx="124" cy="99" r="5.2" fill="#1F1F26"/>
+    <path d="M100 122c-7 0-11 4-11 8s5 7 11 7 11-3 11-7-4-8-11-8z" fill="#1F1F26"/>
+    <path d="M100 137c-4 6-11 6-15 1M100 137c4 6 11 6 15 1" stroke="#1F1F26" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  </g>
+</svg>
+</div>
+        <ul class="frame" style="border-color:#5CB85C"><li class="rot">Wipe down sinks / Vacuum Living Room<span class="tag">rotation</span></li><li>Clean Room</li></ul><div class="dl">SATURDAY</div></div></div>
+      <div class="cols">
+        <div><h3>Reward chart</h3><div class="rchart"><div class="crow"><span class="slot" style="background:#E8B44A"></span><span class="slot" style="background:#E8B44A"></span><span class="slot" style="background:#E8B44A"></span><span class="slot" style="background:#E8B44A"></span><span class="slot" style="background:#E8B44A"></span><span class="slot" style="background:#E8B44A"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="22" height="22" role="presentation" aria-hidden="true">
+  <path id="star-token" d="M50 12l11.2 24.4 26.8 3.2-19.8 18.2 5.2 26.4L50 71.6 26.6 84.2l5.2-26.4L12 39.6l26.8-3.2z" fill="#FDF6E3" stroke="#E4D9B8" stroke-width="2.5"/>
+</svg>
+</span></div><div class="crow"><span class="slot" style="background:#4FA83D"></span><span class="slot" style="background:#4FA83D"></span><span class="slot" style="background:#4FA83D"></span><span class="slot" style="background:#4FA83D"></span><span class="slot" style="background:#4FA83D"></span><span class="slot" style="background:#4FA83D"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="22" height="22" role="presentation" aria-hidden="true">
+  <path id="star-token" d="M50 12l11.2 24.4 26.8 3.2-19.8 18.2 5.2 26.4L50 71.6 26.6 84.2l5.2-26.4L12 39.6l26.8-3.2z" fill="#FDF6E3" stroke="#E4D9B8" stroke-width="2.5"/>
+</svg>
+</span></div><div class="crow"><span class="slot" style="background:#9FCFC4"></span><span class="slot" style="background:#9FCFC4"></span><span class="slot" style="background:#9FCFC4"></span><span class="slot" style="background:#9FCFC4"></span><span class="slot" style="background:#9FCFC4"></span><span class="slot" style="background:#9FCFC4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="22" height="22" role="presentation" aria-hidden="true">
+  <path id="star-token" d="M50 12l11.2 24.4 26.8 3.2-19.8 18.2 5.2 26.4L50 71.6 26.6 84.2l5.2-26.4L12 39.6l26.8-3.2z" fill="#FDF6E3" stroke="#E4D9B8" stroke-width="2.5"/>
+</svg>
+</span></div><div class="crow"><span class="slot" style="background:#E8B44A"></span><span class="slot" style="background:#E8B44A"></span><span class="slot" style="background:#E8B44A"></span><span class="slot" style="background:#E8B44A"></span><span class="slot" style="background:#E8B44A"></span><span class="slot" style="background:#E8B44A"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="22" height="22" role="presentation" aria-hidden="true">
+  <path id="star-token" d="M50 12l11.2 24.4 26.8 3.2-19.8 18.2 5.2 26.4L50 71.6 26.6 84.2l5.2-26.4L12 39.6l26.8-3.2z" fill="#FDF6E3" stroke="#E4D9B8" stroke-width="2.5"/>
+</svg>
+</span></div><div class="crow"><span class="slot" style="background:#4FA83D"></span><span class="slot" style="background:#4FA83D"></span><span class="slot" style="background:#4FA83D"></span><span class="slot" style="background:#4FA83D"></span><span class="slot" style="background:#4FA83D"></span><span class="slot" style="background:#4FA83D"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="22" height="22" role="presentation" aria-hidden="true">
+  <path id="star-token" d="M50 12l11.2 24.4 26.8 3.2-19.8 18.2 5.2 26.4L50 71.6 26.6 84.2l5.2-26.4L12 39.6l26.8-3.2z" fill="#FDF6E3" stroke="#E4D9B8" stroke-width="2.5"/>
+</svg>
+</span></div>
+          <div class="vault"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" width="96" height="77" role="img" aria-label="Vault">
+  <g id="vault">
+    <circle cx="118" cy="80" r="62" fill="none" stroke="#8A9099" stroke-width="12"/>
+    <circle cx="96" cy="80" r="58" fill="#6E747D"/>
+    <circle cx="96" cy="80" r="47" fill="#7D838C"/>
+    <g fill="#4F555D">
+      <circle cx="96" cy="30" r="4.5"/><circle cx="131" cy="45" r="4.5"/>
+      <circle cx="146" cy="80" r="4.5"/><circle cx="131" cy="115" r="4.5"/>
+      <circle cx="96" cy="130" r="4.5"/><circle cx="61" cy="115" r="4.5"/>
+      <circle cx="46" cy="80" r="4.5"/><circle cx="61" cy="45" r="4.5"/>
+    </g>
+    <circle cx="96" cy="80" r="17" fill="#575D65"/>
+    <rect x="92" y="46" width="8" height="68" rx="4" fill="#4F555D" transform="rotate(35 96 80)"/>
+    <rect x="92" y="46" width="8" height="68" rx="4" fill="#4F555D" transform="rotate(-55 96 80)"/>
+  </g>
+</svg>
+<span style="color:#2E7D4F">VAULT</span></div></div></div>
+        <div><h3>How to earn</h3><ul class="plain"><li>Eating meals <em>(+1 trying new food)</em></li><li>Brushing teeth, taking showers, hygiene</li><li>Polite and respectful to others</li><li>Go Outside</li><li>Completing my chores</li><li>Do a Proprioception Sensory Activity <span class="tag priv">private</span></li><li>Complete the Therapeutic Listening Activity <span class="tag priv">private</span></li></ul>
+             <h3>How to spend</h3><ul class="plain tiers"><li><b>5</b> — 30 minutes of TV or collaborative videogame</li><li><b>10</b> — 30 minutes of individual screens</li><li><b>15</b> — Fast food</li><li><b>20</b> — $20 shopping spree</li></ul></div>
+      </div></section><section class="chart">
+      <h2 class="ttl" style="color:#CE3626">MARYN</h2>
+      <p class="cap">penguin &middot; held-sign frame &middot; identity <span class="dot sm" style="background:#E04E2C"></span> <code>#E04E2C</code> fill / <code>#BF3A1E</code> text</p>
+      <h3>Weekly chores</h3>
+      <div class="grid"><div class="day"><div class="av"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="58" height="58" role="img" aria-label="Penguin">
+  <g id="maryn-penguin">
+    <ellipse cx="42" cy="118" rx="17" ry="34" fill="#1F1F26" transform="rotate(14 42 118)"/>
+    <ellipse cx="158" cy="118" rx="17" ry="34" fill="#1F1F26" transform="rotate(-14 158 118)"/>
+    <path d="M100 26c-38 0-62 28-62 66 0 44 26 76 62 76s62-32 62-76c0-38-24-66-62-66z" fill="#1F1F26"/>
+    <path d="M100 58c-25 0-40 20-40 48s16 54 40 54 40-26 40-54-15-48-40-48z" fill="#FFFFFF"/>
+    <circle cx="84" cy="92" r="7.5" fill="#1F1F26"/>
+    <circle cx="116" cy="92" r="7.5" fill="#1F1F26"/>
+    <circle cx="86.5" cy="89.5" r="2.4" fill="#FFFFFF"/>
+    <circle cx="118.5" cy="89.5" r="2.4" fill="#FFFFFF"/>
+    <ellipse cx="68" cy="106" rx="9" ry="6" fill="#F2A9A4"/>
+    <ellipse cx="132" cy="106" rx="9" ry="6" fill="#F2A9A4"/>
+    <path d="M100 102l-11 9a14 14 0 0 0 22 0z" fill="#E08A5A"/>
+  </g>
+</svg>
+</div>
+        <ul class="frame" style="border-color:#E04E2C"><li class="rot">Sweep Kitchen / Pick up Toys in Backyard<span class="tag">rotation</span></li><li>Practice Dance</li></ul><div class="dl">SUNDAY</div></div><div class="day"><div class="av"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="58" height="58" role="img" aria-label="Penguin">
+  <g id="maryn-penguin">
+    <ellipse cx="42" cy="118" rx="17" ry="34" fill="#1F1F26" transform="rotate(14 42 118)"/>
+    <ellipse cx="158" cy="118" rx="17" ry="34" fill="#1F1F26" transform="rotate(-14 158 118)"/>
+    <path d="M100 26c-38 0-62 28-62 66 0 44 26 76 62 76s62-32 62-76c0-38-24-66-62-66z" fill="#1F1F26"/>
+    <path d="M100 58c-25 0-40 20-40 48s16 54 40 54 40-26 40-54-15-48-40-48z" fill="#FFFFFF"/>
+    <circle cx="84" cy="92" r="7.5" fill="#1F1F26"/>
+    <circle cx="116" cy="92" r="7.5" fill="#1F1F26"/>
+    <circle cx="86.5" cy="89.5" r="2.4" fill="#FFFFFF"/>
+    <circle cx="118.5" cy="89.5" r="2.4" fill="#FFFFFF"/>
+    <ellipse cx="68" cy="106" rx="9" ry="6" fill="#F2A9A4"/>
+    <ellipse cx="132" cy="106" rx="9" ry="6" fill="#F2A9A4"/>
+    <path d="M100 102l-11 9a14 14 0 0 0 22 0z" fill="#E08A5A"/>
+  </g>
+</svg>
+</div>
+        <ul class="frame" style="border-color:#E04E2C"><li>Empty Dishwasher</li><li>Pick Up Toys</li></ul><div class="dl">MONDAY</div></div><div class="day"><div class="av"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="58" height="58" role="img" aria-label="Penguin">
+  <g id="maryn-penguin">
+    <ellipse cx="42" cy="118" rx="17" ry="34" fill="#1F1F26" transform="rotate(14 42 118)"/>
+    <ellipse cx="158" cy="118" rx="17" ry="34" fill="#1F1F26" transform="rotate(-14 158 118)"/>
+    <path d="M100 26c-38 0-62 28-62 66 0 44 26 76 62 76s62-32 62-76c0-38-24-66-62-66z" fill="#1F1F26"/>
+    <path d="M100 58c-25 0-40 20-40 48s16 54 40 54 40-26 40-54-15-48-40-48z" fill="#FFFFFF"/>
+    <circle cx="84" cy="92" r="7.5" fill="#1F1F26"/>
+    <circle cx="116" cy="92" r="7.5" fill="#1F1F26"/>
+    <circle cx="86.5" cy="89.5" r="2.4" fill="#FFFFFF"/>
+    <circle cx="118.5" cy="89.5" r="2.4" fill="#FFFFFF"/>
+    <ellipse cx="68" cy="106" rx="9" ry="6" fill="#F2A9A4"/>
+    <ellipse cx="132" cy="106" rx="9" ry="6" fill="#F2A9A4"/>
+    <path d="M100 102l-11 9a14 14 0 0 0 22 0z" fill="#E08A5A"/>
+  </g>
+</svg>
+</div>
+        <ul class="frame" style="border-color:#E04E2C"><li>Empty Dishwasher</li><li>Clean Room</li></ul><div class="dl">TUESDAY</div></div><div class="day"><div class="av"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="58" height="58" role="img" aria-label="Penguin">
+  <g id="maryn-penguin">
+    <ellipse cx="42" cy="118" rx="17" ry="34" fill="#1F1F26" transform="rotate(14 42 118)"/>
+    <ellipse cx="158" cy="118" rx="17" ry="34" fill="#1F1F26" transform="rotate(-14 158 118)"/>
+    <path d="M100 26c-38 0-62 28-62 66 0 44 26 76 62 76s62-32 62-76c0-38-24-66-62-66z" fill="#1F1F26"/>
+    <path d="M100 58c-25 0-40 20-40 48s16 54 40 54 40-26 40-54-15-48-40-48z" fill="#FFFFFF"/>
+    <circle cx="84" cy="92" r="7.5" fill="#1F1F26"/>
+    <circle cx="116" cy="92" r="7.5" fill="#1F1F26"/>
+    <circle cx="86.5" cy="89.5" r="2.4" fill="#FFFFFF"/>
+    <circle cx="118.5" cy="89.5" r="2.4" fill="#FFFFFF"/>
+    <ellipse cx="68" cy="106" rx="9" ry="6" fill="#F2A9A4"/>
+    <ellipse cx="132" cy="106" rx="9" ry="6" fill="#F2A9A4"/>
+    <path d="M100 102l-11 9a14 14 0 0 0 22 0z" fill="#E08A5A"/>
+  </g>
+</svg>
+</div>
+        <ul class="frame" style="border-color:#E04E2C"><li>Empty Dishwasher</li><li>Practice Dance</li></ul><div class="dl">WEDNESDAY</div></div><div class="day"><div class="av"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="58" height="58" role="img" aria-label="Penguin">
+  <g id="maryn-penguin">
+    <ellipse cx="42" cy="118" rx="17" ry="34" fill="#1F1F26" transform="rotate(14 42 118)"/>
+    <ellipse cx="158" cy="118" rx="17" ry="34" fill="#1F1F26" transform="rotate(-14 158 118)"/>
+    <path d="M100 26c-38 0-62 28-62 66 0 44 26 76 62 76s62-32 62-76c0-38-24-66-62-66z" fill="#1F1F26"/>
+    <path d="M100 58c-25 0-40 20-40 48s16 54 40 54 40-26 40-54-15-48-40-48z" fill="#FFFFFF"/>
+    <circle cx="84" cy="92" r="7.5" fill="#1F1F26"/>
+    <circle cx="116" cy="92" r="7.5" fill="#1F1F26"/>
+    <circle cx="86.5" cy="89.5" r="2.4" fill="#FFFFFF"/>
+    <circle cx="118.5" cy="89.5" r="2.4" fill="#FFFFFF"/>
+    <ellipse cx="68" cy="106" rx="9" ry="6" fill="#F2A9A4"/>
+    <ellipse cx="132" cy="106" rx="9" ry="6" fill="#F2A9A4"/>
+    <path d="M100 102l-11 9a14 14 0 0 0 22 0z" fill="#E08A5A"/>
+  </g>
+</svg>
+</div>
+        <ul class="frame" style="border-color:#E04E2C"><li>Empty Dishwasher</li><li>Pick Up Toys</li></ul><div class="dl">THURSDAY</div></div><div class="day"><div class="av"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="58" height="58" role="img" aria-label="Penguin">
+  <g id="maryn-penguin">
+    <ellipse cx="42" cy="118" rx="17" ry="34" fill="#1F1F26" transform="rotate(14 42 118)"/>
+    <ellipse cx="158" cy="118" rx="17" ry="34" fill="#1F1F26" transform="rotate(-14 158 118)"/>
+    <path d="M100 26c-38 0-62 28-62 66 0 44 26 76 62 76s62-32 62-76c0-38-24-66-62-66z" fill="#1F1F26"/>
+    <path d="M100 58c-25 0-40 20-40 48s16 54 40 54 40-26 40-54-15-48-40-48z" fill="#FFFFFF"/>
+    <circle cx="84" cy="92" r="7.5" fill="#1F1F26"/>
+    <circle cx="116" cy="92" r="7.5" fill="#1F1F26"/>
+    <circle cx="86.5" cy="89.5" r="2.4" fill="#FFFFFF"/>
+    <circle cx="118.5" cy="89.5" r="2.4" fill="#FFFFFF"/>
+    <ellipse cx="68" cy="106" rx="9" ry="6" fill="#F2A9A4"/>
+    <ellipse cx="132" cy="106" rx="9" ry="6" fill="#F2A9A4"/>
+    <path d="M100 102l-11 9a14 14 0 0 0 22 0z" fill="#E08A5A"/>
+  </g>
+</svg>
+</div>
+        <ul class="frame" style="border-color:#E04E2C"><li>Empty Dishwasher</li><li>Fold Towels</li></ul><div class="dl">FRIDAY</div></div><div class="day"><div class="av"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="58" height="58" role="img" aria-label="Penguin">
+  <g id="maryn-penguin">
+    <ellipse cx="42" cy="118" rx="17" ry="34" fill="#1F1F26" transform="rotate(14 42 118)"/>
+    <ellipse cx="158" cy="118" rx="17" ry="34" fill="#1F1F26" transform="rotate(-14 158 118)"/>
+    <path d="M100 26c-38 0-62 28-62 66 0 44 26 76 62 76s62-32 62-76c0-38-24-66-62-66z" fill="#1F1F26"/>
+    <path d="M100 58c-25 0-40 20-40 48s16 54 40 54 40-26 40-54-15-48-40-48z" fill="#FFFFFF"/>
+    <circle cx="84" cy="92" r="7.5" fill="#1F1F26"/>
+    <circle cx="116" cy="92" r="7.5" fill="#1F1F26"/>
+    <circle cx="86.5" cy="89.5" r="2.4" fill="#FFFFFF"/>
+    <circle cx="118.5" cy="89.5" r="2.4" fill="#FFFFFF"/>
+    <ellipse cx="68" cy="106" rx="9" ry="6" fill="#F2A9A4"/>
+    <ellipse cx="132" cy="106" rx="9" ry="6" fill="#F2A9A4"/>
+    <path d="M100 102l-11 9a14 14 0 0 0 22 0z" fill="#E08A5A"/>
+  </g>
+</svg>
+</div>
+        <ul class="frame" style="border-color:#E04E2C"><li class="rot">Sweep Kitchen / Pick up Toys in Backyard<span class="tag">rotation</span></li><li>Clean Room</li></ul><div class="dl">SATURDAY</div></div></div>
+      <div class="cols">
+        <div><h3>Reward chart</h3><div class="rchart"><div class="crow"><span class="slot" style="background:#CE3626"></span><span class="slot" style="background:#CE3626"></span><span class="slot" style="background:#CE3626"></span><span class="slot" style="background:#CE3626"></span><span class="slot" style="background:#CE3626"></span><span class="slot" style="background:#CE3626"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="22" height="22" role="presentation" aria-hidden="true">
+  <path id="star-token" d="M50 12l11.2 24.4 26.8 3.2-19.8 18.2 5.2 26.4L50 71.6 26.6 84.2l5.2-26.4L12 39.6l26.8-3.2z" fill="#FDF6E3" stroke="#E4D9B8" stroke-width="2.5"/>
+</svg>
+</span></div><div class="crow"><span class="slot" style="background:#9ED2EE"></span><span class="slot" style="background:#9ED2EE"></span><span class="slot" style="background:#9ED2EE"></span><span class="slot" style="background:#9ED2EE"></span><span class="slot" style="background:#9ED2EE"></span><span class="slot" style="background:#9ED2EE"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="22" height="22" role="presentation" aria-hidden="true">
+  <path id="star-token" d="M50 12l11.2 24.4 26.8 3.2-19.8 18.2 5.2 26.4L50 71.6 26.6 84.2l5.2-26.4L12 39.6l26.8-3.2z" fill="#FDF6E3" stroke="#E4D9B8" stroke-width="2.5"/>
+</svg>
+</span></div><div class="crow"><span class="slot" style="background:#E08A5A"></span><span class="slot" style="background:#E08A5A"></span><span class="slot" style="background:#E08A5A"></span><span class="slot" style="background:#E08A5A"></span><span class="slot" style="background:#E08A5A"></span><span class="slot" style="background:#E08A5A"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="22" height="22" role="presentation" aria-hidden="true">
+  <path id="star-token" d="M50 12l11.2 24.4 26.8 3.2-19.8 18.2 5.2 26.4L50 71.6 26.6 84.2l5.2-26.4L12 39.6l26.8-3.2z" fill="#FDF6E3" stroke="#E4D9B8" stroke-width="2.5"/>
+</svg>
+</span></div><div class="crow"><span class="slot" style="background:#CE3626"></span><span class="slot" style="background:#CE3626"></span><span class="slot" style="background:#CE3626"></span><span class="slot" style="background:#CE3626"></span><span class="slot" style="background:#CE3626"></span><span class="slot" style="background:#CE3626"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="22" height="22" role="presentation" aria-hidden="true">
+  <path id="star-token" d="M50 12l11.2 24.4 26.8 3.2-19.8 18.2 5.2 26.4L50 71.6 26.6 84.2l5.2-26.4L12 39.6l26.8-3.2z" fill="#FDF6E3" stroke="#E4D9B8" stroke-width="2.5"/>
+</svg>
+</span></div><div class="crow"><span class="slot" style="background:#9ED2EE"></span><span class="slot" style="background:#9ED2EE"></span><span class="slot" style="background:#9ED2EE"></span><span class="slot" style="background:#9ED2EE"></span><span class="slot" style="background:#9ED2EE"></span><span class="slot" style="background:#9ED2EE"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="22" height="22" role="presentation" aria-hidden="true">
+  <path id="star-token" d="M50 12l11.2 24.4 26.8 3.2-19.8 18.2 5.2 26.4L50 71.6 26.6 84.2l5.2-26.4L12 39.6l26.8-3.2z" fill="#FDF6E3" stroke="#E4D9B8" stroke-width="2.5"/>
+</svg>
+</span></div>
+          <div class="vault"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" width="96" height="77" role="img" aria-label="Vault">
+  <g id="vault">
+    <circle cx="118" cy="80" r="62" fill="none" stroke="#8A9099" stroke-width="12"/>
+    <circle cx="96" cy="80" r="58" fill="#6E747D"/>
+    <circle cx="96" cy="80" r="47" fill="#7D838C"/>
+    <g fill="#4F555D">
+      <circle cx="96" cy="30" r="4.5"/><circle cx="131" cy="45" r="4.5"/>
+      <circle cx="146" cy="80" r="4.5"/><circle cx="131" cy="115" r="4.5"/>
+      <circle cx="96" cy="130" r="4.5"/><circle cx="61" cy="115" r="4.5"/>
+      <circle cx="46" cy="80" r="4.5"/><circle cx="61" cy="45" r="4.5"/>
+    </g>
+    <circle cx="96" cy="80" r="17" fill="#575D65"/>
+    <rect x="92" y="46" width="8" height="68" rx="4" fill="#4F555D" transform="rotate(35 96 80)"/>
+    <rect x="92" y="46" width="8" height="68" rx="4" fill="#4F555D" transform="rotate(-55 96 80)"/>
+  </g>
+</svg>
+<span style="color:#CE3626">VAULT</span></div></div></div>
+        <div><h3>How to earn</h3><ul class="plain"><li>Eating meals <em>(+1 trying new food)</em></li><li>Brushing teeth, taking showers, hygiene</li><li>Polite and respectful to others</li><li>Go Outside</li><li>Completing my chores</li><li>Practice Dance <span class="tag drv">derived</span></li></ul>
+             <h3>How to spend</h3><ul class="plain tiers"><li><b>5</b> — 30 minutes of TV or collaborative videogame</li><li><b>10</b> — 30 minutes of individual screens</li><li><b>15</b> — Fast food</li><li><b>20</b> — $20 shopping spree</li></ul></div>
+      </div></section></body></html>
