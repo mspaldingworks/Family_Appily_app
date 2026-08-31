@@ -42,6 +42,7 @@ targets:
         TARGETED_DEVICE_FAMILY: "1,2"
         SWIFT_VERSION: "5.10"
         CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: MNR8M8K86K
     entitlements:
       path: Platforms/iOS/FamilyAppily.entitlements
       properties:

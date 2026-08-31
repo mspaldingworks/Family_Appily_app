@@ -174,6 +174,7 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					6EB7297C1A8246726D91EABB = {
+						DevelopmentTeam = MNR8M8K86K;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -363,6 +364,7 @@
 				CODE_SIGN_ENTITLEMENTS = Platforms/iOS/FamilyAppily.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = MNR8M8K86K;
 				INFOPLIST_FILE = Platforms/iOS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -383,6 +385,7 @@
 				CODE_SIGN_ENTITLEMENTS = Platforms/iOS/FamilyAppily.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = MNR8M8K86K;
 				INFOPLIST_FILE = Platforms/iOS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
