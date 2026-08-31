@@ -3,6 +3,7 @@ import SwiftUI
 
 struct ApplicationsBoardView: View {
     let client: JobSearchAPIClient
+    let onUnauthorized: () -> Void
 
     @State private var applications: [Application] = []
     @State private var companies: [Company] = []
@@ -28,7 +29,7 @@ struct ApplicationsBoardView: View {
                         }
                     }
                 }
-                .listStyle(.insetGrouped)
+                .listStyle(.inset)
             }
         }
         .overlay(alignment: .bottom) {
@@ -68,6 +69,8 @@ struct ApplicationsBoardView: View {
             applications = try await applicationsTask
             companies = try await companiesTask
             errorMessage = nil
+        } catch JobSearchAPIError.notAuthenticated {
+            onUnauthorized()
         } catch {
             errorMessage = "Couldn't load applications: \(error)"
         }
@@ -112,8 +115,10 @@ private struct AddApplicationView: View {
                 TextField("Company", text: $companyName)
                 TextField("Role title", text: $roleTitle)
                 TextField("Job URL (optional)", text: $jobURL)
+                    #if os(iOS)
                     .keyboardType(.URL)
                     .textInputAutocapitalization(.never)
+                    #endif
 
                 if let errorMessage {
                     Text(errorMessage).foregroundStyle(.red).font(.footnote)

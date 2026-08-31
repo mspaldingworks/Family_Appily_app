@@ -31,11 +31,11 @@ public struct JobSearchTabView: View {
 
                         switch selectedSection {
                         case .applications:
-                            ApplicationsBoardView(client: client)
+                            ApplicationsBoardView(client: client, onUnauthorized: signOut)
                         case .jobFeed:
-                            JobFeedView(client: client)
+                            JobFeedView(client: client, onUnauthorized: signOut)
                         case .identity:
-                            IdentityView(client: client)
+                            IdentityView(client: client, onUnauthorized: signOut)
                         }
                     }
                 } else {
@@ -51,32 +51,12 @@ public struct JobSearchTabView: View {
             client = JobSearchConfig.makeClient()
         }
     }
-}
 
-private struct JobSearchSetupView: View {
-    let onSave: (String) -> Void
-    @State private var token = ""
-
-    var body: some View {
-        VStack(spacing: 16) {
-            Image(systemName: "briefcase.fill")
-                .font(.system(size: 48))
-                .accessibilityHidden(true)
-            Text("Connect Job Search")
-                .font(.title2.weight(.semibold))
-            Text("Enter the API token generated for this device. This is a one-time setup, not an account.")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-            SecureField("API token", text: $token)
-                .textFieldStyle(.roundedBorder)
-                .frame(maxWidth: 320)
-            Button("Save") { onSave(token) }
-                .buttonStyle(.borderedProminent)
-                .frame(minHeight: 44)
-                .disabled(token.isEmpty)
-        }
-        .padding()
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    /// The stored token was rejected (wrong, revoked, or never valid) — clear
+    /// it and drop back to setup rather than getting stuck showing errors
+    /// forever with no way to fix it from within the app.
+    private func signOut() {
+        JobSearchKeychain.clearToken()
+        client = nil
     }
 }

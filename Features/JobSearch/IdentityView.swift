@@ -3,6 +3,7 @@ import SwiftUI
 
 struct IdentityView: View {
     let client: JobSearchAPIClient
+    let onUnauthorized: () -> Void
 
     @State private var skills: [Skill] = []
     @State private var links: [ProfileLink] = []
@@ -54,7 +55,7 @@ struct IdentityView: View {
                         }
                     }
                 }
-                .listStyle(.insetGrouped)
+                .listStyle(.inset)
             }
         }
         .overlay(alignment: .bottom) {
@@ -81,6 +82,8 @@ struct IdentityView: View {
             links = try await linksTask
             resumes = try await resumesTask
             errorMessage = nil
+        } catch JobSearchAPIError.notAuthenticated {
+            onUnauthorized()
         } catch {
             errorMessage = "Couldn't load identity data: \(error)"
         }

@@ -6,6 +6,7 @@ import SwiftUI
 /// exposed as a Django admin action — this is the native equivalent.
 struct JobFeedView: View {
     let client: JobSearchAPIClient
+    let onUnauthorized: () -> Void
 
     @State private var postings: [IngestedPosting] = []
     @State private var isLoading = false
@@ -30,7 +31,7 @@ struct JobFeedView: View {
                         onSave: { Task { await promote(posting) } }
                     )
                 }
-                .listStyle(.insetGrouped)
+                .listStyle(.inset)
             }
         }
         .overlay(alignment: .bottom) {
@@ -52,6 +53,8 @@ struct JobFeedView: View {
         do {
             postings = try await client.fetchIngestedPostings().filter { $0.status == .new }
             errorMessage = nil
+        } catch JobSearchAPIError.notAuthenticated {
+            onUnauthorized()
         } catch {
             errorMessage = "Couldn't load the job feed: \(error)"
         }
