@@ -83,8 +83,11 @@ public actor JobSearchAPIClient {
 
     // MARK: Ingestion (RSS job feed)
 
-    public func fetchIngestedPostings() async throws -> [IngestedPosting] {
-        try await request("api/ingestion/postings/")
+    /// Filtering server-side matters once the scrapers run daily — otherwise the
+    /// feed pulls every posting ever ingested just to show the new ones.
+    public func fetchIngestedPostings(status: IngestedPosting.Status? = nil) async throws -> [IngestedPosting] {
+        let query = status.map { [URLQueryItem(name: "status", value: $0.rawValue)] } ?? []
+        return try await request("api/ingestion/postings/", queryItems: query)
     }
 
     public func promotePosting(id: Int) async throws -> Application {
@@ -111,8 +114,23 @@ public actor JobSearchAPIClient {
 
     // MARK: Request plumbing
 
-    private func request<T: Decodable>(_ path: String, method: String = "GET", body: (some Encodable)? = Optional<Int>.none) async throws -> T {
-        var urlRequest = URLRequest(url: configuration.baseURL.appendingPathComponent(path))
+    private func request<T: Decodable>(
+        _ path: String,
+        method: String = "GET",
+        queryItems: [URLQueryItem] = [],
+        body: (some Encodable)? = Optional<Int>.none
+    ) async throws -> T {
+        // Query items go through URLComponents rather than being appended to the
+        // path — appendingPathComponent would percent-encode the "?" and produce
+        // a URL the API can't route.
+        let base = configuration.baseURL.appendingPathComponent(path)
+        var components = URLComponents(url: base, resolvingAgainstBaseURL: false)
+        if !queryItems.isEmpty {
+            components?.queryItems = queryItems
+        }
+        guard let url = components?.url else { throw JobSearchAPIError.transport }
+
+        var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = method
         urlRequest.setValue("Token \(configuration.token)", forHTTPHeaderField: "Authorization")
 

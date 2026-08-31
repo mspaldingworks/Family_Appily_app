@@ -51,7 +51,7 @@ struct JobFeedView: View {
         isLoading = true
         defer { isLoading = false }
         do {
-            postings = try await client.fetchIngestedPostings().filter { $0.status == .new }
+            postings = try await client.fetchIngestedPostings(status: .new)
             errorMessage = nil
         } catch JobSearchAPIError.notAuthenticated {
             onUnauthorized()

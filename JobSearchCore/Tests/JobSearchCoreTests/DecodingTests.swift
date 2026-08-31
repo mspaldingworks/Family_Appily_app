@@ -39,6 +39,22 @@ struct DecodingTests {
         #expect(application.appliedDate == nil)
     }
 
+    /// Guards the URL construction in `request(_:method:queryItems:body:)`.
+    /// Appending "?status=new" to the path instead of using URLComponents would
+    /// percent-encode the "?" into %3F and silently 404.
+    @Test func queryItemsProduceAValidURLRatherThanAnEncodedPath() throws {
+        let base = URL(string: "https://jobs.family-appily.com")!
+        var components = URLComponents(
+            url: base.appendingPathComponent("api/ingestion/postings/"),
+            resolvingAgainstBaseURL: false
+        )
+        components?.queryItems = [URLQueryItem(name: "status", value: "new")]
+        let url = try #require(components?.url)
+
+        #expect(url.absoluteString == "https://jobs.family-appily.com/api/ingestion/postings/?status=new")
+        #expect(!url.absoluteString.contains("%3F"))
+    }
+
     @Test func newApplicationEncodesToSnakeCase() throws {
         let encoder = JSONEncoder()
         encoder.keyEncodingStrategy = .convertToSnakeCase
