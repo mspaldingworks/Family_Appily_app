@@ -1,15 +1,18 @@
 import JobSearchCore
 import SwiftUI
 
-/// Root of the Job Search tab. No client until an adult has entered the API
-/// token once (Keychain-backed, no login flow) — see JobSearchConfig.
+/// Root of the Job Search tab. Opens straight to the Job Feed — there is no
+/// setup gate. The token is baked in at build time (see JobSearchConfig), and
+/// if it's ever missing or rejected the feed says so inline and offers to
+/// reconnect, rather than putting a screen in front of the jobs.
 public struct JobSearchTabView: View {
-    @State private var client: JobSearchAPIClient?
-    @State private var selectedSection = Section.applications
+    @State private var client = JobSearchConfig.makeClient()
+    @State private var selectedSection = Section.jobFeed
+    @State private var isConnecting = false
 
     enum Section: String, CaseIterable, Identifiable {
-        case applications = "Applications"
         case jobFeed = "Job Feed"
+        case applications = "Applications"
         case identity = "Identity"
         var id: String { rawValue }
     }
@@ -18,45 +21,48 @@ public struct JobSearchTabView: View {
 
     public var body: some View {
         NavigationStack {
-            Group {
-                if let client {
-                    VStack(spacing: 0) {
-                        Picker("Section", selection: $selectedSection) {
-                            ForEach(Section.allCases) { section in
-                                Text(section.rawValue).tag(section)
-                            }
-                        }
-                        .pickerStyle(.segmented)
-                        .padding()
+            VStack(spacing: 0) {
+                Picker("Section", selection: $selectedSection) {
+                    ForEach(Section.allCases) { section in
+                        Text(section.rawValue).tag(section)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .padding()
 
-                        switch selectedSection {
-                        case .applications:
-                            ApplicationsBoardView(client: client, onUnauthorized: signOut)
-                        case .jobFeed:
-                            JobFeedView(client: client, onUnauthorized: signOut)
-                        case .identity:
-                            IdentityView(client: client, onUnauthorized: signOut)
-                        }
-                    }
-                } else {
-                    JobSearchSetupView { token in
-                        JobSearchKeychain.saveToken(token)
-                        client = JobSearchConfig.makeClient()
-                    }
+                switch selectedSection {
+                case .jobFeed:
+                    JobFeedView(client: client, onUnauthorized: { isConnecting = true })
+                case .applications:
+                    ApplicationsBoardView(client: client, onUnauthorized: { isConnecting = true })
+                case .identity:
+                    IdentityView(client: client, onUnauthorized: { isConnecting = true })
                 }
             }
             .navigationTitle("Job Search")
+            .toolbar {
+                // Only surfaced when there's actually nothing to authenticate
+                // with; otherwise it's clutter on a screen meant for reading jobs.
+                if JobSearchConfig.resolvedToken == nil {
+                    ToolbarItem(placement: .primaryAction) {
+                        Button("Connect") { isConnecting = true }
+                    }
+                }
+            }
         }
-        .task {
-            client = JobSearchConfig.makeClient()
+        .sheet(isPresented: $isConnecting) {
+            NavigationStack {
+                JobSearchSetupView { token in
+                    JobSearchKeychain.saveToken(token)
+                    client = JobSearchConfig.makeClient()
+                    isConnecting = false
+                }
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") { isConnecting = false }
+                    }
+                }
+            }
         }
-    }
-
-    /// The stored token was rejected (wrong, revoked, or never valid) — clear
-    /// it and drop back to setup rather than getting stuck showing errors
-    /// forever with no way to fix it from within the app.
-    private func signOut() {
-        JobSearchKeychain.clearToken()
-        client = nil
     }
 }

@@ -42,6 +42,7 @@
 /* Begin PBXFileReference section */
 		051B7F80F038FB3DC6F9D0AC /* JobSearchMacRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobSearchMacRootView.swift; sourceTree = "<group>"; };
 		0A69B939AD964E1FECE5A7D0 /* FamilyRotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyRotationView.swift; sourceTree = "<group>"; };
+		2696045F11707479E0EEFBD5 /* Local.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Local.xcconfig; sourceTree = "<group>"; };
 		30759EC7E90F4913793D3555 /* FamilyAppilyJobSearchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyAppilyJobSearchApp.swift; sourceTree = "<group>"; };
 		38407E9052A132DE3F393ED6 /* MaterialsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialsView.swift; sourceTree = "<group>"; };
 		3B47836CD54B8ECDFA6923D5 /* FamilyAppily.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FamilyAppily.entitlements; sourceTree = "<group>"; };
@@ -129,6 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				6F27524961344C3BABB9519B /* Chores */,
+				D03B91C6B7BD47B12E697789 /* Family_Appily_app */,
 				AA8C9766A0BEFF0F4462E780 /* iOS */,
 				FA5A7C5DB95D32ED705476EA /* JobSearch */,
 				6D1132918D15029B0C7792BF /* macOS */,
@@ -167,6 +169,15 @@
 			);
 			name = iOS;
 			path = Platforms/iOS;
+			sourceTree = "<group>";
+		};
+		D03B91C6B7BD47B12E697789 /* Family_Appily_app */ = {
+			isa = PBXGroup;
+			children = (
+				2696045F11707479E0EEFBD5 /* Local.xcconfig */,
+			);
+			name = Family_Appily_app;
+			path = .;
 			sourceTree = "<group>";
 		};
 		FA5A7C5DB95D32ED705476EA /* JobSearch */ = {
@@ -335,6 +346,7 @@
 /* Begin XCBuildConfiguration section */
 		77DB99C153A487AFBB522585 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2696045F11707479E0EEFBD5 /* Local.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -391,6 +403,7 @@
 		};
 		8B99CE2242F9F2BFD3F21877 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2696045F11707479E0EEFBD5 /* Local.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;

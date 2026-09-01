@@ -68,15 +68,21 @@ enum JobSearchConfig {
 
     /// Keychain wins, so a token entered or re-entered in the app always beats
     /// whatever was compiled in.
-    static func makeClient() -> JobSearchAPIClient? {
+    static var resolvedToken: String? {
         let stored = JobSearchKeychain.loadToken()
-        let token = stored?.isEmpty == false ? stored : buildTimeToken
+        return stored?.isEmpty == false ? stored : buildTimeToken
+    }
+
+    /// Always returns a client, even with no token. The Job Feed is the whole
+    /// point of this tab and must open straight to the list — a missing token
+    /// is an error to show inside the feed, not a wall in front of it.
+    static func makeClient() -> JobSearchAPIClient {
         // Never logs the token itself — just which source won, which is the only
         // thing needed to diagnose "why is it asking me to connect again?".
+        let stored = JobSearchKeychain.loadToken()
         logger.debug("""
             token source: \(stored?.isEmpty == false ? "keychain" : (buildTimeToken != nil ? "build-time" : "none"), privacy: .public)
             """)
-        guard let token else { return nil }
-        return JobSearchAPIClient(configuration: .init(baseURL: baseURL, token: token))
+        return JobSearchAPIClient(configuration: .init(baseURL: baseURL, token: resolvedToken ?? ""))
     }
 }

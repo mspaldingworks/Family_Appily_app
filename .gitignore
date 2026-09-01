@@ -9,3 +9,6 @@ DerivedData/
 
 # OS
 .DS_Store
+
+# Local-only: bakes the Job Search API token into the build. Never commit.
+Local.xcconfig
