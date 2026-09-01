@@ -95,10 +95,14 @@ public actor JobSearchAPIClient {
     /// Tailored cover letter and resume for a posting. Cached server-side after
     /// the first call, so re-opening a posting doesn't re-run generation.
     public func generateMaterials(postingID: Int, refresh: Bool = false) async throws -> ApplicationMaterials {
+        // Generation is one long model call — well past URLSession's 60s
+        // default, which would surface as a transport error while the server is
+        // still working (and still being billed for it).
         try await request(
             "api/ingestion/postings/\(postingID)/materials/",
             method: "POST",
-            queryItems: refresh ? [URLQueryItem(name: "refresh", value: "1")] : []
+            queryItems: refresh ? [URLQueryItem(name: "refresh", value: "1")] : [],
+            timeout: 300
         )
     }
 
@@ -130,7 +134,8 @@ public actor JobSearchAPIClient {
         _ path: String,
         method: String = "GET",
         queryItems: [URLQueryItem] = [],
-        body: (some Encodable)? = Optional<Int>.none
+        body: (some Encodable)? = Optional<Int>.none,
+        timeout: TimeInterval? = nil
     ) async throws -> T {
         // Query items go through URLComponents rather than being appended to the
         // path — appendingPathComponent would percent-encode the "?" and produce
@@ -145,6 +150,7 @@ public actor JobSearchAPIClient {
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = method
         urlRequest.setValue("Token \(configuration.token)", forHTTPHeaderField: "Authorization")
+        if let timeout { urlRequest.timeoutInterval = timeout }
 
         if let body {
             urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
