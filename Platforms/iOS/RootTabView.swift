@@ -15,10 +15,13 @@ struct RootTabView: View {
             ProfilePickerView()
                 .tabItem { Label("Home", systemImage: "house.fill") }
 
-            AdultGated(reason: "Unlock Job Search") {
-                JobSearchTabView()
-            }
-            .tabItem { Label("Job Search", systemImage: "briefcase.fill") }
+            // Deliberately not behind the adult gate. This is her own job search
+            // on her own phone — the point is to open the app and see options at
+            // a glance, and a Face ID prompt every time defeats that. (AdultGate
+            // still exists for reward redemption in Phase 5, which is genuinely
+            // adult-only and lives on the shared iPad.)
+            JobSearchTabView()
+                .tabItem { Label("Job Search", systemImage: "briefcase.fill") }
         }
         .task {
             do {

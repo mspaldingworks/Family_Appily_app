@@ -27,6 +27,7 @@ targets:
     info:
       path: Platforms/iOS/Info.plist
       properties:
+        JobSearchAPIToken: $(JOB_SEARCH_API_TOKEN)
         UILaunchScreen: {}
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
@@ -64,6 +65,7 @@ targets:
     info:
       path: Platforms/macOS/Info.plist
       properties:
+        JobSearchAPIToken: $(JOB_SEARCH_API_TOKEN)
         LSUIElement: false
     settings:
       base:

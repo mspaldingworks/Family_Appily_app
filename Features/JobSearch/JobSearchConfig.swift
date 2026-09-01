@@ -50,9 +50,24 @@ enum JobSearchKeychain {
 enum JobSearchConfig {
     static let baseURL = URL(string: "https://jobs.family-appily.com")!
 
-    /// nil until an adult has entered the API token once in Settings.
+    /// A token baked in at build time via `JOB_SEARCH_API_TOKEN=...` on the
+    /// xcodebuild command line, so a fresh install just works instead of asking
+    /// for a 40-character paste on a phone keyboard. Nothing secret is stored in
+    /// the repo — without the build setting this is empty and the app falls back
+    /// to the manual setup screen.
+    private static var buildTimeToken: String? {
+        guard let token = Bundle.main.object(forInfoDictionaryKey: "JobSearchAPIToken") as? String,
+              !token.isEmpty,
+              !token.hasPrefix("$(") // unsubstituted placeholder
+        else { return nil }
+        return token
+    }
+
+    /// Keychain wins, so a token entered or re-entered in the app always beats
+    /// whatever was compiled in.
     static func makeClient() -> JobSearchAPIClient? {
-        guard let token = JobSearchKeychain.loadToken(), !token.isEmpty else { return nil }
+        let stored = JobSearchKeychain.loadToken()
+        guard let token = (stored?.isEmpty == false ? stored : buildTimeToken) else { return nil }
         return JobSearchAPIClient(configuration: .init(baseURL: baseURL, token: token))
     }
 }
