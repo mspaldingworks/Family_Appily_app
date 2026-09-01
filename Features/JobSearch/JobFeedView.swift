@@ -1,9 +1,9 @@
 import JobSearchCore
 import SwiftUI
 
-/// Postings pushed in by the n8n RSS-ingestion webhook, for triage. "Save to
-/// tracker" calls the promote endpoint, which the original web app only
-/// exposed as a Django admin action — this is the native equivalent.
+/// Postings pushed in by the Apify scrapers, ranked best-fit first by the
+/// server. "Save" promotes one into the tracker; "Apply" opens the employer's
+/// actual application form.
 struct JobFeedView: View {
     let client: JobSearchAPIClient
     let onUnauthorized: () -> Void
@@ -21,7 +21,7 @@ struct JobFeedView: View {
                 ContentUnavailableView(
                     "No postings yet",
                     systemImage: "tray",
-                    description: Text("RSS-sourced postings pushed in by your automation will show up here.")
+                    description: Text("Scraped postings will show up here, best match first.")
                 )
             } else {
                 List(postings) { posting in
@@ -77,28 +77,64 @@ private struct PostingRow: View {
     let isPromoting: Bool
     let onSave: () -> Void
 
-    var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(posting.title).font(.headline)
-                if !posting.companyName.isEmpty {
-                    Text(posting.companyName).font(.subheadline).foregroundStyle(.secondary)
-                }
-                Text(posting.source).font(.caption).foregroundStyle(.tertiary)
-            }
-            Spacer()
-            Button(action: onSave) {
-                if isPromoting {
-                    ProgressView()
-                } else {
-                    Text("Save")
-                }
-            }
-            .buttonStyle(.borderedProminent)
-            .frame(minWidth: 44, minHeight: 44)
-            .disabled(isPromoting)
-            .accessibilityLabel("Save \(posting.title) to tracker")
+    /// Green / amber / grey rather than a number alone, so the strength of a
+    /// match reads at a glance without parsing digits.
+    private var scoreColor: Color {
+        switch posting.score {
+        case 80...: return .green
+        case 55..<80: return .orange
+        default: return .secondary
         }
-        .padding(.vertical, 4)
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(alignment: .firstTextBaseline, spacing: 10) {
+                Text("\(posting.score)")
+                    .font(.headline.monospacedDigit())
+                    .foregroundStyle(scoreColor)
+                    .accessibilityLabel("Match score \(posting.score) out of 100")
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(posting.title).font(.headline)
+                    if !posting.companyName.isEmpty {
+                        Text(posting.companyName).font(.subheadline).foregroundStyle(.secondary)
+                    }
+                }
+            }
+
+            if !posting.scoreReasons.isEmpty {
+                Text(posting.scoreReasons.joined(separator: " · "))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            HStack(spacing: 10) {
+                if let link = posting.bestApplyLink {
+                    Link(destination: link) {
+                        Label("Apply", systemImage: "arrow.up.right.square")
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .frame(minHeight: 44)
+                }
+
+                Button(action: onSave) {
+                    if isPromoting {
+                        ProgressView()
+                    } else {
+                        Label("Save to tracker", systemImage: "tray.and.arrow.down")
+                    }
+                }
+                .buttonStyle(.bordered)
+                .frame(minHeight: 44)
+                .disabled(isPromoting)
+                .accessibilityLabel("Save \(posting.title) to tracker")
+
+                Spacer()
+            }
+        }
+        .padding(.vertical, 6)
+        .accessibilityElement(children: .contain)
     }
 }
