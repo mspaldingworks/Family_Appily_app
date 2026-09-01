@@ -12,6 +12,7 @@ struct JobFeedView: View {
     @State private var isLoading = false
     @State private var errorMessage: String?
     @State private var promotingID: Int?
+    @State private var materialsFor: IngestedPosting?
 
     var body: some View {
         Group {
@@ -28,7 +29,8 @@ struct JobFeedView: View {
                     PostingRow(
                         posting: posting,
                         isPromoting: promotingID == posting.id,
-                        onSave: { Task { await promote(posting) } }
+                        onSave: { Task { await promote(posting) } },
+                        onGenerate: { materialsFor = posting }
                     )
                 }
                 .listStyle(.inset)
@@ -45,6 +47,9 @@ struct JobFeedView: View {
         }
         .task { await load() }
         .refreshable { await load() }
+        .sheet(item: $materialsFor) { posting in
+            MaterialsView(client: client, posting: posting)
+        }
     }
 
     private func load() async {
@@ -73,9 +78,12 @@ struct JobFeedView: View {
 }
 
 private struct PostingRow: View {
+    @Environment(\.dynamicTypeSize) private var typeSize
+
     let posting: IngestedPosting
     let isPromoting: Bool
     let onSave: () -> Void
+    let onGenerate: () -> Void
 
     /// Green / amber / grey rather than a number alone, so the strength of a
     /// match reads at a glance without parsing digits.
@@ -110,7 +118,28 @@ private struct PostingRow: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
 
+            // Three buttons side by side clip at accessibility text sizes
+            // (CLAUDE.md §3.2 treats truncation as a bug), so stack them there.
+            actions
+        }
+        .padding(.vertical, 6)
+        .accessibilityElement(children: .contain)
+    }
+
+    @ViewBuilder
+    private var actions: some View {
+        if typeSize.isAccessibilitySize {
+            VStack(alignment: .leading, spacing: 10) { actionButtons }
+        } else {
             HStack(spacing: 10) {
+                actionButtons
+                Spacer()
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var actionButtons: some View {
                 if let link = posting.bestApplyLink {
                     Link(destination: link) {
                         Label("Apply", systemImage: "arrow.up.right.square")
@@ -131,10 +160,11 @@ private struct PostingRow: View {
                 .disabled(isPromoting)
                 .accessibilityLabel("Save \(posting.title) to tracker")
 
-                Spacer()
-            }
-        }
-        .padding(.vertical, 6)
-        .accessibilityElement(children: .contain)
+                Button(action: onGenerate) {
+                    Label("Write for me", systemImage: "wand.and.stars")
+                }
+                .buttonStyle(.bordered)
+                .frame(minHeight: 44)
+                .accessibilityLabel("Generate a tailored cover letter and resume for \(posting.title)")
     }
 }

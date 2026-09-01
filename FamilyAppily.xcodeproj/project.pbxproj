@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		003504C2D80C562C0B0CA9C5 /* ProfilePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B76C9F6C1C03A5BC1C639D /* ProfilePickerView.swift */; };
 		0A79732C03639AD4C322F904 /* AdultGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D541C681A6D6A7A05DDD8DED /* AdultGate.swift */; };
+		0BA51807D92978518EF576DE /* MaterialsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38407E9052A132DE3F393ED6 /* MaterialsView.swift */; };
 		0DE29FBAF82C9B92C66260F0 /* DayCardFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7B74C9AF7E2B971FF63974 /* DayCardFrame.swift */; };
 		293CEEB19916BD4411A601FE /* WeeklyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F630409DD2005551010D5B /* WeeklyChartView.swift */; };
 		319D2A651B6DEA46EC12FED8 /* ApplicationsBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D95ACE728955E99BCC04F343 /* ApplicationsBoardView.swift */; };
@@ -21,6 +22,7 @@
 		5BBCDE33B7783D0FD5C800BE /* JobSearchTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB49078220BF6337E94B52F6 /* JobSearchTabView.swift */; };
 		5D22A8B90448C3D88604B57D /* FamilyAppilyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F57BD65D1E4586B0E4B39AE2 /* FamilyAppilyApp.swift */; };
 		6FD034B18CF36C832698AA9D /* FamilyCore in Frameworks */ = {isa = PBXBuildFile; productRef = F545B5D6CC3867011FCE9116 /* FamilyCore */; };
+		8FBD5C8AEF142F9B1613AFE9 /* MaterialsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38407E9052A132DE3F393ED6 /* MaterialsView.swift */; };
 		B33D988B85D100D928F3AA29 /* ApplicationsBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D95ACE728955E99BCC04F343 /* ApplicationsBoardView.swift */; };
 		B4AB524A555F306ED64EE02E /* IdentityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA8E23798B347535924391C /* IdentityView.swift */; };
 		B90FE73C4EEC12FAB96DD8A2 /* FamilyRotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A69B939AD964E1FECE5A7D0 /* FamilyRotationView.swift */; };
@@ -41,6 +43,7 @@
 		051B7F80F038FB3DC6F9D0AC /* JobSearchMacRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobSearchMacRootView.swift; sourceTree = "<group>"; };
 		0A69B939AD964E1FECE5A7D0 /* FamilyRotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyRotationView.swift; sourceTree = "<group>"; };
 		30759EC7E90F4913793D3555 /* FamilyAppilyJobSearchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyAppilyJobSearchApp.swift; sourceTree = "<group>"; };
+		38407E9052A132DE3F393ED6 /* MaterialsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialsView.swift; sourceTree = "<group>"; };
 		3B47836CD54B8ECDFA6923D5 /* FamilyAppily.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FamilyAppily.entitlements; sourceTree = "<group>"; };
 		4383D3E29DD6623D29A72597 /* ChoreRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoreRow.swift; sourceTree = "<group>"; };
 		4A7B74C9AF7E2B971FF63974 /* DayCardFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCardFrame.swift; sourceTree = "<group>"; };
@@ -175,6 +178,7 @@
 				FBA3B54F1BA913EBC29318A2 /* JobSearchConfig.swift */,
 				864695DF2BB9BD17B9203BB3 /* JobSearchSetupView.swift */,
 				BB49078220BF6337E94B52F6 /* JobSearchTabView.swift */,
+				38407E9052A132DE3F393ED6 /* MaterialsView.swift */,
 			);
 			name = JobSearch;
 			path = Features/JobSearch;
@@ -299,6 +303,7 @@
 				FB5E277B10DF78BC184553D4 /* JobSearchMacRootView.swift in Sources */,
 				E48E16097C0976BA853CC657 /* JobSearchSetupView.swift in Sources */,
 				53B1EEB60B232BD0A5F63EDE /* JobSearchTabView.swift in Sources */,
+				0BA51807D92978518EF576DE /* MaterialsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,6 +323,7 @@
 				CE65DB2789074BB8E224FBE4 /* JobSearchConfig.swift in Sources */,
 				F46B363BB4EE332FDE2890E3 /* JobSearchSetupView.swift in Sources */,
 				5BBCDE33B7783D0FD5C800BE /* JobSearchTabView.swift in Sources */,
+				8FBD5C8AEF142F9B1613AFE9 /* MaterialsView.swift in Sources */,
 				003504C2D80C562C0B0CA9C5 /* ProfilePickerView.swift in Sources */,
 				F8A5FBCF8318E249F80A8293 /* RootTabView.swift in Sources */,
 				293CEEB19916BD4411A601FE /* WeeklyChartView.swift in Sources */,

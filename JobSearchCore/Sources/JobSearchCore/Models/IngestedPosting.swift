@@ -27,3 +27,17 @@ public struct IngestedPosting: Codable, Identifiable, Equatable, Sendable {
         URL(string: applyUrl.isEmpty ? url : applyUrl)
     }
 }
+
+/// Tailored application materials generated for one posting.
+public struct ApplicationMaterials: Codable, Equatable, Sendable {
+    public var coverLetter: String
+    public var resumeSummary: String
+    public var resumeBullets: [String]
+    public var gaps: [String]
+    /// True when the model's output didn't match the expected section format —
+    /// the letter field then holds the whole response rather than losing it.
+    public var unparsed: Bool
+    // No explicit CodingKeys: the API client decodes with
+    // .convertFromSnakeCase, which already maps cover_letter -> coverLetter.
+    // Declaring snake_case keys here would double-convert and fail to decode.
+}

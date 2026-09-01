@@ -4,6 +4,8 @@ public enum JobSearchAPIError: Error, Equatable, Sendable {
     case notAuthenticated
     case notFound
     case badStatus(Int)
+    /// The server can't do this yet and said why (e.g. no API key configured).
+    case unavailable(String)
     case decodingFailed
     case transport
 }
@@ -90,6 +92,16 @@ public actor JobSearchAPIClient {
         return try await request("api/ingestion/postings/", queryItems: query)
     }
 
+    /// Tailored cover letter and resume for a posting. Cached server-side after
+    /// the first call, so re-opening a posting doesn't re-run generation.
+    public func generateMaterials(postingID: Int, refresh: Bool = false) async throws -> ApplicationMaterials {
+        try await request(
+            "api/ingestion/postings/\(postingID)/materials/",
+            method: "POST",
+            queryItems: refresh ? [URLQueryItem(name: "refresh", value: "1")] : []
+        )
+    }
+
     public func promotePosting(id: Int) async throws -> Application {
         try await request("api/ingestion/postings/\(id)/promote/", method: "POST")
     }
@@ -155,6 +167,11 @@ public actor JobSearchAPIClient {
             throw JobSearchAPIError.notAuthenticated
         case 404:
             throw JobSearchAPIError.notFound
+        case 503:
+            // Carries an actionable reason ("no API key configured", "no master
+            // resume saved") — surfacing it beats a bare status code.
+            let detail = (try? JSONDecoder().decode([String: String].self, from: data))?["detail"]
+            throw JobSearchAPIError.unavailable(detail ?? "This isn't available yet.")
         default:
             throw JobSearchAPIError.badStatus(http.statusCode)
         }
