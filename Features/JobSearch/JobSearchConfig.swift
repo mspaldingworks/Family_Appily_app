@@ -1,6 +1,9 @@
 import Foundation
 import JobSearchCore
+import OSLog
 import Security
+
+private let logger = Logger(subsystem: "com.mspaldingworks.FamilyAppily", category: "JobSearch")
 
 /// Keychain-backed storage for the Job Search API token. There's no login
 /// screen anywhere in Family Appily — this token is provisioned once (by an
@@ -55,7 +58,7 @@ enum JobSearchConfig {
     /// for a 40-character paste on a phone keyboard. Nothing secret is stored in
     /// the repo — without the build setting this is empty and the app falls back
     /// to the manual setup screen.
-    private static var buildTimeToken: String? {
+    static var buildTimeToken: String? {
         guard let token = Bundle.main.object(forInfoDictionaryKey: "JobSearchAPIToken") as? String,
               !token.isEmpty,
               !token.hasPrefix("$(") // unsubstituted placeholder
@@ -67,7 +70,13 @@ enum JobSearchConfig {
     /// whatever was compiled in.
     static func makeClient() -> JobSearchAPIClient? {
         let stored = JobSearchKeychain.loadToken()
-        guard let token = (stored?.isEmpty == false ? stored : buildTimeToken) else { return nil }
+        let token = stored?.isEmpty == false ? stored : buildTimeToken
+        // Never logs the token itself — just which source won, which is the only
+        // thing needed to diagnose "why is it asking me to connect again?".
+        logger.debug("""
+            token source: \(stored?.isEmpty == false ? "keychain" : (buildTimeToken != nil ? "build-time" : "none"), privacy: .public)
+            """)
+        guard let token else { return nil }
         return JobSearchAPIClient(configuration: .init(baseURL: baseURL, token: token))
     }
 }

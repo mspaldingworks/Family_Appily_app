@@ -5,7 +5,12 @@ import SwiftUI
 /// Family Appily has no accounts anywhere.
 struct JobSearchSetupView: View {
     let onSave: (String) -> Void
-    @State private var token = ""
+
+    /// Prefilled from the build-time token when there is one, so this screen is
+    /// a single tap rather than a "what do I put here?" dead end. It should
+    /// rarely appear at all — it's the fallback when no token is compiled in,
+    /// or after a stored token was rejected.
+    @State private var token = JobSearchConfig.buildTimeToken ?? ""
 
     var body: some View {
         VStack(spacing: 16) {
