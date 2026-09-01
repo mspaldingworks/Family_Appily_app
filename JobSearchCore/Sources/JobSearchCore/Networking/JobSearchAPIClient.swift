@@ -106,6 +106,31 @@ public actor JobSearchAPIClient {
         )
     }
 
+    /// Queue several postings for application in one go. Returns immediately
+    /// with a job to poll — generation is ~40s each, so a batch runs server-side
+    /// on a background thread rather than holding the request open.
+    public func prepareApplications(postingIDs: [Int]) async throws -> PrepareJob {
+        try await request(
+            "api/tracker/applications/prepare/",
+            method: "POST",
+            body: PrepareRequest(postingIds: postingIDs)
+        )
+    }
+
+    public func prepareStatus(jobID: String) async throws -> PrepareJob {
+        try await request("api/tracker/applications/prepare/\(jobID)/")
+    }
+
+    public func markApplied(applicationID: Int) async throws -> Application {
+        try await request("api/tracker/applications/\(applicationID)/mark-applied/", method: "POST")
+    }
+
+    public func syncSheet() async throws -> Int {
+        struct Result: Decodable { let synced: Int }
+        let result: Result = try await request("api/tracker/applications/sync-sheet/", method: "POST")
+        return result.synced
+    }
+
     public func promotePosting(id: Int) async throws -> Application {
         try await request("api/ingestion/postings/\(id)/promote/", method: "POST")
     }

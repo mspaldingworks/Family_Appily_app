@@ -41,3 +41,29 @@ public struct ApplicationMaterials: Codable, Equatable, Sendable {
     // .convertFromSnakeCase, which already maps cover_letter -> coverLetter.
     // Declaring snake_case keys here would double-convert and fail to decode.
 }
+
+
+/// Payload for starting a bulk prepare run.
+public struct PrepareRequest: Codable, Sendable {
+    public var postingIds: [Int]
+}
+
+/// Progress of a bulk prepare run. `results` fills in as each posting finishes,
+/// so the UI can show which ones are done rather than one opaque spinner.
+public struct PrepareJob: Codable, Equatable, Sendable, Identifiable {
+    public struct Result: Codable, Equatable, Sendable {
+        public var postingId: Int
+        public var ok: Bool
+        public var detail: String
+        public var applicationId: Int?
+    }
+
+    public var id: String
+    public var state: String
+    public var total: Int
+    public var done: Int
+    public var results: [Result]
+
+    public var isFinished: Bool { state == "finished" }
+    public var failures: [Result] { results.filter { !$0.ok } }
+}

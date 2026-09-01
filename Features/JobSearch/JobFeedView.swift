@@ -2,8 +2,9 @@ import JobSearchCore
 import SwiftUI
 
 /// Postings pushed in by the Apify scrapers, ranked best-fit first by the
-/// server. "Save" promotes one into the tracker; "Apply" opens the employer's
-/// actual application form.
+/// server. Tap "Select" to tick several and prepare them all at once — that
+/// writes tailored materials, queues each as an application, and mirrors them
+/// into the Google Sheet.
 struct JobFeedView: View {
     let client: JobSearchAPIClient
     let onUnauthorized: () -> Void
@@ -13,6 +14,11 @@ struct JobFeedView: View {
     @State private var errorMessage: String?
     @State private var promotingID: Int?
     @State private var materialsFor: IngestedPosting?
+
+    @State private var isSelecting = false
+    @State private var selection: Set<Int> = []
+    @State private var job: PrepareJob?
+    @State private var isPreparing = false
 
     var body: some View {
         Group {
@@ -28,13 +34,19 @@ struct JobFeedView: View {
                 List(postings) { posting in
                     PostingRow(
                         posting: posting,
+                        isSelecting: isSelecting,
+                        isSelected: selection.contains(posting.id),
                         isPromoting: promotingID == posting.id,
+                        onToggle: { toggle(posting) },
                         onSave: { Task { await promote(posting) } },
                         onGenerate: { materialsFor = posting }
                     )
                 }
                 .listStyle(.inset)
             }
+        }
+        .safeAreaInset(edge: .bottom) {
+            if isSelecting { selectionBar }
         }
         .overlay(alignment: .bottom) {
             if let errorMessage {
@@ -45,12 +57,112 @@ struct JobFeedView: View {
                     .padding()
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button(isSelecting ? "Done" : "Select") {
+                    isSelecting.toggle()
+                    if !isSelecting { selection.removeAll() }
+                }
+            }
+        }
         .task { await load() }
         .refreshable { await load() }
         .sheet(item: $materialsFor) { posting in
             MaterialsView(client: client, posting: posting)
         }
     }
+
+    // MARK: Bulk prepare
+
+    @ViewBuilder
+    private var selectionBar: some View {
+        VStack(spacing: 8) {
+            if let job, !job.isFinished {
+                ProgressView(value: Double(job.done), total: Double(max(job.total, 1))) {
+                    Text("Preparing \(job.done) of \(job.total)…")
+                        .font(.footnote)
+                }
+                .padding(.horizontal)
+            } else if let job, job.isFinished {
+                Text(summary(for: job))
+                    .font(.footnote)
+                    .foregroundStyle(job.failures.isEmpty ? Color.secondary : Color.orange)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal)
+            }
+
+            HStack(spacing: 12) {
+                Button(selection.count == postings.count ? "Clear" : "Select all") {
+                    if selection.count == postings.count {
+                        selection.removeAll()
+                    } else {
+                        selection = Set(postings.map(\.id))
+                    }
+                }
+                .buttonStyle(.bordered)
+                .frame(minHeight: 44)
+
+                Button {
+                    Task { await prepareSelected() }
+                } label: {
+                    if isPreparing {
+                        ProgressView()
+                    } else {
+                        Text("Prepare \(selection.count)")
+                            .frame(maxWidth: .infinity)
+                    }
+                }
+                .buttonStyle(.borderedProminent)
+                .frame(minHeight: 44)
+                .disabled(selection.isEmpty || isPreparing)
+                .accessibilityLabel("Prepare \(selection.count) applications")
+            }
+            .padding(.horizontal)
+            .padding(.bottom, 8)
+        }
+        .background(.bar)
+    }
+
+    private func summary(for job: PrepareJob) -> String {
+        let ready = job.results.filter(\.ok).count
+        if job.failures.isEmpty {
+            return "\(ready) ready to submit. Check the Applications tab or your sheet."
+        }
+        return "\(ready) ready, \(job.failures.count) couldn't be queued: "
+            + job.failures.map(\.detail).joined(separator: " ")
+    }
+
+    private func toggle(_ posting: IngestedPosting) {
+        if selection.contains(posting.id) {
+            selection.remove(posting.id)
+        } else {
+            selection.insert(posting.id)
+        }
+    }
+
+    private func prepareSelected() async {
+        isPreparing = true
+        defer { isPreparing = false }
+        do {
+            var current = try await client.prepareApplications(postingIDs: Array(selection))
+            job = current
+            // Generation runs ~40s per posting server-side, so poll rather than
+            // holding one request open for the length of the whole batch.
+            while !current.isFinished {
+                try await Task.sleep(for: .seconds(3))
+                current = try await client.prepareStatus(jobID: current.id)
+                job = current
+            }
+            selection.removeAll()
+            await load()
+        } catch JobSearchAPIError.notAuthenticated {
+            onUnauthorized()
+        } catch {
+            errorMessage = "Couldn't prepare those: \(error)"
+        }
+    }
+
+    // MARK: Loading
 
     private func load() async {
         isLoading = true
@@ -81,7 +193,10 @@ private struct PostingRow: View {
     @Environment(\.dynamicTypeSize) private var typeSize
 
     let posting: IngestedPosting
+    let isSelecting: Bool
+    let isSelected: Bool
     let isPromoting: Bool
+    let onToggle: () -> Void
     let onSave: () -> Void
     let onGenerate: () -> Void
 
@@ -96,36 +211,53 @@ private struct PostingRow: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(alignment: .firstTextBaseline, spacing: 10) {
-                Text("\(posting.score)")
-                    .font(.headline.monospacedDigit())
-                    .foregroundStyle(scoreColor)
-                    .accessibilityLabel("Match score \(posting.score) out of 100")
+        HStack(alignment: .top, spacing: 12) {
+            if isSelecting {
+                // Shape carries the state, not just colour (CLAUDE.md §3.2):
+                // a filled check versus an empty circle reads without colour.
+                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                    .font(.title2)
+                    .foregroundStyle(isSelected ? Color.accentColor : .secondary)
+                    .accessibilityHidden(true)
+            }
 
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(posting.title).font(.headline)
-                    if !posting.companyName.isEmpty {
-                        Text(posting.companyName).font(.subheadline).foregroundStyle(.secondary)
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(alignment: .firstTextBaseline, spacing: 10) {
+                    Text("\(posting.score)")
+                        .font(.headline.monospacedDigit())
+                        .foregroundStyle(scoreColor)
+                        .accessibilityLabel("Match score \(posting.score) out of 100")
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(posting.title).font(.headline)
+                        if !posting.companyName.isEmpty {
+                            Text(posting.companyName).font(.subheadline).foregroundStyle(.secondary)
+                        }
                     }
                 }
-            }
 
-            if !posting.scoreReasons.isEmpty {
-                Text(posting.scoreReasons.joined(separator: " · "))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
+                if !posting.scoreReasons.isEmpty {
+                    Text(posting.scoreReasons.joined(separator: " · "))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
 
-            // Three buttons side by side clip at accessibility text sizes
-            // (CLAUDE.md §3.2 treats truncation as a bug), so stack them there.
-            actions
+                // Per-row actions would compete with the checkbox for the same
+                // tap, so they're hidden while selecting.
+                if !isSelecting { actions }
+            }
         }
         .padding(.vertical, 6)
-        .accessibilityElement(children: .contain)
+        .contentShape(Rectangle())
+        .onTapGesture { if isSelecting { onToggle() } }
+        .accessibilityElement(children: isSelecting ? .combine : .contain)
+        .accessibilityAddTraits(isSelecting && isSelected ? [.isSelected] : [])
+        .accessibilityHint(isSelecting ? "Double tap to select for bulk apply" : "")
     }
 
+    // Three buttons side by side clip at accessibility text sizes
+    // (CLAUDE.md §3.2 treats truncation as a bug), so stack them there.
     @ViewBuilder
     private var actions: some View {
         if typeSize.isAccessibilitySize {
@@ -140,31 +272,31 @@ private struct PostingRow: View {
 
     @ViewBuilder
     private var actionButtons: some View {
-                if let link = posting.bestApplyLink {
-                    Link(destination: link) {
-                        Label("Apply", systemImage: "arrow.up.right.square")
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .frame(minHeight: 44)
-                }
+        if let link = posting.bestApplyLink {
+            Link(destination: link) {
+                Label("Apply", systemImage: "arrow.up.right.square")
+            }
+            .buttonStyle(.borderedProminent)
+            .frame(minHeight: 44)
+        }
 
-                Button(action: onSave) {
-                    if isPromoting {
-                        ProgressView()
-                    } else {
-                        Label("Save to tracker", systemImage: "tray.and.arrow.down")
-                    }
-                }
-                .buttonStyle(.bordered)
-                .frame(minHeight: 44)
-                .disabled(isPromoting)
-                .accessibilityLabel("Save \(posting.title) to tracker")
+        Button(action: onSave) {
+            if isPromoting {
+                ProgressView()
+            } else {
+                Label("Save to tracker", systemImage: "tray.and.arrow.down")
+            }
+        }
+        .buttonStyle(.bordered)
+        .frame(minHeight: 44)
+        .disabled(isPromoting)
+        .accessibilityLabel("Save \(posting.title) to tracker")
 
-                Button(action: onGenerate) {
-                    Label("Write for me", systemImage: "wand.and.stars")
-                }
-                .buttonStyle(.bordered)
-                .frame(minHeight: 44)
-                .accessibilityLabel("Generate a tailored cover letter and resume for \(posting.title)")
+        Button(action: onGenerate) {
+            Label("Write for me", systemImage: "wand.and.stars")
+        }
+        .buttonStyle(.bordered)
+        .frame(minHeight: 44)
+        .accessibilityLabel("Generate a tailored cover letter and resume for \(posting.title)")
     }
 }
