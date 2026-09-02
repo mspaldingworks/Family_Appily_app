@@ -18,6 +18,7 @@ struct JobFeedView: View {
     @State private var isLoading = false
     @State private var errorMessage: String?
     @State private var applyingID: Int?
+    @State private var expanded: Set<Int> = []
 
     var body: some View {
         Group {
@@ -34,6 +35,8 @@ struct JobFeedView: View {
                     PostingRow(
                         posting: posting,
                         isApplying: applyingID == posting.id,
+                        isExpanded: expanded.contains(posting.id),
+                        onToggleDetails: { toggleDetails(posting) },
                         onApply: { Task { await applyTo(posting) } },
                         onSignIn: { openSignIn(posting) }
                     )
@@ -52,6 +55,14 @@ struct JobFeedView: View {
         }
         .task { await load() }
         .refreshable { await load() }
+    }
+
+    private func toggleDetails(_ posting: IngestedPosting) {
+        if expanded.contains(posting.id) {
+            expanded.remove(posting.id)
+        } else {
+            expanded.insert(posting.id)
+        }
     }
 
     private func load() async {
@@ -108,8 +119,12 @@ struct JobFeedView: View {
 }
 
 private struct PostingRow: View {
+    @Environment(\.dynamicTypeSize) private var typeSize
+
     let posting: IngestedPosting
     let isApplying: Bool
+    let isExpanded: Bool
+    let onToggleDetails: () -> Void
     let onApply: () -> Void
     let onSignIn: () -> Void
 
@@ -144,6 +159,12 @@ private struct PostingRow: View {
                 }
             }
 
+            if let chips = posting.details?.summaryChips, !chips.isEmpty {
+                Text(chips.joined(separator: " · "))
+                    .font(.subheadline)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
             if !posting.scoreReasons.isEmpty {
                 Text(posting.scoreReasons.joined(separator: " · "))
                     .font(.caption)
@@ -151,7 +172,11 @@ private struct PostingRow: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
 
-            applyButton
+            if isExpanded, let details = posting.details {
+                expandedDetails(details)
+            }
+
+            actions
         }
         .padding(.vertical, 6)
         .accessibilityElement(children: .contain)
@@ -170,6 +195,92 @@ private struct PostingRow: View {
         .buttonStyle(.plain)
         .frame(minHeight: 44)
         .accessibilityLabel("\(posting.platform.isEmpty ? "This employer" : posting.platform) needs an account first. Opens the sign-in page.")
+    }
+
+    // Side by side these clip at accessibility text sizes, which CLAUDE.md §3.2
+    // treats as a bug rather than a tradeoff.
+    @ViewBuilder
+    private var actions: some View {
+        if typeSize.isAccessibilitySize {
+            VStack(alignment: .leading, spacing: 10) {
+                applyButton
+                detailsButton
+            }
+        } else {
+            HStack(spacing: 10) {
+                applyButton
+                detailsButton
+                Spacer()
+            }
+        }
+    }
+
+    private var detailsButton: some View {
+        Button(action: onToggleDetails) {
+            Label(isExpanded ? "Less" : "Details",
+                  systemImage: isExpanded ? "chevron.up" : "chevron.down")
+        }
+        .buttonStyle(.bordered)
+        .frame(minHeight: 44)
+        .disabled(!(posting.details?.hasAnything ?? false))
+        .accessibilityLabel(isExpanded
+            ? "Hide the details for \(posting.title)"
+            : "Show the full description and details for \(posting.title)")
+    }
+
+    /// The whole posting, in the app. Reading it here rather than on the
+    /// employer's site is the entire point, so the description isn't truncated.
+    @ViewBuilder
+    private func expandedDetails(_ details: PostingDetails) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            if !details.posted.isEmpty || !details.companyRating.isEmpty {
+                HStack(spacing: 12) {
+                    if !details.posted.isEmpty {
+                        Label(details.posted, systemImage: "clock").font(.caption)
+                    }
+                    if !details.companyRating.isEmpty {
+                        Label(details.companyRating, systemImage: "star")
+                            .font(.caption)
+                            .accessibilityLabel("Employer rated \(details.companyRating)")
+                    }
+                }
+                .foregroundStyle(.secondary)
+            }
+
+            if !details.benefits.isEmpty {
+                detailSection("Benefits", items: details.benefits)
+            }
+            if !details.requirements.isEmpty {
+                detailSection("Requirements", items: details.requirements)
+            }
+            if !details.shifts.isEmpty {
+                detailSection("Shifts", items: details.shifts)
+            }
+
+            if !details.description.isEmpty {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Full description").font(.subheadline.weight(.semibold))
+                    Text(details.description)
+                        .font(.callout)
+                        .textSelection(.enabled)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+        }
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 10))
+    }
+
+    private func detailSection(_ title: String, items: [String]) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(title).font(.subheadline.weight(.semibold))
+            ForEach(items, id: \.self) { item in
+                Text("• \(item)").font(.caption)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var applyButton: some View {

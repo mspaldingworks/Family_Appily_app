@@ -144,3 +144,44 @@ struct MaterialsDecodingTests {
         #expect(decoded[1].generatedMaterials?.coverLetter == "Real letter")
     }
 }
+
+struct PostingDetailsDecodingTests {
+    private func decode(_ json: String) throws -> PostingDetails {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        return try decoder.decode(PostingDetails.self, from: json.data(using: .utf8)!)
+    }
+
+    /// Shape captured from the live API (ingestion/details.py).
+    @Test func decodesTheRealDetailsShape() throws {
+        let details = try decode("""
+        {"description": "Lead our digital fundraising.", "location": "Carlsbad, CA",
+         "salary": "$70,000 - $80,000 a year", "job_types": ["Full-time", "Remote"],
+         "benefits": ["Health insurance"], "requirements": [], "shifts": [],
+         "posted": "3 hours ago", "is_remote": true, "company_rating": "2.8 from 10 reviews"}
+        """)
+        #expect(details.salary == "$70,000 - $80,000 a year")
+        #expect(details.jobTypes == ["Full-time", "Remote"])
+        #expect(details.isRemote)
+        #expect(details.hasAnything)
+    }
+
+    /// Scrapers omit plenty, so every field defaults rather than throwing —
+    /// one sparse posting must not empty the whole feed.
+    @Test func decodesASparsePayload() throws {
+        let details = try decode("{}")
+        #expect(details.description == "")
+        #expect(details.jobTypes.isEmpty)
+        #expect(details.hasAnything == false)
+    }
+
+    @Test func summaryChipsDoNotRepeatRemoteTwice() throws {
+        let details = try decode("""
+        {"location": "Remote", "is_remote": true, "job_types": ["Remote", "Full-time"],
+         "salary": "", "description": "x", "benefits": [], "requirements": [],
+         "shifts": [], "posted": "", "company_rating": ""}
+        """)
+        #expect(details.summaryChips.filter { $0 == "Remote" }.count == 1)
+        #expect(details.summaryChips.contains("Full-time"))
+    }
+}

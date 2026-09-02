@@ -25,6 +25,9 @@ public struct IngestedPosting: Codable, Identifiable, Equatable, Sendable {
     public var platform: String
     public var requiresAccount: Bool
     public var signInUrl: String
+    /// The readable parts of the scrape, for the expanded card. Replaces the
+    /// raw scraper payload the feed used to ship and never decoded.
+    public var details: PostingDetails?
     public let createdAt: Date
 
     /// Where the Apply button should send her.
@@ -34,6 +37,56 @@ public struct IngestedPosting: Codable, Identifiable, Equatable, Sendable {
 }
 
 /// Tailored application materials generated for one posting.
+/// What the expanded job card shows. Every field is optional in practice —
+/// scrapers omit plenty — so all of them default rather than throwing.
+public struct PostingDetails: Codable, Equatable, Sendable {
+    public var description: String
+    public var location: String
+    public var salary: String
+    public var jobTypes: [String]
+    public var benefits: [String]
+    public var requirements: [String]
+    public var shifts: [String]
+    public var posted: String
+    public var isRemote: Bool
+    public var companyRating: String
+
+    enum CodingKeys: String, CodingKey {
+        case description, location, salary, jobTypes, benefits
+        case requirements, shifts, posted, isRemote, companyRating
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        description = try container.decodeIfPresent(String.self, forKey: .description) ?? ""
+        location = try container.decodeIfPresent(String.self, forKey: .location) ?? ""
+        salary = try container.decodeIfPresent(String.self, forKey: .salary) ?? ""
+        jobTypes = try container.decodeIfPresent([String].self, forKey: .jobTypes) ?? []
+        benefits = try container.decodeIfPresent([String].self, forKey: .benefits) ?? []
+        requirements = try container.decodeIfPresent([String].self, forKey: .requirements) ?? []
+        shifts = try container.decodeIfPresent([String].self, forKey: .shifts) ?? []
+        posted = try container.decodeIfPresent(String.self, forKey: .posted) ?? ""
+        isRemote = try container.decodeIfPresent(Bool.self, forKey: .isRemote) ?? false
+        companyRating = try container.decodeIfPresent(String.self, forKey: .companyRating) ?? ""
+    }
+
+    /// The one-line facts worth showing on the collapsed card.
+    public var summaryChips: [String] {
+        var chips: [String] = []
+        if isRemote { chips.append("Remote") }
+        if !location.isEmpty, !isRemote || location.lowercased() != "remote" {
+            chips.append(location)
+        }
+        if !salary.isEmpty { chips.append(salary) }
+        chips.append(contentsOf: jobTypes.filter { $0.lowercased() != "remote" })
+        return chips
+    }
+
+    public var hasAnything: Bool {
+        !description.isEmpty || !summaryChips.isEmpty || !benefits.isEmpty
+    }
+}
+
 public extension IngestedPosting {
     /// Where to create an account, when the portal insists on one before it
     /// will show the form.
