@@ -8,9 +8,8 @@ import AppKit
 #endif
 
 /// Postings pushed in by the Apify scrapers, ranked best-fit first by the
-/// server. Tap "Select" to tick several and prepare them all at once — that
-/// writes tailored materials, queues each as an application, and mirrors them
-/// into the Google Sheet.
+/// server. One button per job: Apply writes the materials, saves the
+/// application, and opens the employer's form.
 struct JobFeedView: View {
     let client: JobSearchAPIClient
     let onUnauthorized: () -> Void
@@ -19,11 +18,6 @@ struct JobFeedView: View {
     @State private var isLoading = false
     @State private var errorMessage: String?
     @State private var applyingID: Int?
-
-    @State private var isSelecting = false
-    @State private var selection: Set<Int> = []
-    @State private var job: PrepareJob?
-    @State private var isPreparing = false
 
     var body: some View {
         Group {
@@ -39,19 +33,13 @@ struct JobFeedView: View {
                 List(postings) { posting in
                     PostingRow(
                         posting: posting,
-                        isSelecting: isSelecting,
-                        isSelected: selection.contains(posting.id),
                         isApplying: applyingID == posting.id,
-                        onToggle: { toggle(posting) },
                         onApply: { Task { await applyTo(posting) } },
                         onSignIn: { openSignIn(posting) }
                     )
                 }
                 .listStyle(.inset)
             }
-        }
-        .safeAreaInset(edge: .bottom) {
-            if isSelecting { selectionBar }
         }
         .overlay(alignment: .bottom) {
             if let errorMessage {
@@ -62,109 +50,9 @@ struct JobFeedView: View {
                     .padding()
             }
         }
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button(isSelecting ? "Done" : "Select") {
-                    isSelecting.toggle()
-                    if !isSelecting { selection.removeAll() }
-                }
-            }
-        }
         .task { await load() }
         .refreshable { await load() }
     }
-
-    // MARK: Bulk prepare
-
-    @ViewBuilder
-    private var selectionBar: some View {
-        VStack(spacing: 8) {
-            if let job, !job.isFinished {
-                ProgressView(value: Double(job.done), total: Double(max(job.total, 1))) {
-                    Text("Preparing \(job.done) of \(job.total)…")
-                        .font(.footnote)
-                }
-                .padding(.horizontal)
-            } else if let job, job.isFinished {
-                Text(summary(for: job))
-                    .font(.footnote)
-                    .foregroundStyle(job.failures.isEmpty ? Color.secondary : Color.orange)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.horizontal)
-            }
-
-            HStack(spacing: 12) {
-                Button(selection.count == postings.count ? "Clear" : "Select all") {
-                    if selection.count == postings.count {
-                        selection.removeAll()
-                    } else {
-                        selection = Set(postings.map(\.id))
-                    }
-                }
-                .buttonStyle(.bordered)
-                .frame(minHeight: 44)
-
-                Button {
-                    Task { await prepareSelected() }
-                } label: {
-                    if isPreparing {
-                        ProgressView()
-                    } else {
-                        Text("Prepare \(selection.count)")
-                            .frame(maxWidth: .infinity)
-                    }
-                }
-                .buttonStyle(.borderedProminent)
-                .frame(minHeight: 44)
-                .disabled(selection.isEmpty || isPreparing)
-                .accessibilityLabel("Prepare \(selection.count) applications")
-            }
-            .padding(.horizontal)
-            .padding(.bottom, 8)
-        }
-        .background(.bar)
-    }
-
-    private func summary(for job: PrepareJob) -> String {
-        let ready = job.results.filter(\.ok).count
-        if job.failures.isEmpty {
-            return "\(ready) ready to submit. Check the Applications tab or your sheet."
-        }
-        return "\(ready) ready, \(job.failures.count) couldn't be queued: "
-            + job.failures.map(\.detail).joined(separator: " ")
-    }
-
-    private func toggle(_ posting: IngestedPosting) {
-        if selection.contains(posting.id) {
-            selection.remove(posting.id)
-        } else {
-            selection.insert(posting.id)
-        }
-    }
-
-    private func prepareSelected() async {
-        isPreparing = true
-        defer { isPreparing = false }
-        do {
-            var current = try await client.prepareApplications(postingIDs: Array(selection))
-            job = current
-            // Generation runs ~40s per posting server-side, so poll rather than
-            // holding one request open for the length of the whole batch.
-            while !current.isFinished {
-                try await Task.sleep(for: .seconds(3))
-                current = try await client.prepareStatus(jobID: current.id)
-                job = current
-            }
-            selection.removeAll()
-            await load()
-        } catch JobSearchAPIError.notAuthenticated {
-            onUnauthorized()
-        } catch {
-            errorMessage = "Couldn't prepare those: \(error)"
-        }
-    }
-
-    // MARK: Loading
 
     private func load() async {
         isLoading = true
@@ -220,13 +108,8 @@ struct JobFeedView: View {
 }
 
 private struct PostingRow: View {
-    @Environment(\.dynamicTypeSize) private var typeSize
-
     let posting: IngestedPosting
-    let isSelecting: Bool
-    let isSelected: Bool
     let isApplying: Bool
-    let onToggle: () -> Void
     let onApply: () -> Void
     let onSignIn: () -> Void
 
@@ -241,68 +124,37 @@ private struct PostingRow: View {
     }
 
     var body: some View {
-        HStack(alignment: .top, spacing: 12) {
-            if isSelecting {
-                // Shape carries the state, not just colour (CLAUDE.md §3.2):
-                // a filled check versus an empty circle reads without colour.
-                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                    .font(.title2)
-                    .foregroundStyle(isSelected ? Color.accentColor : .secondary)
-                    .accessibilityHidden(true)
-            }
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(alignment: .firstTextBaseline, spacing: 10) {
+                Text("\(posting.score)")
+                    .font(.headline.monospacedDigit())
+                    .foregroundStyle(scoreColor)
+                    .accessibilityLabel("Match score \(posting.score) out of 100")
 
-            VStack(alignment: .leading, spacing: 8) {
-                HStack(alignment: .firstTextBaseline, spacing: 10) {
-                    Text("\(posting.score)")
-                        .font(.headline.monospacedDigit())
-                        .foregroundStyle(scoreColor)
-                        .accessibilityLabel("Match score \(posting.score) out of 100")
-
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(posting.title).font(.headline)
-                        HStack(spacing: 6) {
-                            if !posting.companyName.isEmpty {
-                                Text(posting.companyName).font(.subheadline).foregroundStyle(.secondary)
-                            }
-                            if posting.requiresAccount, !isSelecting {
-                                accountBadge
-                            }
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(posting.title).font(.headline)
+                    HStack(spacing: 6) {
+                        if !posting.companyName.isEmpty {
+                            Text(posting.companyName).font(.subheadline).foregroundStyle(.secondary)
+                        }
+                        if posting.requiresAccount {
+                            accountBadge
                         }
                     }
                 }
-
-                if !posting.scoreReasons.isEmpty {
-                    Text(posting.scoreReasons.joined(separator: " · "))
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-
-                // Per-row actions would compete with the checkbox for the same
-                // tap, so they're hidden while selecting.
-                if !isSelecting { actions }
             }
+
+            if !posting.scoreReasons.isEmpty {
+                Text(posting.scoreReasons.joined(separator: " · "))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            applyButton
         }
         .padding(.vertical, 6)
-        .contentShape(Rectangle())
-        .onTapGesture { if isSelecting { onToggle() } }
-        .accessibilityElement(children: isSelecting ? .combine : .contain)
-        .accessibilityAddTraits(isSelecting && isSelected ? [.isSelected] : [])
-        .accessibilityHint(isSelecting ? "Double tap to select for bulk apply" : "")
-    }
-
-    // Three buttons side by side clip at accessibility text sizes
-    // (CLAUDE.md §3.2 treats truncation as a bug), so stack them there.
-    @ViewBuilder
-    private var actions: some View {
-        if typeSize.isAccessibilitySize {
-            VStack(alignment: .leading, spacing: 10) { actionButtons }
-        } else {
-            HStack(spacing: 10) {
-                actionButtons
-                Spacer()
-            }
-        }
+        .accessibilityElement(children: .contain)
     }
 
     /// Tapping the badge goes straight to the portal's sign-in page, because
@@ -320,8 +172,7 @@ private struct PostingRow: View {
         .accessibilityLabel("\(posting.platform.isEmpty ? "This employer" : posting.platform) needs an account first. Opens the sign-in page.")
     }
 
-    @ViewBuilder
-    private var actionButtons: some View {
+    private var applyButton: some View {
         Button(action: onApply) {
             if isApplying {
                 HStack(spacing: 8) {
