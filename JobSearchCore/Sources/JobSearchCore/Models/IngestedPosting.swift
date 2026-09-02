@@ -20,6 +20,11 @@ public struct IngestedPosting: Codable, Identifiable, Equatable, Sendable {
     public var score: Int
     /// Why it scored that way, so the ranking can be judged rather than trusted.
     public var scoreReasons: [String]
+    /// Which ATS the application goes through, and whether it demands an
+    /// account before showing the form.
+    public var platform: String
+    public var requiresAccount: Bool
+    public var signInUrl: String
     public let createdAt: Date
 
     /// Where the Apply button should send her.
@@ -29,6 +34,12 @@ public struct IngestedPosting: Codable, Identifiable, Equatable, Sendable {
 }
 
 /// Tailored application materials generated for one posting.
+public extension IngestedPosting {
+    /// Where to create an account, when the portal insists on one before it
+    /// will show the form.
+    var signInLink: URL? { URL(string: signInUrl) }
+}
+
 public struct ApplicationMaterials: Codable, Equatable, Sendable {
     public var coverLetter: String
     public var resumeSummary: String

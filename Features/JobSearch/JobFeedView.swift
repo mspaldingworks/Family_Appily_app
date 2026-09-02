@@ -1,6 +1,12 @@
 import JobSearchCore
 import SwiftUI
 
+#if os(iOS)
+import UIKit
+#else
+import AppKit
+#endif
+
 /// Postings pushed in by the Apify scrapers, ranked best-fit first by the
 /// server. Tap "Select" to tick several and prepare them all at once — that
 /// writes tailored materials, queues each as an application, and mirrors them
@@ -12,8 +18,7 @@ struct JobFeedView: View {
     @State private var postings: [IngestedPosting] = []
     @State private var isLoading = false
     @State private var errorMessage: String?
-    @State private var promotingID: Int?
-    @State private var materialsFor: IngestedPosting?
+    @State private var applyingID: Int?
 
     @State private var isSelecting = false
     @State private var selection: Set<Int> = []
@@ -36,10 +41,10 @@ struct JobFeedView: View {
                         posting: posting,
                         isSelecting: isSelecting,
                         isSelected: selection.contains(posting.id),
-                        isPromoting: promotingID == posting.id,
+                        isApplying: applyingID == posting.id,
                         onToggle: { toggle(posting) },
-                        onSave: { Task { await promote(posting) } },
-                        onGenerate: { materialsFor = posting }
+                        onApply: { Task { await applyTo(posting) } },
+                        onSignIn: { openSignIn(posting) }
                     )
                 }
                 .listStyle(.inset)
@@ -67,9 +72,6 @@ struct JobFeedView: View {
         }
         .task { await load() }
         .refreshable { await load() }
-        .sheet(item: $materialsFor) { posting in
-            MaterialsView(client: client, posting: posting)
-        }
     }
 
     // MARK: Bulk prepare
@@ -177,15 +179,43 @@ struct JobFeedView: View {
         }
     }
 
-    private func promote(_ posting: IngestedPosting) async {
-        promotingID = posting.id
-        defer { promotingID = nil }
+    /// One tap does the whole thing: write the materials if they're missing,
+    /// track the application, then open the employer's portal. Generating takes
+    /// about 40 seconds the first time, which is why the row shows progress
+    /// rather than appearing to hang.
+    private func applyTo(_ posting: IngestedPosting) async {
+        applyingID = posting.id
+        defer { applyingID = nil }
         do {
-            _ = try await client.promotePosting(id: posting.id)
+            var job = try await client.prepareApplications(postingIDs: [posting.id])
+            while !job.isFinished {
+                try await Task.sleep(for: .seconds(3))
+                job = try await client.prepareStatus(jobID: job.id)
+            }
+            if let failure = job.failures.first {
+                errorMessage = failure.detail
+            }
+            if let link = posting.bestApplyLink {
+                openURL(link)
+            }
             postings.removeAll { $0.id == posting.id }
+        } catch JobSearchAPIError.notAuthenticated {
+            onUnauthorized()
         } catch {
-            errorMessage = "Couldn't save \(posting.title): \(error)"
+            errorMessage = "Couldn't prepare \(posting.title): \(error)"
         }
+    }
+
+    private func openSignIn(_ posting: IngestedPosting) {
+        if let link = posting.signInLink { openURL(link) }
+    }
+
+    private func openURL(_ url: URL) {
+        #if os(iOS)
+        UIApplication.shared.open(url)
+        #else
+        NSWorkspace.shared.open(url)
+        #endif
     }
 }
 
@@ -195,10 +225,10 @@ private struct PostingRow: View {
     let posting: IngestedPosting
     let isSelecting: Bool
     let isSelected: Bool
-    let isPromoting: Bool
+    let isApplying: Bool
     let onToggle: () -> Void
-    let onSave: () -> Void
-    let onGenerate: () -> Void
+    let onApply: () -> Void
+    let onSignIn: () -> Void
 
     /// Green / amber / grey rather than a number alone, so the strength of a
     /// match reads at a glance without parsing digits.
@@ -230,8 +260,13 @@ private struct PostingRow: View {
 
                     VStack(alignment: .leading, spacing: 2) {
                         Text(posting.title).font(.headline)
-                        if !posting.companyName.isEmpty {
-                            Text(posting.companyName).font(.subheadline).foregroundStyle(.secondary)
+                        HStack(spacing: 6) {
+                            if !posting.companyName.isEmpty {
+                                Text(posting.companyName).font(.subheadline).foregroundStyle(.secondary)
+                            }
+                            if posting.requiresAccount, !isSelecting {
+                                accountBadge
+                            }
                         }
                     }
                 }
@@ -270,33 +305,38 @@ private struct PostingRow: View {
         }
     }
 
+    /// Tapping the badge goes straight to the portal's sign-in page, because
+    /// these platforms won't show the application form to a stranger — landing
+    /// on the job post from a phone is a dead end otherwise.
+    private var accountBadge: some View {
+        Button(action: onSignIn) {
+            Label(posting.platform.isEmpty ? "Account needed" : "\(posting.platform) account",
+                  systemImage: "person.badge.key.fill")
+                .font(.caption2.weight(.medium))
+                .foregroundStyle(.orange)
+        }
+        .buttonStyle(.plain)
+        .frame(minHeight: 44)
+        .accessibilityLabel("\(posting.platform.isEmpty ? "This employer" : posting.platform) needs an account first. Opens the sign-in page.")
+    }
+
     @ViewBuilder
     private var actionButtons: some View {
-        if let link = posting.bestApplyLink {
-            Link(destination: link) {
+        Button(action: onApply) {
+            if isApplying {
+                HStack(spacing: 8) {
+                    ProgressView()
+                    Text("Writing your materials…")
+                }
+            } else {
                 Label("Apply", systemImage: "arrow.up.right.square")
             }
-            .buttonStyle(.borderedProminent)
-            .frame(minHeight: 44)
         }
-
-        Button(action: onSave) {
-            if isPromoting {
-                ProgressView()
-            } else {
-                Label("Save to tracker", systemImage: "tray.and.arrow.down")
-            }
-        }
-        .buttonStyle(.bordered)
+        .buttonStyle(.borderedProminent)
         .frame(minHeight: 44)
-        .disabled(isPromoting)
-        .accessibilityLabel("Save \(posting.title) to tracker")
-
-        Button(action: onGenerate) {
-            Label("Write for me", systemImage: "wand.and.stars")
-        }
-        .buttonStyle(.bordered)
-        .frame(minHeight: 44)
-        .accessibilityLabel("Generate a tailored cover letter and resume for \(posting.title)")
+        .disabled(isApplying)
+        .accessibilityLabel(isApplying
+            ? "Preparing your application for \(posting.title)"
+            : "Apply to \(posting.title). Writes your cover letter and resume, saves it to the tracker, then opens the employer's form.")
     }
 }
