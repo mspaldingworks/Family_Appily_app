@@ -65,3 +65,82 @@ struct DecodingTests {
         #expect(object["job_url"] as? String == "https://example.com")
     }
 }
+
+struct MaterialsDecodingTests {
+    private func decoder() -> JSONDecoder {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        decoder.dateDecodingStrategy = .custom { decoder in
+            let container = try decoder.singleValueContainer()
+            let string = try container.decode(String.self)
+            let formatter = ISO8601DateFormatter()
+            formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+            guard let date = formatter.date(from: string) else {
+                throw DecodingError.dataCorruptedError(in: container, debugDescription: "bad date")
+            }
+            return date
+        }
+        return decoder
+    }
+
+    private func application(materials: String) -> Data {
+        """
+        {
+            "id": 1, "company": 1, "company_name": "Acme Corp", "role_title": "Staff Engineer",
+            "job_url": "https://example.com/job/1", "apply_url": "https://example.com/apply",
+            "generated_materials": \(materials),
+            "resume_drive_url": "", "cover_letter_drive_url": "",
+            "status": "ready", "source": "ingested",
+            "applied_date": null, "salary_notes": "", "resume": null, "cover_letter": null,
+            "notes": "", "created_at": "2026-09-02T12:52:22.054202Z",
+            "updated_at": "2026-09-02T12:52:22.054209Z", "events": []
+        }
+        """.data(using: .utf8)!
+    }
+
+    /// The bug that emptied the Drafts screen: one legacy application with no
+    /// linked posting serialised its materials as `{}`, and the strict
+    /// synthesised initialiser threw on the missing keys — failing the decode
+    /// of every other application in the same response.
+    @Test func decodesAnEmptyMaterialsObjectWithoutThrowing() throws {
+        let decoded = try decoder().decode(Application.self, from: application(materials: "{}"))
+        #expect(decoded.generatedMaterials?.isEmpty == true)
+        #expect(decoded.generatedMaterials?.coverLetter == "")
+    }
+
+    @Test func decodesNullMaterials() throws {
+        let decoded = try decoder().decode(Application.self, from: application(materials: "null"))
+        #expect(decoded.generatedMaterials == nil)
+    }
+
+    @Test func decodesPartialMaterials() throws {
+        let decoded = try decoder().decode(
+            Application.self,
+            from: application(materials: #"{"cover_letter": "Dear Hiring Team"}"#))
+        #expect(decoded.generatedMaterials?.coverLetter == "Dear Hiring Team")
+        #expect(decoded.generatedMaterials?.gaps.isEmpty == true)
+    }
+
+    @Test func decodesFullMaterials() throws {
+        let json = #"""
+        {"cover_letter": "Dear Hiring Team", "resume_summary": "Development leader.",
+         "resume_bullets": ["Grew Give for Good"], "gaps": ["No PMP."], "unparsed": false}
+        """#
+        let decoded = try decoder().decode(Application.self, from: application(materials: json))
+        let materials = try #require(decoded.generatedMaterials)
+        #expect(materials.resumeBullets == ["Grew Give for Good"])
+        #expect(materials.gaps == ["No PMP."])
+        #expect(materials.isEmpty == false)
+    }
+
+    /// One bad row must not take the rest of the list with it.
+    @Test func oneMalformedRowDoesNotFailTheWholeList() throws {
+        let list = """
+        [\(String(data: application(materials: "{}"), encoding: .utf8)!),
+         \(String(data: application(materials: #"{"cover_letter": "Real letter"}"#), encoding: .utf8)!)]
+        """.data(using: .utf8)!
+        let decoded = try decoder().decode([Application].self, from: list)
+        #expect(decoded.count == 2)
+        #expect(decoded[1].generatedMaterials?.coverLetter == "Real letter")
+    }
+}

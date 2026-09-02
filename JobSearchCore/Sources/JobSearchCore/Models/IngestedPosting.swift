@@ -48,9 +48,42 @@ public struct ApplicationMaterials: Codable, Equatable, Sendable {
     /// True when the model's output didn't match the expected section format —
     /// the letter field then holds the whole response rather than losing it.
     public var unparsed: Bool
-    // No explicit CodingKeys: the API client decodes with
-    // .convertFromSnakeCase, which already maps cover_letter -> coverLetter.
-    // Declaring snake_case keys here would double-convert and fail to decode.
+
+    // Raw values are camelCase on purpose: the client decodes with
+    // .convertFromSnakeCase, so "cover_letter" has already become
+    // "coverLetter" by the time these are matched.
+    enum CodingKeys: String, CodingKey {
+        case coverLetter, resumeSummary, resumeBullets, gaps, unparsed
+    }
+
+    /// Decodes leniently. A record with no materials used to arrive as `{}` —
+    /// an object claiming to be materials while missing every field — and the
+    /// strict synthesised initialiser threw, which failed the decode of the
+    /// whole list and emptied the Drafts screen. One malformed row should cost
+    /// its own contents, not everything alongside it.
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        coverLetter = try container.decodeIfPresent(String.self, forKey: .coverLetter) ?? ""
+        resumeSummary = try container.decodeIfPresent(String.self, forKey: .resumeSummary) ?? ""
+        resumeBullets = try container.decodeIfPresent([String].self, forKey: .resumeBullets) ?? []
+        gaps = try container.decodeIfPresent([String].self, forKey: .gaps) ?? []
+        unparsed = try container.decodeIfPresent(Bool.self, forKey: .unparsed) ?? false
+    }
+
+    public init(coverLetter: String = "", resumeSummary: String = "",
+                resumeBullets: [String] = [], gaps: [String] = [],
+                unparsed: Bool = false) {
+        self.coverLetter = coverLetter
+        self.resumeSummary = resumeSummary
+        self.resumeBullets = resumeBullets
+        self.gaps = gaps
+        self.unparsed = unparsed
+    }
+
+    /// True when there's nothing worth showing, however it arrived.
+    public var isEmpty: Bool {
+        coverLetter.isEmpty && resumeSummary.isEmpty && resumeBullets.isEmpty && gaps.isEmpty
+    }
 }
 
 

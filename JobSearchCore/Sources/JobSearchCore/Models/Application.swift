@@ -52,6 +52,39 @@ public struct Application: Codable, Identifiable, Equatable, Sendable {
     public let updatedAt: Date
     public var events: [ApplicationEvent]
 
+    enum CodingKeys: String, CodingKey {
+        case id, company, companyName, roleTitle, jobUrl, status, source
+        case appliedDate, salaryNotes, applyUrl, generatedMaterials
+        case resumeDriveUrl, coverLetterDriveUrl, notes, createdAt, updatedAt, events
+    }
+
+    /// Decodes leniently, for the same reason ApplicationMaterials does: fields
+    /// added to the API later (apply_url, the Drive links) are absent from any
+    /// older or leaner payload, and the synthesised initialiser would throw on
+    /// the whole response rather than leave one string empty.
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(Int.self, forKey: .id)
+        company = try container.decode(Int.self, forKey: .company)
+        companyName = try container.decodeIfPresent(String.self, forKey: .companyName) ?? ""
+        roleTitle = try container.decodeIfPresent(String.self, forKey: .roleTitle) ?? ""
+        jobUrl = try container.decodeIfPresent(String.self, forKey: .jobUrl) ?? ""
+        status = try container.decodeIfPresent(Status.self, forKey: .status) ?? .saved
+        source = try container.decodeIfPresent(Source.self, forKey: .source) ?? .manual
+        appliedDate = try container.decodeIfPresent(String.self, forKey: .appliedDate)
+        salaryNotes = try container.decodeIfPresent(String.self, forKey: .salaryNotes) ?? ""
+        applyUrl = try container.decodeIfPresent(String.self, forKey: .applyUrl) ?? ""
+        generatedMaterials = try container.decodeIfPresent(
+            ApplicationMaterials.self, forKey: .generatedMaterials)
+        resumeDriveUrl = try container.decodeIfPresent(String.self, forKey: .resumeDriveUrl) ?? ""
+        coverLetterDriveUrl = try container.decodeIfPresent(
+            String.self, forKey: .coverLetterDriveUrl) ?? ""
+        notes = try container.decodeIfPresent(String.self, forKey: .notes) ?? ""
+        createdAt = try container.decode(Date.self, forKey: .createdAt)
+        updatedAt = try container.decode(Date.self, forKey: .updatedAt)
+        events = try container.decodeIfPresent([ApplicationEvent].self, forKey: .events) ?? []
+    }
+
     public init(
         id: Int,
         company: Int,
