@@ -141,6 +141,16 @@ public actor JobSearchAPIClient {
         try await request("api/tracker/applications/\(applicationID)/mark-applied/", method: "POST")
     }
 
+    /// Move an application along the pipeline — phone screen, interview, offer.
+    public func updateStatus(applicationID: Int, status: Application.Status) async throws -> Application {
+        struct Patch: Encodable { let status: String }
+        return try await request(
+            "api/tracker/applications/\(applicationID)/",
+            method: "PATCH",
+            body: Patch(status: status.rawValue)
+        )
+    }
+
     public func syncSheet() async throws -> Int {
         struct Result: Decodable { let synced: Int }
         let result: Result = try await request("api/tracker/applications/sync-sheet/", method: "POST")

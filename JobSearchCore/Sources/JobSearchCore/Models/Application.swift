@@ -157,6 +157,26 @@ public extension Application {
     /// not yet sent. Everything else belongs on the tracker board, not here.
     var isDraft: Bool { status == .ready || status == .approved }
 
+    /// Everything she has actually submitted, including the outcomes. Distinct
+    /// from `isDraft`: these are done and being tracked, not waiting on her.
+    var isSubmitted: Bool {
+        switch status {
+        case .applied, .phoneScreen, .interview, .offer, .rejected, .withdrawn: return true
+        case .saved, .ready, .approved: return false
+        }
+    }
+
+    /// Statuses worth offering as the next step from wherever this one is.
+    var nextSteps: [Status] {
+        switch status {
+        case .applied: return [.phoneScreen, .interview, .rejected, .withdrawn]
+        case .phoneScreen: return [.interview, .offer, .rejected, .withdrawn]
+        case .interview: return [.offer, .rejected, .withdrawn]
+        case .offer: return [.rejected, .withdrawn]
+        default: return []
+        }
+    }
+
     var bestApplyLink: URL? {
         URL(string: applyUrl.isEmpty ? jobUrl : applyUrl)
     }

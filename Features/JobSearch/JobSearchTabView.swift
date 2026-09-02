@@ -14,6 +14,7 @@ public struct JobSearchTabView: View {
         case jobFeed = "Job Feed"
         case drafts = "Drafts"
         case applications = "Applications"
+        case applied = "Applied"
         case identity = "Identity"
         var id: String { rawValue }
     }
@@ -38,6 +39,8 @@ public struct JobSearchTabView: View {
                     DraftsView(client: client, onUnauthorized: { isConnecting = true })
                 case .applications:
                     ApplicationsBoardView(client: client, onUnauthorized: { isConnecting = true })
+                case .applied:
+                    AppliedView(client: client, onUnauthorized: { isConnecting = true })
                 case .identity:
                     IdentityView(client: client, onUnauthorized: { isConnecting = true })
                 }
