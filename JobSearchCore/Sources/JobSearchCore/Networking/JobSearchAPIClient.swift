@@ -121,6 +121,22 @@ public actor JobSearchAPIClient {
         try await request("api/tracker/applications/prepare/\(jobID)/")
     }
 
+    /// Record that she's read and okayed a draft. Sends nothing anywhere.
+    public func approveApplication(id: Int) async throws -> Application {
+        try await request("api/tracker/applications/\(id)/approve/", method: "POST")
+    }
+
+    /// Replace the generated text with her own wording, then re-render the PDFs.
+    public func editMaterials(applicationID: Int, materials: ApplicationMaterials) async throws -> Application {
+        try await request(
+            "api/tracker/applications/\(applicationID)/materials/",
+            method: "PATCH",
+            body: materials,
+            // Re-renders two PDFs and re-uploads both to Drive before replying.
+            timeout: 120
+        )
+    }
+
     public func markApplied(applicationID: Int) async throws -> Application {
         try await request("api/tracker/applications/\(applicationID)/mark-applied/", method: "POST")
     }

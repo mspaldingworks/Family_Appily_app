@@ -12,6 +12,7 @@ public struct JobSearchTabView: View {
 
     enum Section: String, CaseIterable, Identifiable {
         case jobFeed = "Job Feed"
+        case drafts = "Drafts"
         case applications = "Applications"
         case identity = "Identity"
         var id: String { rawValue }
@@ -33,6 +34,8 @@ public struct JobSearchTabView: View {
                 switch selectedSection {
                 case .jobFeed:
                     JobFeedView(client: client, onUnauthorized: { isConnecting = true })
+                case .drafts:
+                    DraftsView(client: client, onUnauthorized: { isConnecting = true })
                 case .applications:
                     ApplicationsBoardView(client: client, onUnauthorized: { isConnecting = true })
                 case .identity:

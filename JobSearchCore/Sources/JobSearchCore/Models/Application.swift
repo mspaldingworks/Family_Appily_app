@@ -3,6 +3,8 @@ import Foundation
 public struct Application: Codable, Identifiable, Equatable, Sendable {
     public enum Status: String, Codable, CaseIterable, Sendable {
         case saved
+        case ready
+        case approved
         case applied
         case phoneScreen = "phone_screen"
         case interview
@@ -13,6 +15,8 @@ public struct Application: Codable, Identifiable, Equatable, Sendable {
         public var label: String {
             switch self {
             case .saved: return "Saved"
+            case .ready: return "Draft ready"
+            case .approved: return "Approved"
             case .applied: return "Applied"
             case .phoneScreen: return "Phone screen"
             case .interview: return "Interview"
@@ -37,6 +41,12 @@ public struct Application: Codable, Identifiable, Equatable, Sendable {
     public var source: Source
     public var appliedDate: String?
     public var salaryNotes: String
+    /// Where the employer actually takes applications — resolved server-side
+    /// from the source posting, falling back to the job listing.
+    public var applyUrl: String
+    public var generatedMaterials: ApplicationMaterials?
+    public var resumeDriveUrl: String
+    public var coverLetterDriveUrl: String
     public var notes: String
     public let createdAt: Date
     public let updatedAt: Date
@@ -52,6 +62,10 @@ public struct Application: Codable, Identifiable, Equatable, Sendable {
         source: Source = .manual,
         appliedDate: String? = nil,
         salaryNotes: String = "",
+        applyUrl: String = "",
+        generatedMaterials: ApplicationMaterials? = nil,
+        resumeDriveUrl: String = "",
+        coverLetterDriveUrl: String = "",
         notes: String = "",
         createdAt: Date = .now,
         updatedAt: Date = .now,
@@ -66,6 +80,10 @@ public struct Application: Codable, Identifiable, Equatable, Sendable {
         self.source = source
         self.appliedDate = appliedDate
         self.salaryNotes = salaryNotes
+        self.applyUrl = applyUrl
+        self.generatedMaterials = generatedMaterials
+        self.resumeDriveUrl = resumeDriveUrl
+        self.coverLetterDriveUrl = coverLetterDriveUrl
         self.notes = notes
         self.createdAt = createdAt
         self.updatedAt = updatedAt
@@ -99,4 +117,17 @@ public struct NewCompany: Encodable, Sendable {
     public init(name: String) {
         self.name = name
     }
+}
+
+public extension Application {
+    /// Drafts waiting on her: generated but not yet approved, or approved but
+    /// not yet sent. Everything else belongs on the tracker board, not here.
+    var isDraft: Bool { status == .ready || status == .approved }
+
+    var bestApplyLink: URL? {
+        URL(string: applyUrl.isEmpty ? jobUrl : applyUrl)
+    }
+
+    var driveResumeLink: URL? { URL(string: resumeDriveUrl) }
+    var driveCoverLetterLink: URL? { URL(string: coverLetterDriveUrl) }
 }
