@@ -153,9 +153,12 @@ public struct NewCompany: Encodable, Sendable {
 }
 
 public extension Application {
-    /// Drafts waiting on her: generated but not yet approved, or approved but
-    /// not yet sent. Everything else belongs on the tracker board, not here.
-    var isDraft: Bool { status == .ready || status == .approved }
+    /// Waiting on her to read and approve. Includes `saved` so an application
+    /// added by hand enters the pipeline at the same place a scraped one does.
+    var isDraft: Bool { status == .saved || status == .ready }
+
+    /// Approved and waiting to be sent.
+    var isApproved: Bool { status == .approved }
 
     /// Everything she has actually submitted, including the outcomes. Distinct
     /// from `isDraft`: these are done and being tracked, not waiting on her.

@@ -7,13 +7,11 @@ import UIKit
 import AppKit
 #endif
 
-/// Read the draft, fix the wording, approve it, then hand off to the employer's
-/// portal and record that it went.
+/// Read the draft and fix the wording, then approve it.
 ///
-/// Nothing here submits anything on her behalf. These jobs apply through ATS
-/// portals (Workday, iCIMS, Greenhouse) that require an account and legally
-/// meaningful attestations about work authorisation and EEO. Copying the
-/// materials, opening the portal, and recording the outcome is the whole job.
+/// Approving is the only outward action here: it moves the application to the
+/// Approvals stage. Opening the employer's form and recording the submission
+/// happen there, so each screen in the pipeline does exactly one thing.
 struct DraftReviewView: View {
     let client: JobSearchAPIClient
     let application: Application
@@ -192,40 +190,26 @@ struct DraftReviewView: View {
 
     @ViewBuilder
     private var actionBar: some View {
-        VStack(spacing: 10) {
-            if current.status == .ready {
+        VStack(spacing: 8) {
+            if current.status == .approved {
+                Label("Approved — send it from the Approvals tab.", systemImage: "checkmark.seal.fill")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            } else {
                 Button {
                     Task { await approve() }
                 } label: {
-                    if isWorking { ProgressView() }
-                    else { Label("Approve this draft", systemImage: "checkmark.seal").frame(maxWidth: .infinity) }
+                    if isWorking {
+                        ProgressView()
+                    } else {
+                        Label("Approve this draft", systemImage: "checkmark.seal")
+                            .frame(maxWidth: .infinity)
+                    }
                 }
                 .buttonStyle(.borderedProminent)
                 .frame(minHeight: 44)
-                .disabled(isWorking)
-            } else if let link = current.bestApplyLink {
-                // Copying first is the point: every one of these portals wants
-                // the letter pasted into a box she can't pre-fill from here.
-                Button {
-                    copy(letter)
-                    openLink(link)
-                } label: {
-                    Label("Copy letter and open portal", systemImage: "arrow.up.right.square")
-                        .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.borderedProminent)
-                .frame(minHeight: 44)
-            }
-
-            if current.status != .applied {
-                Button {
-                    Task { await markApplied() }
-                } label: {
-                    Label("I submitted this", systemImage: "paperplane").frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.bordered)
-                .frame(minHeight: 44)
-                .disabled(isWorking)
+                .disabled(isWorking || materials == nil)
+                .accessibilityLabel("Approve this draft and move it to Approvals")
             }
         }
         .padding()
@@ -257,20 +241,9 @@ struct DraftReviewView: View {
         defer { isWorking = false }
         do {
             apply(try await client.approveApplication(id: current.id))
-            message = "Approved. Nothing has been sent — use the button below when you're ready."
+            message = "Approved. It's in the Approvals tab when you're ready to send it."
         } catch {
             message = "Couldn't approve that: \(error)"
-        }
-    }
-
-    private func markApplied() async {
-        isWorking = true
-        defer { isWorking = false }
-        do {
-            apply(try await client.markApplied(applicationID: current.id))
-            message = "Recorded as applied, and your sheet is updated."
-        } catch {
-            message = "Couldn't record that: \(error)"
         }
     }
 
@@ -283,11 +256,4 @@ struct DraftReviewView: View {
         #endif
     }
 
-    private func openLink(_ url: URL) {
-        #if os(iOS)
-        UIApplication.shared.open(url)
-        #else
-        NSWorkspace.shared.open(url)
-        #endif
-    }
 }

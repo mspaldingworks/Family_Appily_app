@@ -13,7 +13,7 @@ public struct JobSearchTabView: View {
     enum Section: String, CaseIterable, Identifiable {
         case jobFeed = "Job Feed"
         case drafts = "Drafts"
-        case applications = "Applications"
+        case approvals = "Approvals"
         case applied = "Applied"
         case identity = "Identity"
         var id: String { rawValue }
@@ -37,8 +37,8 @@ public struct JobSearchTabView: View {
                     JobFeedView(client: client, onUnauthorized: { isConnecting = true })
                 case .drafts:
                     DraftsView(client: client, onUnauthorized: { isConnecting = true })
-                case .applications:
-                    ApplicationsBoardView(client: client, onUnauthorized: { isConnecting = true })
+                case .approvals:
+                    ApprovalsView(client: client, onUnauthorized: { isConnecting = true })
                 case .applied:
                     AppliedView(client: client, onUnauthorized: { isConnecting = true })
                 case .identity:
