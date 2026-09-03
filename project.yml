@@ -61,14 +61,17 @@ targets:
         com.apple.developer.icloud-services:
           - CloudKit
 
-  FamilyAppilyJobSearch:
+  FamilyAppilyMac:
     type: application
     platform: macOS
     deploymentTarget: "14.0"
     sources:
       - path: Platforms/macOS
+      - path: Features/Profiles
+      - path: Features/Chores
       - path: Features/JobSearch
     dependencies:
+      - package: FamilyCore
       - package: JobSearchCore
     info:
       path: Platforms/macOS/Info.plist
@@ -77,14 +80,23 @@ targets:
         LSUIElement: false
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.mspaldingworks.FamilyAppilyJobSearch
-        PRODUCT_NAME: "Job Search"
+        PRODUCT_BUNDLE_IDENTIFIER: com.mspaldingworks.FamilyAppily
+        PRODUCT_NAME: "Family Appily"
         MARKETING_VERSION: "1.0"
         SWIFT_VERSION: "5.10"
         CODE_SIGN_STYLE: Automatic
         DEVELOPMENT_TEAM: MNR8M8K86K
         ENABLE_HARDENED_RUNTIME: true
         COMBINE_HIDPI_IMAGES: true
+    # No iCloud entitlement: that requires a provisioning profile, which
+    # requires this Mac to be registered in the developer account. Without it
+    # FamilyModelContainer falls back to a local store, so the household side
+    # works but doesn't sync with the phone. See the note in the README.
+    entitlements:
+      path: Platforms/macOS/FamilyAppilyMac.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.network.client: true
 
 schemes:
   FamilyAppily:
@@ -96,9 +108,9 @@ schemes:
     test:
       config: Debug
       gatherCoverageData: false
-  FamilyAppilyJobSearch:
+  FamilyAppilyMac:
     build:
       targets:
-        FamilyAppilyJobSearch: all
+        FamilyAppilyMac: all
     run:
       config: Debug

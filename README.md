@@ -29,3 +29,31 @@ Open the project with `FamilyAppily.xcodeproj`, or regenerate it from `project.y
 ## Build order
 
 Phases are defined in §9 of `CLAUDE.md`. Run them in order; each is a self-contained prompt for Claude Code. Do not skip ahead — later phases assume the data layer from earlier ones. Remaining: Phase 2/3 (calendar), Phase 5 (reward system UI), Phase 6's widgets, Phase 7 (Mac), Phase 8 (Watch), Phase 9 (cross-platform audit).
+
+## Family Appily on the Mac
+
+`/Applications/Family Appily.app` is the full app — Home, Family Rotation, and
+the whole Job Search pipeline in a sidebar. Built from the `FamilyAppilyMac`
+target:
+
+```bash
+xcodebuild -project FamilyAppily.xcodeproj -scheme FamilyAppilyMac \
+  -destination 'platform=macOS' build
+```
+
+### Household data does not sync to the Mac yet
+
+The Mac build has **no iCloud entitlement**, so SwiftData falls back to a local
+store (`~/Library/Containers/com.mspaldingworks.FamilyAppily/…/default.store`).
+The chore chart and rotation work, seeded from `family-hub-assets`, but they are
+this Mac's own copy — changes here do not reach the iPhone and vice versa.
+
+Adding the entitlement requires a Mac App Development provisioning profile,
+which requires this Mac to be registered in the developer account:
+
+- Provisioning UDID: `00008103-001600C20AF3001E`
+- Register at developer.apple.com → Devices → macOS, then restore the iCloud
+  keys in `Platforms/macOS/FamilyAppilyMac.entitlements` and `project.yml`.
+
+Job Search is unaffected — it talks to the API over the network and shares the
+same data as the phone already.

@@ -15,9 +15,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0AAA622F7AAB70FB862CA0BB"
-               BuildableName = "FamilyAppilyJobSearch.app"
-               BlueprintName = "FamilyAppilyJobSearch"
+               BlueprintIdentifier = "07508B521E15E44F45982B46"
+               BuildableName = "FamilyAppilyMac.app"
+               BlueprintName = "FamilyAppilyMac"
                ReferencedContainer = "container:FamilyAppily.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,9 +32,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0AAA622F7AAB70FB862CA0BB"
-            BuildableName = "FamilyAppilyJobSearch.app"
-            BlueprintName = "FamilyAppilyJobSearch"
+            BlueprintIdentifier = "07508B521E15E44F45982B46"
+            BuildableName = "FamilyAppilyMac.app"
+            BlueprintName = "FamilyAppilyMac"
             ReferencedContainer = "container:FamilyAppily.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -55,9 +55,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0AAA622F7AAB70FB862CA0BB"
-            BuildableName = "FamilyAppilyJobSearch.app"
-            BlueprintName = "FamilyAppilyJobSearch"
+            BlueprintIdentifier = "07508B521E15E44F45982B46"
+            BuildableName = "FamilyAppilyMac.app"
+            BlueprintName = "FamilyAppilyMac"
             ReferencedContainer = "container:FamilyAppily.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -74,9 +74,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0AAA622F7AAB70FB862CA0BB"
-            BuildableName = "FamilyAppilyJobSearch.app"
-            BlueprintName = "FamilyAppilyJobSearch"
+            BlueprintIdentifier = "07508B521E15E44F45982B46"
+            BuildableName = "FamilyAppilyMac.app"
+            BlueprintName = "FamilyAppilyMac"
             ReferencedContainer = "container:FamilyAppily.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
