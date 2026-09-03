@@ -28,6 +28,9 @@ public struct IngestedPosting: Codable, Identifiable, Equatable, Sendable {
     /// The readable parts of the scrape, for the expanded card. Replaces the
     /// raw scraper payload the feed used to ship and never decoded.
     public var details: PostingDetails?
+    /// Which of her skills this posting asks for, and which it asks for that
+    /// she doesn't list.
+    public var skills: PostingSkills?
     public let createdAt: Date
 
     /// Where the Apply button should send her.
@@ -37,6 +40,27 @@ public struct IngestedPosting: Codable, Identifiable, Equatable, Sendable {
 }
 
 /// Tailored application materials generated for one posting.
+/// Her skills against one posting. Two separate counts, because a job matching
+/// a dozen of her skills still isn't much use if it wants four she's never
+/// touched.
+public struct PostingSkills: Codable, Equatable, Sendable {
+    public var matched: [String]
+    public var missing: [String]
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        matched = try container.decodeIfPresent([String].self, forKey: .matched) ?? []
+        missing = try container.decodeIfPresent([String].self, forKey: .missing) ?? []
+    }
+
+    public init(matched: [String] = [], missing: [String] = []) {
+        self.matched = matched
+        self.missing = missing
+    }
+
+    public var hasAnything: Bool { !matched.isEmpty || !missing.isEmpty }
+}
+
 /// What the expanded job card shows. Every field is optional in practice —
 /// scrapers omit plenty — so all of them default rather than throwing.
 public struct PostingDetails: Codable, Equatable, Sendable {

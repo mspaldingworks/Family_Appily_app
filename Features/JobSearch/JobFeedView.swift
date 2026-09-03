@@ -195,10 +195,18 @@ private struct PostingRow: View {
                 }
             }
 
+            if let posted = posting.details?.posted, !posted.isEmpty {
+                postedStamp(posted)
+            }
+
             if let chips = posting.details?.summaryChips, !chips.isEmpty {
                 Text(chips.joined(separator: " · "))
                     .font(.subheadline)
                     .fixedSize(horizontal: false, vertical: true)
+            }
+
+            if let skills = posting.skills, skills.hasAnything {
+                skillPills(skills)
             }
 
             if !posting.scoreReasons.isEmpty {
@@ -271,20 +279,21 @@ private struct PostingRow: View {
     @ViewBuilder
     private func expandedDetails(_ details: PostingDetails) -> some View {
         VStack(alignment: .leading, spacing: 12) {
-            if !details.posted.isEmpty || !details.companyRating.isEmpty {
-                HStack(spacing: 12) {
-                    if !details.posted.isEmpty {
-                        Label(details.posted, systemImage: "clock").font(.caption)
-                    }
-                    if !details.companyRating.isEmpty {
-                        Label(details.companyRating, systemImage: "star")
-                            .font(.caption)
-                            .accessibilityLabel("Employer rated \(details.companyRating)")
-                    }
-                }
-                .foregroundStyle(.secondary)
+            // The posted date is on the collapsed card already; repeating it
+            // here just pushes the description further down.
+            if !details.companyRating.isEmpty {
+                Label(details.companyRating, systemImage: "star")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .accessibilityLabel("Employer rated \(details.companyRating)")
             }
 
+            if let skills = posting.skills, !skills.matched.isEmpty {
+                detailSection("Your skills this job asks for", items: skills.matched, tint: .green)
+            }
+            if let skills = posting.skills, !skills.missing.isEmpty {
+                detailSection("Asks for, not on your profile", items: skills.missing, tint: .indigo)
+            }
             if !details.benefits.isEmpty {
                 detailSection("Benefits", items: details.benefits)
             }
@@ -310,15 +319,62 @@ private struct PostingRow: View {
         .background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 10))
     }
 
-    private func detailSection(_ title: String, items: [String]) -> some View {
+    private func detailSection(_ title: String, items: [String], tint: Color? = nil) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(title).font(.subheadline.weight(.semibold))
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(tint ?? .primary)
             ForEach(items, id: \.self) { item in
                 Text("• \(item)").font(.caption)
                     .fixedSize(horizontal: false, vertical: true)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    /// Teal, and nothing else on the card uses it — recency is the thing she
+    /// scans for first, and it shouldn't have to compete with the score or the
+    /// account badge. Paired with a clock, since colour is never the only
+    /// signal (CLAUDE.md §3.2).
+    private func postedStamp(_ posted: String) -> some View {
+        Label(posted.localizedCapitalized, systemImage: "clock.fill")
+            .font(.caption.weight(.semibold))
+            .foregroundStyle(Color.teal)
+            .accessibilityLabel("Posted \(posted)")
+    }
+
+    /// Two counts, two colours, deliberately different shapes of information:
+    /// green for what she brings, indigo for what she'd be learning. Indigo
+    /// rather than red or orange because a gap is context, not a warning — and
+    /// because orange already means "needs an account" on this card.
+    private func skillPills(_ skills: PostingSkills) -> some View {
+        HStack(spacing: 8) {
+            if !skills.matched.isEmpty {
+                pill(count: skills.matched.count,
+                     noun: "skill match" + (skills.matched.count == 1 ? "" : "es"),
+                     symbol: "checkmark.seal.fill",
+                     tint: .green,
+                     spoken: "\(skills.matched.count) of your skills match: \(skills.matched.joined(separator: ", "))")
+            }
+            if !skills.missing.isEmpty {
+                pill(count: skills.missing.count,
+                     noun: "to learn",
+                     symbol: "book.fill",
+                     tint: .indigo,
+                     spoken: "\(skills.missing.count) skills you don't list: \(skills.missing.joined(separator: ", "))")
+            }
+            Spacer(minLength: 0)
+        }
+    }
+
+    private func pill(count: Int, noun: String, symbol: String, tint: Color, spoken: String) -> some View {
+        Label("\(count) \(noun)", systemImage: symbol)
+            .font(.caption.weight(.semibold))
+            .foregroundStyle(tint)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(tint.opacity(0.14), in: Capsule())
+            .accessibilityLabel(spoken)
     }
 
     /// No confirmation dialog — the feed shows an Undo banner instead, per

@@ -185,3 +185,26 @@ struct PostingDetailsDecodingTests {
         #expect(details.summaryChips.contains("Full-time"))
     }
 }
+
+struct PostingSkillsDecodingTests {
+    private func decode(_ json: String) throws -> PostingSkills {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        return try decoder.decode(PostingSkills.self, from: json.data(using: .utf8)!)
+    }
+
+    @Test func decodesBothLists() throws {
+        let skills = try decode(#"{"matched": ["Fundraising", "WordPress"], "missing": ["Tableau"]}"#)
+        #expect(skills.matched.count == 2)
+        #expect(skills.missing == ["Tableau"])
+        #expect(skills.hasAnything)
+    }
+
+    /// A posting with no description yields neither list; the card should just
+    /// omit the pills rather than fail to decode.
+    @Test func decodesAnEmptyResult() throws {
+        let skills = try decode("{}")
+        #expect(skills.matched.isEmpty)
+        #expect(skills.hasAnything == false)
+    }
+}
