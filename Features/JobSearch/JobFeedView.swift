@@ -19,6 +19,8 @@ struct JobFeedView: View {
     @State private var errorMessage: String?
     @State private var applyingID: Int?
     @State private var expanded: Set<Int> = []
+    @State private var removed: RemovedItem?
+    @State private var isUndoing = false
 
     var body: some View {
         Group {
@@ -38,10 +40,21 @@ struct JobFeedView: View {
                         isExpanded: expanded.contains(posting.id),
                         onToggleDetails: { toggleDetails(posting) },
                         onApply: { Task { await applyTo(posting) } },
-                        onSignIn: { openSignIn(posting) }
+                        onSignIn: { openSignIn(posting) },
+                        onRemove: { Task { await remove(posting) } }
                     )
                 }
                 .listStyle(.inset)
+            }
+        }
+        .safeAreaInset(edge: .bottom) {
+            if let removed {
+                UndoBanner(
+                    removed: removed,
+                    isWorking: isUndoing,
+                    onUndo: { Task { await undoRemove(removed) } },
+                    onDismiss: { self.removed = nil }
+                )
             }
         }
         .overlay(alignment: .bottom) {
@@ -55,6 +68,28 @@ struct JobFeedView: View {
         }
         .task { await load() }
         .refreshable { await load() }
+    }
+
+    private func remove(_ posting: IngestedPosting) async {
+        do {
+            _ = try await client.dismissPosting(id: posting.id)
+            postings.removeAll { $0.id == posting.id }
+            removed = RemovedItem(id: posting.id, label: posting.title)
+        } catch {
+            errorMessage = "Couldn't remove \(posting.title): \(error)"
+        }
+    }
+
+    private func undoRemove(_ item: RemovedItem) async {
+        isUndoing = true
+        defer { isUndoing = false }
+        do {
+            _ = try await client.restorePosting(id: item.id)
+            removed = nil
+            await load()
+        } catch {
+            errorMessage = "Couldn't put \(item.label) back: \(error)"
+        }
     }
 
     private func toggleDetails(_ posting: IngestedPosting) {
@@ -127,6 +162,7 @@ private struct PostingRow: View {
     let onToggleDetails: () -> Void
     let onApply: () -> Void
     let onSignIn: () -> Void
+    let onRemove: () -> Void
 
     /// Green / amber / grey rather than a number alone, so the strength of a
     /// match reads at a glance without parsing digits.
@@ -205,12 +241,14 @@ private struct PostingRow: View {
             VStack(alignment: .leading, spacing: 10) {
                 applyButton
                 detailsButton
+                removeButton
             }
         } else {
             HStack(spacing: 10) {
                 applyButton
                 detailsButton
                 Spacer()
+                removeButton
             }
         }
     }
@@ -281,6 +319,18 @@ private struct PostingRow: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    /// No confirmation dialog — the feed shows an Undo banner instead, per
+    /// CLAUDE.md §3.5.
+    private var removeButton: some View {
+        Button(role: .destructive, action: onRemove) {
+            Label("Remove", systemImage: "xmark.circle")
+                .labelStyle(.iconOnly)
+        }
+        .buttonStyle(.bordered)
+        .frame(minWidth: 44, minHeight: 44)
+        .accessibilityLabel("Remove \(posting.title) from the feed")
     }
 
     private var applyButton: some View {

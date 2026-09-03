@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		003504C2D80C562C0B0CA9C5 /* ProfilePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B76C9F6C1C03A5BC1C639D /* ProfilePickerView.swift */; };
 		00BF15738A704E35F9178FB6 /* ApprovalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE2E4DDB2378E8FD041724E /* ApprovalsView.swift */; };
+		09446443DEB8D7A1D11123A2 /* UndoBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474ADAD27DBAFAEF2D7BD588 /* UndoBanner.swift */; };
 		0A79732C03639AD4C322F904 /* AdultGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D541C681A6D6A7A05DDD8DED /* AdultGate.swift */; };
 		0DE29FBAF82C9B92C66260F0 /* DayCardFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7B74C9AF7E2B971FF63974 /* DayCardFrame.swift */; };
 		293CEEB19916BD4411A601FE /* WeeklyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F630409DD2005551010D5B /* WeeklyChartView.swift */; };
@@ -34,6 +35,7 @@
 		CB21A7C0782880982CD00E81 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DCC1D7D827A0856AED8FFE09 /* Assets.xcassets */; };
 		CE65DB2789074BB8E224FBE4 /* JobSearchConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBA3B54F1BA913EBC29318A2 /* JobSearchConfig.swift */; };
 		D40DF78D31486C7773DF2D9D /* DraftReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD28FF0E0419721A0803F38 /* DraftReviewView.swift */; };
+		D8CB40677248DD6A43F38251 /* UndoBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474ADAD27DBAFAEF2D7BD588 /* UndoBanner.swift */; };
 		DED989213F3D464CA1BF14C3 /* AppliedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B1CE23B969A2068A6E1494 /* AppliedView.swift */; };
 		E48E16097C0976BA853CC657 /* JobSearchSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864695DF2BB9BD17B9203BB3 /* JobSearchSetupView.swift */; };
 		E5A279CF04022173CDE6A62F /* CompletionMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797A6D1BE6092083000FD565 /* CompletionMark.swift */; };
@@ -54,6 +56,7 @@
 		30759EC7E90F4913793D3555 /* FamilyAppilyJobSearchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyAppilyJobSearchApp.swift; sourceTree = "<group>"; };
 		3B47836CD54B8ECDFA6923D5 /* FamilyAppily.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FamilyAppily.entitlements; sourceTree = "<group>"; };
 		4383D3E29DD6623D29A72597 /* ChoreRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoreRow.swift; sourceTree = "<group>"; };
+		474ADAD27DBAFAEF2D7BD588 /* UndoBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndoBanner.swift; sourceTree = "<group>"; };
 		4A7B74C9AF7E2B971FF63974 /* DayCardFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCardFrame.swift; sourceTree = "<group>"; };
 		61E3A16D7A582B3A9E3D3DF1 /* FamilyCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = FamilyCore; path = FamilyCore; sourceTree = SOURCE_ROOT; };
 		6CDEA4ADF710D0F021B7F928 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -202,6 +205,7 @@
 				FBA3B54F1BA913EBC29318A2 /* JobSearchConfig.swift */,
 				864695DF2BB9BD17B9203BB3 /* JobSearchSetupView.swift */,
 				BB49078220BF6337E94B52F6 /* JobSearchTabView.swift */,
+				474ADAD27DBAFAEF2D7BD588 /* UndoBanner.swift */,
 			);
 			name = JobSearch;
 			path = Features/JobSearch;
@@ -330,6 +334,7 @@
 				FB5E277B10DF78BC184553D4 /* JobSearchMacRootView.swift in Sources */,
 				E48E16097C0976BA853CC657 /* JobSearchSetupView.swift in Sources */,
 				53B1EEB60B232BD0A5F63EDE /* JobSearchTabView.swift in Sources */,
+				09446443DEB8D7A1D11123A2 /* UndoBanner.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -355,6 +360,7 @@
 				5BBCDE33B7783D0FD5C800BE /* JobSearchTabView.swift in Sources */,
 				003504C2D80C562C0B0CA9C5 /* ProfilePickerView.swift in Sources */,
 				F8A5FBCF8318E249F80A8293 /* RootTabView.swift in Sources */,
+				D8CB40677248DD6A43F38251 /* UndoBanner.swift in Sources */,
 				293CEEB19916BD4411A601FE /* WeeklyChartView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

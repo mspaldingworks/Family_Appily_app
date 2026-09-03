@@ -6,6 +6,7 @@ public struct Application: Codable, Identifiable, Equatable, Sendable {
         case ready
         case approved
         case applied
+        case discarded
         case phoneScreen = "phone_screen"
         case interview
         case offer
@@ -18,6 +19,7 @@ public struct Application: Codable, Identifiable, Equatable, Sendable {
             case .ready: return "Draft ready"
             case .approved: return "Approved"
             case .applied: return "Applied"
+            case .discarded: return "Removed"
             case .phoneScreen: return "Phone screen"
             case .interview: return "Interview"
             case .offer: return "Offer"
@@ -165,7 +167,7 @@ public extension Application {
     var isSubmitted: Bool {
         switch status {
         case .applied, .phoneScreen, .interview, .offer, .rejected, .withdrawn: return true
-        case .saved, .ready, .approved: return false
+        case .saved, .ready, .approved, .discarded: return false
         }
     }
 

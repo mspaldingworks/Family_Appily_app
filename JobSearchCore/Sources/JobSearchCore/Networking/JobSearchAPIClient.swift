@@ -157,6 +157,25 @@ public actor JobSearchAPIClient {
         return result.synced
     }
 
+    /// Take a posting out of the feed. Reversible with `restorePosting`.
+    public func dismissPosting(id: Int) async throws -> IngestedPosting {
+        try await request("api/ingestion/postings/\(id)/dismiss/", method: "POST")
+    }
+
+    public func restorePosting(id: Int) async throws -> IngestedPosting {
+        try await request("api/ingestion/postings/\(id)/restore/", method: "POST")
+    }
+
+    /// Remove an application from the pipeline. Not a delete — the generated
+    /// text cost money and undo has to be able to put it back.
+    public func discardApplication(id: Int) async throws -> Application {
+        try await request("api/tracker/applications/\(id)/discard/", method: "POST")
+    }
+
+    public func restoreApplication(id: Int) async throws -> Application {
+        try await request("api/tracker/applications/\(id)/restore/", method: "POST")
+    }
+
     public func promotePosting(id: Int) async throws -> Application {
         try await request("api/ingestion/postings/\(id)/promote/", method: "POST")
     }

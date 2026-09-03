@@ -18,6 +18,8 @@ struct DraftsView: View {
     @State private var approvingID: Int?
     @State private var showingAddSheet = false
     @State private var companies: [Company] = []
+    @State private var removed: RemovedItem?
+    @State private var isUndoing = false
 
     private var drafts: [Application] { applications.filter(\.isDraft) }
 
@@ -37,10 +39,21 @@ struct DraftsView: View {
                         application: application,
                         isApproving: approvingID == application.id,
                         onRead: { reviewing = application },
-                        onApprove: { Task { await approve(application) } }
+                        onApprove: { Task { await approve(application) } },
+                        onRemove: { Task { await remove(application) } }
                     )
                 }
                 .listStyle(.inset)
+            }
+        }
+        .safeAreaInset(edge: .bottom) {
+            if let removed {
+                UndoBanner(
+                    removed: removed,
+                    isWorking: isUndoing,
+                    onUndo: { Task { await undoRemove(removed) } },
+                    onDismiss: { self.removed = nil }
+                )
             }
         }
         .overlay(alignment: .bottom) {
@@ -79,6 +92,31 @@ struct DraftsView: View {
         }
     }
 
+    /// Remove without deleting: the generated text cost money, the PDFs exist
+    /// in Drive, and undo has to be able to put it back. The source posting is
+    /// dismissed too, so the job doesn't reappear in tomorrow's feed.
+    private func remove(_ application: Application) async {
+        do {
+            _ = try await client.discardApplication(id: application.id)
+            applications.removeAll { $0.id == application.id }
+            removed = RemovedItem(id: application.id, label: application.roleTitle)
+        } catch {
+            errorMessage = "Couldn't remove \(application.roleTitle): \(error)"
+        }
+    }
+
+    private func undoRemove(_ item: RemovedItem) async {
+        isUndoing = true
+        defer { isUndoing = false }
+        do {
+            _ = try await client.restoreApplication(id: item.id)
+            removed = nil
+            await load()
+        } catch {
+            errorMessage = "Couldn't put \(item.label) back: \(error)"
+        }
+    }
+
     /// Approve without opening the draft. Sends nothing — it moves the
     /// application to the Approvals stage, where submitting happens.
     private func approve(_ application: Application) async {
@@ -114,6 +152,7 @@ private struct DraftRow: View {
     let isApproving: Bool
     let onRead: () -> Void
     let onApprove: () -> Void
+    let onRemove: () -> Void
 
     private var hasMaterials: Bool {
         !(application.generatedMaterials?.isEmpty ?? true)
@@ -146,10 +185,21 @@ private struct DraftRow: View {
     @ViewBuilder
     private var actions: some View {
         if typeSize.isAccessibilitySize {
-            VStack(alignment: .leading, spacing: 8) { buttons }
+            VStack(alignment: .leading, spacing: 8) { buttons; removeButton }
         } else {
-            HStack(spacing: 10) { buttons; Spacer() }
+            HStack(spacing: 10) { buttons; Spacer(); removeButton }
         }
+    }
+
+    /// No confirmation dialog — an Undo banner appears instead, per §3.5.
+    private var removeButton: some View {
+        Button(role: .destructive, action: onRemove) {
+            Label("Remove", systemImage: "xmark.circle")
+                .labelStyle(.iconOnly)
+        }
+        .buttonStyle(.bordered)
+        .frame(minWidth: 44, minHeight: 44)
+        .accessibilityLabel("Remove \(application.roleTitle) from your drafts")
     }
 
     @ViewBuilder
