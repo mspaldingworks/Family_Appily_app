@@ -66,23 +66,32 @@ enum JobSearchConfig {
         return token
     }
 
-    /// Keychain wins, so a token entered or re-entered in the app always beats
-    /// whatever was compiled in.
+    /// The compiled-in token wins, and the keychain is only consulted when
+    /// there isn't one.
+    ///
+    /// This order exists for macOS. Reading the login keychain there prompts
+    /// for the account password, and when the token is already baked into the
+    /// build that prompt buys nothing — it's a password dialog guarding a
+    /// lookup certain to come back empty. iOS never showed it, so the cost was
+    /// invisible until the app ran on a Mac.
     static var resolvedToken: String? {
+        if let baked = buildTimeToken { return baked }
         let stored = JobSearchKeychain.loadToken()
-        return stored?.isEmpty == false ? stored : buildTimeToken
+        return stored?.isEmpty == false ? stored : nil
     }
 
     /// Always returns a client, even with no token. The Job Feed is the whole
     /// point of this tab and must open straight to the list — a missing token
     /// is an error to show inside the feed, not a wall in front of it.
     static func makeClient() -> JobSearchAPIClient {
+        // Resolve once. The old version read the keychain here and again in
+        // resolvedToken, so a single launch could raise two password prompts.
+        let token = resolvedToken
         // Never logs the token itself — just which source won, which is the only
         // thing needed to diagnose "why is it asking me to connect again?".
-        let stored = JobSearchKeychain.loadToken()
         logger.debug("""
-            token source: \(stored?.isEmpty == false ? "keychain" : (buildTimeToken != nil ? "build-time" : "none"), privacy: .public)
+            token source: \(buildTimeToken != nil ? "build-time" : (token != nil ? "keychain" : "none"), privacy: .public)
             """)
-        return JobSearchAPIClient(configuration: .init(baseURL: baseURL, token: resolvedToken ?? ""))
+        return JobSearchAPIClient(configuration: .init(baseURL: baseURL, token: token ?? ""))
     }
 }
