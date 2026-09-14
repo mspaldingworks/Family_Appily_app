@@ -4,8 +4,5 @@
 <dict>
 	<key>com.apple.security.app-sandbox</key>
 	<true/>
-	<!-- The Job Search tab is the only part that talks to a server. -->
-	<key>com.apple.security.network.client</key>
-	<true/>
 </dict>
 </plist>

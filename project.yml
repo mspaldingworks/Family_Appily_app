@@ -5,19 +5,9 @@ options:
     iOS: "17.0"
     macOS: "14.0"
 
-# Local.xcconfig supplies JOB_SEARCH_API_TOKEN. It's gitignored and machine-local,
-# so the token is baked into every build without anyone remembering a command-line
-# flag — forgetting it is what put the "Connect Job Search" wall back on the phone.
-# Builds fine without the file; the app just has no token.
-configFiles:
-  Debug: Local.xcconfig
-  Release: Local.xcconfig
-
 packages:
   FamilyCore:
     path: FamilyCore
-  JobSearchCore:
-    path: JobSearchCore
 
 targets:
   FamilyAppily:
@@ -28,14 +18,11 @@ targets:
       - path: Platforms/iOS
       - path: Features/Profiles
       - path: Features/Chores
-      - path: Features/JobSearch
     dependencies:
       - package: FamilyCore
-      - package: JobSearchCore
     info:
       path: Platforms/iOS/Info.plist
       properties:
-        JobSearchAPIToken: $(JOB_SEARCH_API_TOKEN)
         UILaunchScreen: {}
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
@@ -69,14 +56,11 @@ targets:
       - path: Platforms/macOS
       - path: Features/Profiles
       - path: Features/Chores
-      - path: Features/JobSearch
     dependencies:
       - package: FamilyCore
-      - package: JobSearchCore
     info:
       path: Platforms/macOS/Info.plist
       properties:
-        JobSearchAPIToken: $(JOB_SEARCH_API_TOKEN)
         LSUIElement: false
     settings:
       base:
@@ -96,7 +80,6 @@ targets:
       path: Platforms/macOS/FamilyAppilyMac.entitlements
       properties:
         com.apple.security.app-sandbox: true
-        com.apple.security.network.client: true
 
 schemes:
   FamilyAppily:

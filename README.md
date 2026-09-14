@@ -22,8 +22,6 @@ Native SwiftUI family-management app for iPhone, iPad, Apple Watch, and Mac. Bri
 
 Phase 0 (foundation) and Phase 1 (profile picker, weekly chart, card frames, completion mark) are built, per `PHASE0_PROMPT.md`. `rotationEpoch` still needs to be set once by an adult in-app (there's a setup prompt for it) — see §11 of `CLAUDE.md` for the remaining open items.
 
-Also built out of sequence: **Job Search**, a new tab with its own scoped backend (see `ARCHITECTURE_DECISION.md` in the API repo) — applications board, RSS-sourced job feed, and identity/profile view, behind the same inline adult gate as other adult actions.
-
 Open the project with `FamilyAppily.xcodeproj`, or regenerate it from `project.yml` via `xcodegen generate` (`brew install xcodegen`) if you change the project structure.
 
 ## Build order
@@ -32,9 +30,8 @@ Phases are defined in §9 of `CLAUDE.md`. Run them in order; each is a self-cont
 
 ## Family Appily on the Mac
 
-`/Applications/Family Appily.app` is the full app — Home, Family Rotation, and
-the whole Job Search pipeline in a sidebar. Built from the `FamilyAppilyMac`
-target:
+`/Applications/Family Appily.app` is the full app — Home and Family Rotation
+in a sidebar. Built from the `FamilyAppilyMac` target:
 
 ```bash
 xcodebuild -project FamilyAppily.xcodeproj -scheme FamilyAppilyMac \
@@ -54,6 +51,3 @@ which requires this Mac to be registered in the developer account:
 - Provisioning UDID: `00008103-001600C20AF3001E`
 - Register at developer.apple.com → Devices → macOS, then restore the iCloud
   keys in `Platforms/macOS/FamilyAppilyMac.entitlements` and `project.yml`.
-
-Job Search is unaffected — it talks to the API over the network and shares the
-same data as the phone already.
