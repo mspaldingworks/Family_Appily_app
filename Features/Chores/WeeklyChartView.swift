@@ -1,6 +1,12 @@
 import FamilyCore
 import SwiftData
 import SwiftUI
+#if canImport(UIKit)
+import UIKit
+#endif
+#if canImport(AudioToolbox)
+import AudioToolbox
+#endif
 
 /// Seven day cards, four in the top row and three in the bottom, week
 /// beginning Sunday — preserved on iPad/Mac, collapsing to a vertical list
@@ -22,6 +28,8 @@ public struct WeeklyChartView: View {
     private var ticketBalance: Int { TicketService.balance(for: child.id, in: ticketEntries) }
 
     @AppStorage("rotationEpochISO8601") private var rotationEpochISO8601: String = ""
+    @AppStorage("hapticsEnabled") private var hapticsEnabled = true
+    @AppStorage("soundEnabled") private var soundEnabled = false
     @State private var showingRotationSetup = false
 
     public init(child: Child) {
@@ -126,8 +134,22 @@ public struct WeeklyChartView: View {
             // Completing a chore earns one ticket — the "Completing my chores"
             // earn item from §7.7, wired directly to the child's own action.
             modelContext.insert(TicketLedgerEntry(childID: childID, amount: 1, kind: .earn, referenceID: choreID, occurredAt: day))
+            playCompletionFeedback()
         }
         try? modelContext.save()
+    }
+
+    /// Haptic + optional sound on completion, per §3.7 — each independently
+    /// mutable in the Parents settings. iOS-only; a no-op elsewhere.
+    private func playCompletionFeedback() {
+        #if os(iOS)
+        if hapticsEnabled {
+            UINotificationFeedbackGenerator().notificationOccurred(.success)
+        }
+        if soundEnabled {
+            AudioServicesPlaySystemSound(SystemSoundID(1057))
+        }
+        #endif
     }
 
     private func setRotationEpoch(_ date: Date) {

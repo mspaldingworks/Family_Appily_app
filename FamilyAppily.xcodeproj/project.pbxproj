@@ -15,21 +15,29 @@
 		41EADF806F147A3FC781DBFF /* ChoreRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4383D3E29DD6623D29A72597 /* ChoreRow.swift */; };
 		4874BFF89E8F74CA384DEB29 /* WeeklyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F630409DD2005551010D5B /* WeeklyChartView.swift */; };
 		564A6EDA6B2512DD8F97CC8C /* ChoreRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4383D3E29DD6623D29A72597 /* ChoreRow.swift */; };
+		59B50ABC46C61208C97CACC6 /* ChildSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BBE5CCB205BA2A3C195358E /* ChildSettingsView.swift */; };
 		5D22A8B90448C3D88604B57D /* FamilyAppilyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F57BD65D1E4586B0E4B39AE2 /* FamilyAppilyApp.swift */; };
+		63E114E161D8FBCE8D5B6DC2 /* ChoreSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5838CB35CBFE479FFB9AE584 /* ChoreSettingsView.swift */; };
+		6922498929EEB6BCF50935F1 /* ParentDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB67EA9D432085D898854D95 /* ParentDashboardView.swift */; };
 		6AEA55B280AFAFEAD5D53378 /* AdultGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D541C681A6D6A7A05DDD8DED /* AdultGate.swift */; };
 		6BC49A4E31EC6BCE749D9FEE /* FamilyCore in Frameworks */ = {isa = PBXBuildFile; productRef = 709889DB199DB2ACFC990A52 /* FamilyCore */; };
 		6FD034B18CF36C832698AA9D /* FamilyCore in Frameworks */ = {isa = PBXBuildFile; productRef = F545B5D6CC3867011FCE9116 /* FamilyCore */; };
+		7674564C10883A38E9D2335D /* ChildSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BBE5CCB205BA2A3C195358E /* ChildSettingsView.swift */; };
 		7C398F2F383C9854DFA02A04 /* FamilyAppilyMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE1BDF3089BDC4EDEC3ADC6 /* FamilyAppilyMacApp.swift */; };
 		7F34F9AEA5A1B7D50F3A62FD /* CompletionMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797A6D1BE6092083000FD565 /* CompletionMark.swift */; };
 		8001D4C5CFD009D898F0B874 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6CDEA4ADF710D0F021B7F928 /* Assets.xcassets */; };
 		97704E02238759216108DE5C /* FamilyAppilyMacRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85173E294DAE5E1B2FCDE94D /* FamilyAppilyMacRootView.swift */; };
 		A78C4B5399A2C61E5C75BF0B /* DayCardFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7B74C9AF7E2B971FF63974 /* DayCardFrame.swift */; };
+		A9230F7DA3889BF3D860D0FD /* ChoreAssignmentEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A23975051C05B005F9D0829 /* ChoreAssignmentEditorView.swift */; };
+		AB5E1D7FA5512623BA01C677 /* ParentDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB67EA9D432085D898854D95 /* ParentDashboardView.swift */; };
+		B5DB03B6E99B7B981E5732A9 /* ChoreSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5838CB35CBFE479FFB9AE584 /* ChoreSettingsView.swift */; };
 		B90FE73C4EEC12FAB96DD8A2 /* FamilyRotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A69B939AD964E1FECE5A7D0 /* FamilyRotationView.swift */; };
 		C2047BDEC8F8D436F9EE180F /* RewardChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7340364D4930DB53E623E83E /* RewardChartView.swift */; };
 		C9F21AE4201F199DED7A12C2 /* ProfilePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B76C9F6C1C03A5BC1C639D /* ProfilePickerView.swift */; };
 		CB21A7C0782880982CD00E81 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DCC1D7D827A0856AED8FFE09 /* Assets.xcassets */; };
 		D450DE8DC59C95FF6730DF5C /* FamilyRotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A69B939AD964E1FECE5A7D0 /* FamilyRotationView.swift */; };
 		E5A279CF04022173CDE6A62F /* CompletionMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797A6D1BE6092083000FD565 /* CompletionMark.swift */; };
+		E8C8B2CB5057F415BAEA86E4 /* ChoreAssignmentEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A23975051C05B005F9D0829 /* ChoreAssignmentEditorView.swift */; };
 		EB5641838E64D896E7A5F019 /* RewardChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7340364D4930DB53E623E83E /* RewardChartView.swift */; };
 		F7B5D30FC68A7549667A9DCF /* RewardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CA6CDA8B621E8B1D074158 /* RewardsView.swift */; };
 		F8A5FBCF8318E249F80A8293 /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F63A131F244EAA4D6D8D4E8D /* RootTabView.swift */; };
@@ -37,10 +45,13 @@
 
 /* Begin PBXFileReference section */
 		0A69B939AD964E1FECE5A7D0 /* FamilyRotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyRotationView.swift; sourceTree = "<group>"; };
+		2BBE5CCB205BA2A3C195358E /* ChildSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildSettingsView.swift; sourceTree = "<group>"; };
 		3B47836CD54B8ECDFA6923D5 /* FamilyAppily.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FamilyAppily.entitlements; sourceTree = "<group>"; };
 		4383D3E29DD6623D29A72597 /* ChoreRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoreRow.swift; sourceTree = "<group>"; };
 		4A7B74C9AF7E2B971FF63974 /* DayCardFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCardFrame.swift; sourceTree = "<group>"; };
+		5838CB35CBFE479FFB9AE584 /* ChoreSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoreSettingsView.swift; sourceTree = "<group>"; };
 		61E3A16D7A582B3A9E3D3DF1 /* FamilyCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = FamilyCore; path = FamilyCore; sourceTree = SOURCE_ROOT; };
+		6A23975051C05B005F9D0829 /* ChoreAssignmentEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoreAssignmentEditorView.swift; sourceTree = "<group>"; };
 		6CDEA4ADF710D0F021B7F928 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7340364D4930DB53E623E83E /* RewardChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardChartView.swift; sourceTree = "<group>"; };
 		797A6D1BE6092083000FD565 /* CompletionMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionMark.swift; sourceTree = "<group>"; };
@@ -57,6 +68,7 @@
 		F57BD65D1E4586B0E4B39AE2 /* FamilyAppilyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyAppilyApp.swift; sourceTree = "<group>"; };
 		F63A131F244EAA4D6D8D4E8D /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
 		F92C5B15646BCC4881099FF5 /* FamilyAppilyMac.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FamilyAppilyMac.entitlements; sourceTree = "<group>"; };
+		FB67EA9D432085D898854D95 /* ParentDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentDashboardView.swift; sourceTree = "<group>"; };
 		FF1CA6C19D4406965A9F4595 /* FamilyAppily.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = FamilyAppily.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -113,6 +125,18 @@
 			path = Platforms/macOS;
 			sourceTree = "<group>";
 		};
+		6EB7961BD81A9C35309FEADF /* Parents */ = {
+			isa = PBXGroup;
+			children = (
+				2BBE5CCB205BA2A3C195358E /* ChildSettingsView.swift */,
+				6A23975051C05B005F9D0829 /* ChoreAssignmentEditorView.swift */,
+				5838CB35CBFE479FFB9AE584 /* ChoreSettingsView.swift */,
+				FB67EA9D432085D898854D95 /* ParentDashboardView.swift */,
+			);
+			name = Parents;
+			path = Features/Parents;
+			sourceTree = "<group>";
+		};
 		6F27524961344C3BABB9519B /* Chores */ = {
 			isa = PBXGroup;
 			children = (
@@ -133,6 +157,7 @@
 				AA8C9766A0BEFF0F4462E780 /* iOS */,
 				6D1132918D15029B0C7792BF /* macOS */,
 				7C2A2D369844946572DB0BB7 /* Packages */,
+				6EB7961BD81A9C35309FEADF /* Parents */,
 				4B581CD0194AEAE794A2544E /* Profiles */,
 				14166B3F833FADC45E401629 /* Rewards */,
 				992302F166E08F38043C59A8 /* Products */,
@@ -279,12 +304,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				6AEA55B280AFAFEAD5D53378 /* AdultGate.swift in Sources */,
+				7674564C10883A38E9D2335D /* ChildSettingsView.swift in Sources */,
+				A9230F7DA3889BF3D860D0FD /* ChoreAssignmentEditorView.swift in Sources */,
 				564A6EDA6B2512DD8F97CC8C /* ChoreRow.swift in Sources */,
+				B5DB03B6E99B7B981E5732A9 /* ChoreSettingsView.swift in Sources */,
 				7F34F9AEA5A1B7D50F3A62FD /* CompletionMark.swift in Sources */,
 				A78C4B5399A2C61E5C75BF0B /* DayCardFrame.swift in Sources */,
 				7C398F2F383C9854DFA02A04 /* FamilyAppilyMacApp.swift in Sources */,
 				97704E02238759216108DE5C /* FamilyAppilyMacRootView.swift in Sources */,
 				D450DE8DC59C95FF6730DF5C /* FamilyRotationView.swift in Sources */,
+				6922498929EEB6BCF50935F1 /* ParentDashboardView.swift in Sources */,
 				C9F21AE4201F199DED7A12C2 /* ProfilePickerView.swift in Sources */,
 				EB5641838E64D896E7A5F019 /* RewardChartView.swift in Sources */,
 				F7B5D30FC68A7549667A9DCF /* RewardsView.swift in Sources */,
@@ -297,11 +326,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				0A79732C03639AD4C322F904 /* AdultGate.swift in Sources */,
+				59B50ABC46C61208C97CACC6 /* ChildSettingsView.swift in Sources */,
+				E8C8B2CB5057F415BAEA86E4 /* ChoreAssignmentEditorView.swift in Sources */,
 				41EADF806F147A3FC781DBFF /* ChoreRow.swift in Sources */,
+				63E114E161D8FBCE8D5B6DC2 /* ChoreSettingsView.swift in Sources */,
 				E5A279CF04022173CDE6A62F /* CompletionMark.swift in Sources */,
 				0DE29FBAF82C9B92C66260F0 /* DayCardFrame.swift in Sources */,
 				5D22A8B90448C3D88604B57D /* FamilyAppilyApp.swift in Sources */,
 				B90FE73C4EEC12FAB96DD8A2 /* FamilyRotationView.swift in Sources */,
+				AB5E1D7FA5512623BA01C677 /* ParentDashboardView.swift in Sources */,
 				003504C2D80C562C0B0CA9C5 /* ProfilePickerView.swift in Sources */,
 				C2047BDEC8F8D436F9EE180F /* RewardChartView.swift in Sources */,
 				3BF558E8083FE151ECCC2179 /* RewardsView.swift in Sources */,

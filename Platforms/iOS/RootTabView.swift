@@ -2,14 +2,26 @@ import FamilyCore
 import SwiftData
 import SwiftUI
 
-/// The app's root. Hosts the Profile picker → Child chart → Family rotation
-/// flow and kicks off the one-time seed of family data.
+/// The app's root. A Family tab — the profile picker → child chart → family
+/// rotation flow the app still opens into (§3.5) — and a Parents tab, gated
+/// behind Face ID / passcode so a child can't reach chore definitions,
+/// balances, or settings. Also kicks off the one-time seed of family data.
 struct RootTabView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var seedingError: Error?
 
     var body: some View {
-        ProfilePickerView()
+        TabView {
+            ProfilePickerView()
+                .tabItem { Label("Family", systemImage: "house.fill") }
+
+            NavigationStack {
+                AdultGated(reason: "Open the parents area to change chores, tickets, and settings") {
+                    ParentDashboardView()
+                }
+            }
+            .tabItem { Label("Parents", systemImage: "gearshape.fill") }
+        }
         .task {
             do {
                 try FamilySeeder.seedIfNeeded(context: modelContext)

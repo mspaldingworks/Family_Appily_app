@@ -44,6 +44,7 @@ struct AdultGated<Content: View>: View {
 
     @StateObject private var gate = AdultGate()
     @State private var didFail = false
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         Group {
@@ -74,6 +75,12 @@ struct AdultGated<Content: View>: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(SharedTokensBackground())
             }
+        }
+        // Re-lock when the app leaves the foreground so an unlocked adult area
+        // can't be left open on a shared device (§3.5). Adult access is
+        // per-session, not permanent — see AdultGate.lock().
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase != .active { gate.lock() }
         }
     }
 }

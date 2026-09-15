@@ -19,6 +19,7 @@ targets:
       - path: Features/Profiles
       - path: Features/Chores
       - path: Features/Rewards
+      - path: Features/Parents
     dependencies:
       - package: FamilyCore
     info:
@@ -58,6 +59,7 @@ targets:
       - path: Features/Profiles
       - path: Features/Chores
       - path: Features/Rewards
+      - path: Features/Parents
     dependencies:
       - package: FamilyCore
     info:

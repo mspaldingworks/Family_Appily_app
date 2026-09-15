@@ -13,6 +13,7 @@ struct FamilyAppilyMacRootView: View {
     enum Item: String, CaseIterable, Identifiable {
         case home = "Home"
         case rotation = "Family Rotation"
+        case parents = "Parents"
 
         var id: String { rawValue }
 
@@ -20,6 +21,7 @@ struct FamilyAppilyMacRootView: View {
             switch self {
             case .home: return "house.fill"
             case .rotation: return "arrow.triangle.2.circlepath"
+            case .parents: return "gearshape.fill"
             }
         }
     }
@@ -59,6 +61,10 @@ struct FamilyAppilyMacRootView: View {
             ProfilePickerView().navigationTitle("Home")
         case .rotation:
             FamilyRotationView().navigationTitle("Family Rotation")
+        case .parents:
+            // Ungated on the Mac: this is her own unlocked machine, unlike the
+            // shared iPad the Face ID gate exists for (see FamilyAppilyMacApp).
+            NavigationStack { ParentDashboardView() }
         case nil:
             ContentUnavailableView("Pick a section", systemImage: "sidebar.left")
         }
