@@ -87,8 +87,10 @@ public struct FamilyRotationView: View {
         let theme = ChildTheme.theme(for: childID)
         return HStack {
             Image(systemName: chore.sfSymbol)
+                .foregroundStyle(SharedTokens.ink)
                 .accessibilityHidden(true)
             Text(chore.label)
+                .foregroundStyle(SharedTokens.ink)
             Spacer()
             HStack(spacing: 6) {
                 Circle().fill(theme.dotFill).frame(width: 12, height: 12)

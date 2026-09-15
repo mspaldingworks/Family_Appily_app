@@ -68,7 +68,7 @@ private struct ProfileCard: View {
                 Text("\(ticketBalance) tickets")
                     .font(.subheadline)
             }
-            .foregroundStyle(.secondary)
+            .foregroundStyle(SharedTokens.inkSecondary)
         }
         .frame(minWidth: 60, minHeight: 60)
         .padding(20)
@@ -85,9 +85,11 @@ private struct FamilyRotationCard: View {
         VStack(spacing: 12) {
             Image(systemName: "arrow.triangle.2.circlepath")
                 .font(.system(size: 48))
+                .foregroundStyle(SharedTokens.ink)
                 .accessibilityHidden(true)
             Text("Family Rotation")
                 .font(.system(.title2, design: .rounded).weight(.bold))
+                .foregroundStyle(SharedTokens.ink)
         }
         .frame(minWidth: 60, minHeight: 60)
         .padding(20)
