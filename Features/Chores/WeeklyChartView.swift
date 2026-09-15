@@ -15,8 +15,11 @@ public struct WeeklyChartView: View {
     @Query private var chores: [Chore]
     @Query private var completions: [Completion]
     @Query private var rotationChores: [RotationChore]
+    @Query private var ticketEntries: [TicketLedgerEntry]
 
     @Environment(\.modelContext) private var modelContext
+
+    private var ticketBalance: Int { TicketService.balance(for: child.id, in: ticketEntries) }
 
     @AppStorage("rotationEpochISO8601") private var rotationEpochISO8601: String = ""
     @State private var showingRotationSetup = false
@@ -74,6 +77,17 @@ public struct WeeklyChartView: View {
         }
         .padding()
         .navigationTitle(child.name)
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                NavigationLink {
+                    RewardsView(child: child)
+                } label: {
+                    Label("\(ticketBalance) tickets", systemImage: "star.fill")
+                        .labelStyle(.titleAndIcon)
+                }
+                .accessibilityLabel("\(child.name) has \(ticketBalance) tickets. Open reward chart.")
+            }
+        }
     }
 
     @ViewBuilder
@@ -98,8 +112,20 @@ public struct WeeklyChartView: View {
 
         if let existing {
             modelContext.delete(existing)
+            // Take back the ticket this completion earned, matching the same
+            // child/chore/day so un-checking is fully reversible per §3.5.
+            if let earned = ticketEntries.first(where: {
+                $0.childID == childID && $0.referenceID == choreID
+                    && $0.kind == TicketLedgerKind.earn.rawValue
+                    && Calendar.current.isDate($0.occurredAt, inSameDayAs: day)
+            }) {
+                modelContext.delete(earned)
+            }
         } else {
             modelContext.insert(Completion(childID: childID, choreID: choreID, date: day))
+            // Completing a chore earns one ticket — the "Completing my chores"
+            // earn item from §7.7, wired directly to the child's own action.
+            modelContext.insert(TicketLedgerEntry(childID: childID, amount: 1, kind: .earn, referenceID: choreID, occurredAt: day))
         }
         try? modelContext.save()
     }

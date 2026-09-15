@@ -18,6 +18,7 @@ targets:
       - path: Platforms/iOS
       - path: Features/Profiles
       - path: Features/Chores
+      - path: Features/Rewards
     dependencies:
       - package: FamilyCore
     info:
@@ -56,6 +57,7 @@ targets:
       - path: Platforms/macOS
       - path: Features/Profiles
       - path: Features/Chores
+      - path: Features/Rewards
     dependencies:
       - package: FamilyCore
     info:

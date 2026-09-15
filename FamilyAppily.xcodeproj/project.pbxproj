@@ -11,6 +11,7 @@
 		0A79732C03639AD4C322F904 /* AdultGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D541C681A6D6A7A05DDD8DED /* AdultGate.swift */; };
 		0DE29FBAF82C9B92C66260F0 /* DayCardFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7B74C9AF7E2B971FF63974 /* DayCardFrame.swift */; };
 		293CEEB19916BD4411A601FE /* WeeklyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F630409DD2005551010D5B /* WeeklyChartView.swift */; };
+		3BF558E8083FE151ECCC2179 /* RewardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CA6CDA8B621E8B1D074158 /* RewardsView.swift */; };
 		41EADF806F147A3FC781DBFF /* ChoreRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4383D3E29DD6623D29A72597 /* ChoreRow.swift */; };
 		4874BFF89E8F74CA384DEB29 /* WeeklyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F630409DD2005551010D5B /* WeeklyChartView.swift */; };
 		564A6EDA6B2512DD8F97CC8C /* ChoreRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4383D3E29DD6623D29A72597 /* ChoreRow.swift */; };
@@ -24,10 +25,13 @@
 		97704E02238759216108DE5C /* FamilyAppilyMacRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85173E294DAE5E1B2FCDE94D /* FamilyAppilyMacRootView.swift */; };
 		A78C4B5399A2C61E5C75BF0B /* DayCardFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7B74C9AF7E2B971FF63974 /* DayCardFrame.swift */; };
 		B90FE73C4EEC12FAB96DD8A2 /* FamilyRotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A69B939AD964E1FECE5A7D0 /* FamilyRotationView.swift */; };
+		C2047BDEC8F8D436F9EE180F /* RewardChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7340364D4930DB53E623E83E /* RewardChartView.swift */; };
 		C9F21AE4201F199DED7A12C2 /* ProfilePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B76C9F6C1C03A5BC1C639D /* ProfilePickerView.swift */; };
 		CB21A7C0782880982CD00E81 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DCC1D7D827A0856AED8FFE09 /* Assets.xcassets */; };
 		D450DE8DC59C95FF6730DF5C /* FamilyRotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A69B939AD964E1FECE5A7D0 /* FamilyRotationView.swift */; };
 		E5A279CF04022173CDE6A62F /* CompletionMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797A6D1BE6092083000FD565 /* CompletionMark.swift */; };
+		EB5641838E64D896E7A5F019 /* RewardChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7340364D4930DB53E623E83E /* RewardChartView.swift */; };
+		F7B5D30FC68A7549667A9DCF /* RewardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CA6CDA8B621E8B1D074158 /* RewardsView.swift */; };
 		F8A5FBCF8318E249F80A8293 /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F63A131F244EAA4D6D8D4E8D /* RootTabView.swift */; };
 /* End PBXBuildFile section */
 
@@ -38,9 +42,11 @@
 		4A7B74C9AF7E2B971FF63974 /* DayCardFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCardFrame.swift; sourceTree = "<group>"; };
 		61E3A16D7A582B3A9E3D3DF1 /* FamilyCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = FamilyCore; path = FamilyCore; sourceTree = SOURCE_ROOT; };
 		6CDEA4ADF710D0F021B7F928 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7340364D4930DB53E623E83E /* RewardChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardChartView.swift; sourceTree = "<group>"; };
 		797A6D1BE6092083000FD565 /* CompletionMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionMark.swift; sourceTree = "<group>"; };
 		7B591FBE8ACDE04735D44DC1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		85173E294DAE5E1B2FCDE94D /* FamilyAppilyMacRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyAppilyMacRootView.swift; sourceTree = "<group>"; };
+		85CA6CDA8B621E8B1D074158 /* RewardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardsView.swift; sourceTree = "<group>"; };
 		A9B76C9F6C1C03A5BC1C639D /* ProfilePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePickerView.swift; sourceTree = "<group>"; };
 		BE76F14258725A26F800D6CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		BFE1BDF3089BDC4EDEC3ADC6 /* FamilyAppilyMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyAppilyMacApp.swift; sourceTree = "<group>"; };
@@ -74,6 +80,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		14166B3F833FADC45E401629 /* Rewards */ = {
+			isa = PBXGroup;
+			children = (
+				7340364D4930DB53E623E83E /* RewardChartView.swift */,
+				85CA6CDA8B621E8B1D074158 /* RewardsView.swift */,
+			);
+			name = Rewards;
+			path = Features/Rewards;
+			sourceTree = "<group>";
+		};
 		4B581CD0194AEAE794A2544E /* Profiles */ = {
 			isa = PBXGroup;
 			children = (
@@ -118,6 +134,7 @@
 				6D1132918D15029B0C7792BF /* macOS */,
 				7C2A2D369844946572DB0BB7 /* Packages */,
 				4B581CD0194AEAE794A2544E /* Profiles */,
+				14166B3F833FADC45E401629 /* Rewards */,
 				992302F166E08F38043C59A8 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -269,6 +286,8 @@
 				97704E02238759216108DE5C /* FamilyAppilyMacRootView.swift in Sources */,
 				D450DE8DC59C95FF6730DF5C /* FamilyRotationView.swift in Sources */,
 				C9F21AE4201F199DED7A12C2 /* ProfilePickerView.swift in Sources */,
+				EB5641838E64D896E7A5F019 /* RewardChartView.swift in Sources */,
+				F7B5D30FC68A7549667A9DCF /* RewardsView.swift in Sources */,
 				4874BFF89E8F74CA384DEB29 /* WeeklyChartView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -284,6 +303,8 @@
 				5D22A8B90448C3D88604B57D /* FamilyAppilyApp.swift in Sources */,
 				B90FE73C4EEC12FAB96DD8A2 /* FamilyRotationView.swift in Sources */,
 				003504C2D80C562C0B0CA9C5 /* ProfilePickerView.swift in Sources */,
+				C2047BDEC8F8D436F9EE180F /* RewardChartView.swift in Sources */,
+				3BF558E8083FE151ECCC2179 /* RewardsView.swift in Sources */,
 				F8A5FBCF8318E249F80A8293 /* RootTabView.swift in Sources */,
 				293CEEB19916BD4411A601FE /* WeeklyChartView.swift in Sources */,
 			);
