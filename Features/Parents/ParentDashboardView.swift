@@ -68,7 +68,8 @@ struct ParentDashboardView: View {
                         Spacer()
                         Label("\(TicketService.balance(for: child.id, in: ticketEntries))", systemImage: "star.fill")
                             .labelStyle(.titleAndIcon)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(ChildTheme.theme(for: child.childID ?? .finley).dotFill)
+                            .fontWeight(.semibold)
                     }
                 }
                 .frame(minHeight: 44)
@@ -81,10 +82,25 @@ struct ParentDashboardView: View {
             NavigationLink {
                 ChoreSettingsView()
             } label: {
-                Label("Chore definitions", systemImage: "checklist")
+                HStack(spacing: 12) {
+                    settingsIcon("checklist", .orange)
+                    Text("Chore definitions")
+                }
             }
             .frame(minHeight: 44)
         }
+    }
+
+    /// A friendly, iOS-Settings-style coloured glyph. Decorative and always
+    /// paired with a text label, so it never carries meaning by colour alone
+    /// (CLAUDE.md §3.2); `ChoreColor.onColor` keeps the glyph AA-legible.
+    private func settingsIcon(_ symbol: String, _ color: ChoreColor) -> some View {
+        Image(systemName: symbol)
+            .font(.footnote.weight(.semibold))
+            .foregroundStyle(color.onColor)
+            .frame(width: 28, height: 28)
+            .background(color.fill, in: RoundedRectangle(cornerRadius: 7, style: .continuous))
+            .accessibilityHidden(true)
     }
 
     private var feedbackSection: some View {

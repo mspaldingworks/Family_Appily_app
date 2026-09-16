@@ -206,6 +206,8 @@ Three artifacts interlock. Build them as one system, not three screens.
 
 **Ticket spend tiers are family-scope and identical across all three children.** Per-child pricing is the fastest way to make this feel unfair. 5 / 10 / 15 / 20.
 
+**Chores earn a per-chore ticket value.** Each chore definition carries an adult-set ticket value (`Chore.ticketValue`, default 1); completing a chore credits that many tickets to the child's ledger, reversible on un-check (`WeeklyChartView.toggle`). This supersedes the earlier flat one-ticket-per-completion rule, so a harder chore can be worth more — while the default of 1 leaves the reward-chart maths unchanged for any chore an adult hasn't tuned. Chore definitions also carry an icon, a colour, and an optional due date, all edited in Parents → Chore definitions. The chore colour comes from an adult-facing `ChoreColor` palette that is deliberately separate from the legend-locked per-child identity colours in §7.1 — those are never recoloured.
+
 **Health-adjacent earn items are private.** Arthur's earn list includes therapy activities. Any item flagged `private: true` renders only in that child's own profile and for adults — never in shared family views, exports, or a widget on a shared device. This is a §5 privacy requirement, not a preference.
 
 ### 7.6 Asset handling
