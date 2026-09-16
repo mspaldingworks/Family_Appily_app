@@ -131,12 +131,23 @@ public struct WeeklyChartView: View {
             }
         } else {
             modelContext.insert(Completion(childID: childID, choreID: choreID, date: day))
-            // Completing a chore earns one ticket — the "Completing my chores"
-            // earn item from §7.7, wired directly to the child's own action.
-            modelContext.insert(TicketLedgerEntry(childID: childID, amount: 1, kind: .earn, referenceID: choreID, occurredAt: day))
+            // Completing a chore earns that chore's ticket value (adult-set on the
+            // chore definition; defaults to 1), wired to the child's own action.
+            modelContext.insert(TicketLedgerEntry(childID: childID, amount: ticketValue(for: chore), kind: .earn, referenceID: choreID, occurredAt: day))
             playCompletionFeedback()
         }
         try? modelContext.save()
+    }
+
+    /// Tickets a completion of this chore earns. Fixed chores carry their own
+    /// value; a resolved rotation slot has no `Chore` row of its own, so it uses
+    /// the "Weekly Chore" placeholder's value. At least 1, so completing any
+    /// chore is always worth something.
+    private func ticketValue(for chore: ResolvedChore) -> Int {
+        let match = chore.isRotationResolved
+            ? chores.first { $0.choreType == .rotationResolved }
+            : chores.first { $0.id == chore.id }
+        return max(1, match?.ticketValue ?? 1)
     }
 
     /// Haptic + optional sound on completion, per §3.7 — each independently
