@@ -104,7 +104,15 @@ public enum SharedTokens {
 
     /// Body text, outlines, character linework. 15.8:1 on white.
     public static let ink = Color(hex: "#1F1F26")
-    /// Card/chart background, light mode.
+    /// Muted body text on paper — captions, secondary labels, "N tickets".
+    /// Fixed (not the system `.secondary`) so it stays readable on the
+    /// always-light paper card in Dark Mode, where `.secondary` would resolve
+    /// to near-white and disappear. ~6.5:1 on white.
+    public static let inkSecondary = Color(hex: "#55555E")
+    /// Card/chart background. Deliberately light in both appearances — the
+    /// chart reads like a sheet of paper on the wall, not an inverted panel.
+    /// Anything drawn on top of it must use `ink`/`inkSecondary` or a child's
+    /// `textInk`, never `.primary`/`.secondary`, which flip to white in the dark.
     public static let paper = Color(hex: "#FFFFFF")
     /// Card/chart background, dark mode. A warm charcoal, not inverted grey.
     public static let paperDark = Color(hex: "#1C1C1E")

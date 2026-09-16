@@ -17,11 +17,15 @@ struct ChoreRow: View {
             ZStack(alignment: .leading) {
                 HStack(spacing: 8) {
                     Image(systemName: chore.sfSymbol)
+                        .foregroundStyle(SharedTokens.ink)
+                        .opacity(isComplete ? 0.45 : 1)
                         .accessibilityHidden(true)
                     VStack(alignment: .leading, spacing: 2) {
                         Text(chore.label)
                             .font(.system(.body, design: .default))
-                            .foregroundStyle(isComplete ? .secondary : .primary)
+                            // Fixed ink, never `.primary`: the card is always
+                            // white, so `.primary` would be invisible in the dark.
+                            .foregroundStyle(SharedTokens.ink)
                             .opacity(isComplete ? 0.45 : 1)
                         if chore.isRotationResolved {
                             HStack(spacing: 4) {
@@ -30,7 +34,7 @@ struct ChoreRow: View {
                                     .frame(width: 8, height: 8)
                                 Text("Family rotation")
                                     .font(.caption)
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(childTheme.textInk)
                             }
                         }
                     }

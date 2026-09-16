@@ -8,78 +8,59 @@
 
 /* Begin PBXBuildFile section */
 		003504C2D80C562C0B0CA9C5 /* ProfilePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B76C9F6C1C03A5BC1C639D /* ProfilePickerView.swift */; };
-		081401C3D616AB1CE52F5414 /* JobSearchTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB49078220BF6337E94B52F6 /* JobSearchTabView.swift */; };
 		0A79732C03639AD4C322F904 /* AdultGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D541C681A6D6A7A05DDD8DED /* AdultGate.swift */; };
 		0DE29FBAF82C9B92C66260F0 /* DayCardFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7B74C9AF7E2B971FF63974 /* DayCardFrame.swift */; };
-		1166F7951B49E120D8FB3307 /* UndoBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474ADAD27DBAFAEF2D7BD588 /* UndoBanner.swift */; };
-		138ACEC6E8F11A4A08249485 /* JobSearchSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864695DF2BB9BD17B9203BB3 /* JobSearchSetupView.swift */; };
-		246E76A60808AC0EB2461CD7 /* IdentityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA8E23798B347535924391C /* IdentityView.swift */; };
 		293CEEB19916BD4411A601FE /* WeeklyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F630409DD2005551010D5B /* WeeklyChartView.swift */; };
-		41671B415386FF9A8AC8858D /* DraftsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3C0D0FD7FB8EC3A02AD3A1 /* DraftsView.swift */; };
+		3BF558E8083FE151ECCC2179 /* RewardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CA6CDA8B621E8B1D074158 /* RewardsView.swift */; };
 		41EADF806F147A3FC781DBFF /* ChoreRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4383D3E29DD6623D29A72597 /* ChoreRow.swift */; };
 		4874BFF89E8F74CA384DEB29 /* WeeklyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F630409DD2005551010D5B /* WeeklyChartView.swift */; };
-		4F1903515B43779EA05002A9 /* JobSearchCore in Frameworks */ = {isa = PBXBuildFile; productRef = 865464BC1006909E18F65AD4 /* JobSearchCore */; };
 		564A6EDA6B2512DD8F97CC8C /* ChoreRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4383D3E29DD6623D29A72597 /* ChoreRow.swift */; };
-		5BBCDE33B7783D0FD5C800BE /* JobSearchTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB49078220BF6337E94B52F6 /* JobSearchTabView.swift */; };
+		59B50ABC46C61208C97CACC6 /* ChildSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BBE5CCB205BA2A3C195358E /* ChildSettingsView.swift */; };
 		5D22A8B90448C3D88604B57D /* FamilyAppilyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F57BD65D1E4586B0E4B39AE2 /* FamilyAppilyApp.swift */; };
-		6A76F00A8CD46EFFA1B29738 /* AddApplicationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BECB25520A4D02054A4C0980 /* AddApplicationView.swift */; };
+		63E114E161D8FBCE8D5B6DC2 /* ChoreSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5838CB35CBFE479FFB9AE584 /* ChoreSettingsView.swift */; };
+		6922498929EEB6BCF50935F1 /* ParentDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB67EA9D432085D898854D95 /* ParentDashboardView.swift */; };
 		6AEA55B280AFAFEAD5D53378 /* AdultGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D541C681A6D6A7A05DDD8DED /* AdultGate.swift */; };
 		6BC49A4E31EC6BCE749D9FEE /* FamilyCore in Frameworks */ = {isa = PBXBuildFile; productRef = 709889DB199DB2ACFC990A52 /* FamilyCore */; };
 		6FD034B18CF36C832698AA9D /* FamilyCore in Frameworks */ = {isa = PBXBuildFile; productRef = F545B5D6CC3867011FCE9116 /* FamilyCore */; };
+		7674564C10883A38E9D2335D /* ChildSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BBE5CCB205BA2A3C195358E /* ChildSettingsView.swift */; };
 		7C398F2F383C9854DFA02A04 /* FamilyAppilyMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE1BDF3089BDC4EDEC3ADC6 /* FamilyAppilyMacApp.swift */; };
-		7D00C6EFE853354D10DF9EEC /* ApprovalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE2E4DDB2378E8FD041724E /* ApprovalsView.swift */; };
 		7F34F9AEA5A1B7D50F3A62FD /* CompletionMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797A6D1BE6092083000FD565 /* CompletionMark.swift */; };
 		8001D4C5CFD009D898F0B874 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6CDEA4ADF710D0F021B7F928 /* Assets.xcassets */; };
-		9407D928536D148956BFD0EB /* JobSearchConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBA3B54F1BA913EBC29318A2 /* JobSearchConfig.swift */; };
 		97704E02238759216108DE5C /* FamilyAppilyMacRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85173E294DAE5E1B2FCDE94D /* FamilyAppilyMacRootView.swift */; };
-		9E206DA1DAF853061509CD3D /* ApprovalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE2E4DDB2378E8FD041724E /* ApprovalsView.swift */; };
 		A78C4B5399A2C61E5C75BF0B /* DayCardFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7B74C9AF7E2B971FF63974 /* DayCardFrame.swift */; };
-		AB10204719632C0D66BA7B94 /* DraftsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3C0D0FD7FB8EC3A02AD3A1 /* DraftsView.swift */; };
-		B0EE938D1DE351697E63F811 /* DraftReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD28FF0E0419721A0803F38 /* DraftReviewView.swift */; };
+		A9230F7DA3889BF3D860D0FD /* ChoreAssignmentEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A23975051C05B005F9D0829 /* ChoreAssignmentEditorView.swift */; };
+		AB5E1D7FA5512623BA01C677 /* ParentDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB67EA9D432085D898854D95 /* ParentDashboardView.swift */; };
+		B5DB03B6E99B7B981E5732A9 /* ChoreSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5838CB35CBFE479FFB9AE584 /* ChoreSettingsView.swift */; };
 		B90FE73C4EEC12FAB96DD8A2 /* FamilyRotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A69B939AD964E1FECE5A7D0 /* FamilyRotationView.swift */; };
-		C3D5EF3C88F256CCD8992119 /* JobFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB8891FE3DF8DD2C8F89A738 /* JobFeedView.swift */; };
-		C650EA068F15181916C8278A /* IdentityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA8E23798B347535924391C /* IdentityView.swift */; };
+		C2047BDEC8F8D436F9EE180F /* RewardChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7340364D4930DB53E623E83E /* RewardChartView.swift */; };
 		C9F21AE4201F199DED7A12C2 /* ProfilePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B76C9F6C1C03A5BC1C639D /* ProfilePickerView.swift */; };
 		CB21A7C0782880982CD00E81 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DCC1D7D827A0856AED8FFE09 /* Assets.xcassets */; };
-		CE65DB2789074BB8E224FBE4 /* JobSearchConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBA3B54F1BA913EBC29318A2 /* JobSearchConfig.swift */; };
-		D208682E6912ECAE592C58FD /* JobSearchCore in Frameworks */ = {isa = PBXBuildFile; productRef = 68CEC39068B0F4C22E85D6EA /* JobSearchCore */; };
-		D40DF78D31486C7773DF2D9D /* DraftReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD28FF0E0419721A0803F38 /* DraftReviewView.swift */; };
 		D450DE8DC59C95FF6730DF5C /* FamilyRotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A69B939AD964E1FECE5A7D0 /* FamilyRotationView.swift */; };
-		D81218E7322292605703F27A /* AppliedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B1CE23B969A2068A6E1494 /* AppliedView.swift */; };
-		D8CB40677248DD6A43F38251 /* UndoBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474ADAD27DBAFAEF2D7BD588 /* UndoBanner.swift */; };
 		E5A279CF04022173CDE6A62F /* CompletionMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797A6D1BE6092083000FD565 /* CompletionMark.swift */; };
-		E6F61FF6CE9A3F02EEBAB39E /* AppliedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B1CE23B969A2068A6E1494 /* AppliedView.swift */; };
-		EFAD9714C30DD7F07183F05C /* JobFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB8891FE3DF8DD2C8F89A738 /* JobFeedView.swift */; };
-		F46B363BB4EE332FDE2890E3 /* JobSearchSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864695DF2BB9BD17B9203BB3 /* JobSearchSetupView.swift */; };
+		E8C8B2CB5057F415BAEA86E4 /* ChoreAssignmentEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A23975051C05B005F9D0829 /* ChoreAssignmentEditorView.swift */; };
+		EB5641838E64D896E7A5F019 /* RewardChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7340364D4930DB53E623E83E /* RewardChartView.swift */; };
+		F7B5D30FC68A7549667A9DCF /* RewardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CA6CDA8B621E8B1D074158 /* RewardsView.swift */; };
 		F8A5FBCF8318E249F80A8293 /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F63A131F244EAA4D6D8D4E8D /* RootTabView.swift */; };
-		F8B97F0B39C176FBDF1CC15A /* AddApplicationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BECB25520A4D02054A4C0980 /* AddApplicationView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		07B1CE23B969A2068A6E1494 /* AppliedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppliedView.swift; sourceTree = "<group>"; };
 		0A69B939AD964E1FECE5A7D0 /* FamilyRotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyRotationView.swift; sourceTree = "<group>"; };
-		2696045F11707479E0EEFBD5 /* Local.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Local.xcconfig; sourceTree = "<group>"; };
-		2F3C0D0FD7FB8EC3A02AD3A1 /* DraftsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftsView.swift; sourceTree = "<group>"; };
+		2BBE5CCB205BA2A3C195358E /* ChildSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildSettingsView.swift; sourceTree = "<group>"; };
 		3B47836CD54B8ECDFA6923D5 /* FamilyAppily.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FamilyAppily.entitlements; sourceTree = "<group>"; };
 		4383D3E29DD6623D29A72597 /* ChoreRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoreRow.swift; sourceTree = "<group>"; };
-		474ADAD27DBAFAEF2D7BD588 /* UndoBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndoBanner.swift; sourceTree = "<group>"; };
 		4A7B74C9AF7E2B971FF63974 /* DayCardFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCardFrame.swift; sourceTree = "<group>"; };
+		5838CB35CBFE479FFB9AE584 /* ChoreSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoreSettingsView.swift; sourceTree = "<group>"; };
 		61E3A16D7A582B3A9E3D3DF1 /* FamilyCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = FamilyCore; path = FamilyCore; sourceTree = SOURCE_ROOT; };
+		6A23975051C05B005F9D0829 /* ChoreAssignmentEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoreAssignmentEditorView.swift; sourceTree = "<group>"; };
 		6CDEA4ADF710D0F021B7F928 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7340364D4930DB53E623E83E /* RewardChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardChartView.swift; sourceTree = "<group>"; };
 		797A6D1BE6092083000FD565 /* CompletionMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionMark.swift; sourceTree = "<group>"; };
 		7B591FBE8ACDE04735D44DC1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		85173E294DAE5E1B2FCDE94D /* FamilyAppilyMacRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyAppilyMacRootView.swift; sourceTree = "<group>"; };
-		864695DF2BB9BD17B9203BB3 /* JobSearchSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobSearchSetupView.swift; sourceTree = "<group>"; };
-		8CA8E23798B347535924391C /* IdentityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityView.swift; sourceTree = "<group>"; };
+		85CA6CDA8B621E8B1D074158 /* RewardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardsView.swift; sourceTree = "<group>"; };
 		A9B76C9F6C1C03A5BC1C639D /* ProfilePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePickerView.swift; sourceTree = "<group>"; };
-		AA33AB604FF382D5469151F0 /* JobSearchCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = JobSearchCore; path = JobSearchCore; sourceTree = SOURCE_ROOT; };
-		BB49078220BF6337E94B52F6 /* JobSearchTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobSearchTabView.swift; sourceTree = "<group>"; };
 		BE76F14258725A26F800D6CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		BECB25520A4D02054A4C0980 /* AddApplicationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddApplicationView.swift; sourceTree = "<group>"; };
 		BFE1BDF3089BDC4EDEC3ADC6 /* FamilyAppilyMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyAppilyMacApp.swift; sourceTree = "<group>"; };
-		CB8891FE3DF8DD2C8F89A738 /* JobFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobFeedView.swift; sourceTree = "<group>"; };
-		CCD28FF0E0419721A0803F38 /* DraftReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftReviewView.swift; sourceTree = "<group>"; };
-		CDE2E4DDB2378E8FD041724E /* ApprovalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApprovalsView.swift; sourceTree = "<group>"; };
 		D3F630409DD2005551010D5B /* WeeklyChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyChartView.swift; sourceTree = "<group>"; };
 		D541C681A6D6A7A05DDD8DED /* AdultGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdultGate.swift; sourceTree = "<group>"; };
 		DCC1D7D827A0856AED8FFE09 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -87,7 +68,7 @@
 		F57BD65D1E4586B0E4B39AE2 /* FamilyAppilyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyAppilyApp.swift; sourceTree = "<group>"; };
 		F63A131F244EAA4D6D8D4E8D /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
 		F92C5B15646BCC4881099FF5 /* FamilyAppilyMac.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FamilyAppilyMac.entitlements; sourceTree = "<group>"; };
-		FBA3B54F1BA913EBC29318A2 /* JobSearchConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobSearchConfig.swift; sourceTree = "<group>"; };
+		FB67EA9D432085D898854D95 /* ParentDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentDashboardView.swift; sourceTree = "<group>"; };
 		FF1CA6C19D4406965A9F4595 /* FamilyAppily.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = FamilyAppily.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -97,7 +78,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6FD034B18CF36C832698AA9D /* FamilyCore in Frameworks */,
-				4F1903515B43779EA05002A9 /* JobSearchCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -106,13 +86,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				6BC49A4E31EC6BCE749D9FEE /* FamilyCore in Frameworks */,
-				D208682E6912ECAE592C58FD /* JobSearchCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		14166B3F833FADC45E401629 /* Rewards */ = {
+			isa = PBXGroup;
+			children = (
+				7340364D4930DB53E623E83E /* RewardChartView.swift */,
+				85CA6CDA8B621E8B1D074158 /* RewardsView.swift */,
+			);
+			name = Rewards;
+			path = Features/Rewards;
+			sourceTree = "<group>";
+		};
 		4B581CD0194AEAE794A2544E /* Profiles */ = {
 			isa = PBXGroup;
 			children = (
@@ -136,6 +125,18 @@
 			path = Platforms/macOS;
 			sourceTree = "<group>";
 		};
+		6EB7961BD81A9C35309FEADF /* Parents */ = {
+			isa = PBXGroup;
+			children = (
+				2BBE5CCB205BA2A3C195358E /* ChildSettingsView.swift */,
+				6A23975051C05B005F9D0829 /* ChoreAssignmentEditorView.swift */,
+				5838CB35CBFE479FFB9AE584 /* ChoreSettingsView.swift */,
+				FB67EA9D432085D898854D95 /* ParentDashboardView.swift */,
+			);
+			name = Parents;
+			path = Features/Parents;
+			sourceTree = "<group>";
+		};
 		6F27524961344C3BABB9519B /* Chores */ = {
 			isa = PBXGroup;
 			children = (
@@ -153,12 +154,12 @@
 			isa = PBXGroup;
 			children = (
 				6F27524961344C3BABB9519B /* Chores */,
-				D03B91C6B7BD47B12E697789 /* Family_Appily_app */,
 				AA8C9766A0BEFF0F4462E780 /* iOS */,
-				FA5A7C5DB95D32ED705476EA /* JobSearch */,
 				6D1132918D15029B0C7792BF /* macOS */,
 				7C2A2D369844946572DB0BB7 /* Packages */,
+				6EB7961BD81A9C35309FEADF /* Parents */,
 				4B581CD0194AEAE794A2544E /* Profiles */,
+				14166B3F833FADC45E401629 /* Rewards */,
 				992302F166E08F38043C59A8 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -167,7 +168,6 @@
 			isa = PBXGroup;
 			children = (
 				61E3A16D7A582B3A9E3D3DF1 /* FamilyCore */,
-				AA33AB604FF382D5469151F0 /* JobSearchCore */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -194,34 +194,6 @@
 			path = Platforms/iOS;
 			sourceTree = "<group>";
 		};
-		D03B91C6B7BD47B12E697789 /* Family_Appily_app */ = {
-			isa = PBXGroup;
-			children = (
-				2696045F11707479E0EEFBD5 /* Local.xcconfig */,
-			);
-			name = Family_Appily_app;
-			path = .;
-			sourceTree = "<group>";
-		};
-		FA5A7C5DB95D32ED705476EA /* JobSearch */ = {
-			isa = PBXGroup;
-			children = (
-				BECB25520A4D02054A4C0980 /* AddApplicationView.swift */,
-				07B1CE23B969A2068A6E1494 /* AppliedView.swift */,
-				CDE2E4DDB2378E8FD041724E /* ApprovalsView.swift */,
-				CCD28FF0E0419721A0803F38 /* DraftReviewView.swift */,
-				2F3C0D0FD7FB8EC3A02AD3A1 /* DraftsView.swift */,
-				8CA8E23798B347535924391C /* IdentityView.swift */,
-				CB8891FE3DF8DD2C8F89A738 /* JobFeedView.swift */,
-				FBA3B54F1BA913EBC29318A2 /* JobSearchConfig.swift */,
-				864695DF2BB9BD17B9203BB3 /* JobSearchSetupView.swift */,
-				BB49078220BF6337E94B52F6 /* JobSearchTabView.swift */,
-				474ADAD27DBAFAEF2D7BD588 /* UndoBanner.swift */,
-			);
-			name = JobSearch;
-			path = Features/JobSearch;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -240,7 +212,6 @@
 			name = FamilyAppilyMac;
 			packageProductDependencies = (
 				709889DB199DB2ACFC990A52 /* FamilyCore */,
-				68CEC39068B0F4C22E85D6EA /* JobSearchCore */,
 			);
 			productName = FamilyAppilyMac;
 			productReference = F1250A36FCB54C419D3511BA /* FamilyAppilyMac.app */;
@@ -261,7 +232,6 @@
 			name = FamilyAppily;
 			packageProductDependencies = (
 				F545B5D6CC3867011FCE9116 /* FamilyCore */,
-				865464BC1006909E18F65AD4 /* JobSearchCore */,
 			);
 			productName = FamilyAppily;
 			productReference = FF1CA6C19D4406965A9F4595 /* FamilyAppily.app */;
@@ -297,7 +267,6 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				700B0F02D55FC1198E87BDB9 /* XCLocalSwiftPackageReference "FamilyCore" */,
-				38170293DD1533674A90FDAF /* XCLocalSwiftPackageReference "JobSearchCore" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 992302F166E08F38043C59A8 /* Products */;
@@ -334,25 +303,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6A76F00A8CD46EFFA1B29738 /* AddApplicationView.swift in Sources */,
 				6AEA55B280AFAFEAD5D53378 /* AdultGate.swift in Sources */,
-				D81218E7322292605703F27A /* AppliedView.swift in Sources */,
-				7D00C6EFE853354D10DF9EEC /* ApprovalsView.swift in Sources */,
+				7674564C10883A38E9D2335D /* ChildSettingsView.swift in Sources */,
+				A9230F7DA3889BF3D860D0FD /* ChoreAssignmentEditorView.swift in Sources */,
 				564A6EDA6B2512DD8F97CC8C /* ChoreRow.swift in Sources */,
+				B5DB03B6E99B7B981E5732A9 /* ChoreSettingsView.swift in Sources */,
 				7F34F9AEA5A1B7D50F3A62FD /* CompletionMark.swift in Sources */,
 				A78C4B5399A2C61E5C75BF0B /* DayCardFrame.swift in Sources */,
-				B0EE938D1DE351697E63F811 /* DraftReviewView.swift in Sources */,
-				AB10204719632C0D66BA7B94 /* DraftsView.swift in Sources */,
 				7C398F2F383C9854DFA02A04 /* FamilyAppilyMacApp.swift in Sources */,
 				97704E02238759216108DE5C /* FamilyAppilyMacRootView.swift in Sources */,
 				D450DE8DC59C95FF6730DF5C /* FamilyRotationView.swift in Sources */,
-				246E76A60808AC0EB2461CD7 /* IdentityView.swift in Sources */,
-				C3D5EF3C88F256CCD8992119 /* JobFeedView.swift in Sources */,
-				9407D928536D148956BFD0EB /* JobSearchConfig.swift in Sources */,
-				138ACEC6E8F11A4A08249485 /* JobSearchSetupView.swift in Sources */,
-				081401C3D616AB1CE52F5414 /* JobSearchTabView.swift in Sources */,
+				6922498929EEB6BCF50935F1 /* ParentDashboardView.swift in Sources */,
 				C9F21AE4201F199DED7A12C2 /* ProfilePickerView.swift in Sources */,
-				1166F7951B49E120D8FB3307 /* UndoBanner.swift in Sources */,
+				EB5641838E64D896E7A5F019 /* RewardChartView.swift in Sources */,
+				F7B5D30FC68A7549667A9DCF /* RewardsView.swift in Sources */,
 				4874BFF89E8F74CA384DEB29 /* WeeklyChartView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -361,25 +325,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F8B97F0B39C176FBDF1CC15A /* AddApplicationView.swift in Sources */,
 				0A79732C03639AD4C322F904 /* AdultGate.swift in Sources */,
-				E6F61FF6CE9A3F02EEBAB39E /* AppliedView.swift in Sources */,
-				9E206DA1DAF853061509CD3D /* ApprovalsView.swift in Sources */,
+				59B50ABC46C61208C97CACC6 /* ChildSettingsView.swift in Sources */,
+				E8C8B2CB5057F415BAEA86E4 /* ChoreAssignmentEditorView.swift in Sources */,
 				41EADF806F147A3FC781DBFF /* ChoreRow.swift in Sources */,
+				63E114E161D8FBCE8D5B6DC2 /* ChoreSettingsView.swift in Sources */,
 				E5A279CF04022173CDE6A62F /* CompletionMark.swift in Sources */,
 				0DE29FBAF82C9B92C66260F0 /* DayCardFrame.swift in Sources */,
-				D40DF78D31486C7773DF2D9D /* DraftReviewView.swift in Sources */,
-				41671B415386FF9A8AC8858D /* DraftsView.swift in Sources */,
 				5D22A8B90448C3D88604B57D /* FamilyAppilyApp.swift in Sources */,
 				B90FE73C4EEC12FAB96DD8A2 /* FamilyRotationView.swift in Sources */,
-				C650EA068F15181916C8278A /* IdentityView.swift in Sources */,
-				EFAD9714C30DD7F07183F05C /* JobFeedView.swift in Sources */,
-				CE65DB2789074BB8E224FBE4 /* JobSearchConfig.swift in Sources */,
-				F46B363BB4EE332FDE2890E3 /* JobSearchSetupView.swift in Sources */,
-				5BBCDE33B7783D0FD5C800BE /* JobSearchTabView.swift in Sources */,
+				AB5E1D7FA5512623BA01C677 /* ParentDashboardView.swift in Sources */,
 				003504C2D80C562C0B0CA9C5 /* ProfilePickerView.swift in Sources */,
+				C2047BDEC8F8D436F9EE180F /* RewardChartView.swift in Sources */,
+				3BF558E8083FE151ECCC2179 /* RewardsView.swift in Sources */,
 				F8A5FBCF8318E249F80A8293 /* RootTabView.swift in Sources */,
-				D8CB40677248DD6A43F38251 /* UndoBanner.swift in Sources */,
 				293CEEB19916BD4411A601FE /* WeeklyChartView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -412,7 +371,6 @@
 		};
 		77DB99C153A487AFBB522585 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2696045F11707479E0EEFBD5 /* Local.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -469,7 +427,6 @@
 		};
 		8B99CE2242F9F2BFD3F21877 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2696045F11707479E0EEFBD5 /* Local.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -629,10 +586,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		38170293DD1533674A90FDAF /* XCLocalSwiftPackageReference "JobSearchCore" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = JobSearchCore;
-		};
 		700B0F02D55FC1198E87BDB9 /* XCLocalSwiftPackageReference "FamilyCore" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = FamilyCore;
@@ -640,17 +593,9 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		68CEC39068B0F4C22E85D6EA /* JobSearchCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JobSearchCore;
-		};
 		709889DB199DB2ACFC990A52 /* FamilyCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = FamilyCore;
-		};
-		865464BC1006909E18F65AD4 /* JobSearchCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JobSearchCore;
 		};
 		F545B5D6CC3867011FCE9116 /* FamilyCore */ = {
 			isa = XCSwiftPackageProductDependency;

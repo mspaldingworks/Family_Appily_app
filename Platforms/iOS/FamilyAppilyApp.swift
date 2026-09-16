@@ -1,5 +1,4 @@
 import FamilyCore
-import JobSearchCore
 import SwiftData
 import SwiftUI
 

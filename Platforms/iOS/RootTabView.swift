@@ -2,10 +2,10 @@ import FamilyCore
 import SwiftData
 import SwiftUI
 
-/// The app-wide tab bar. "Home" contains the existing, unmodified Profile
-/// picker → Child chart → Family rotation flow. "Job Search" is new and
-/// adult-facing, so it sits behind the same inline Face ID/PIN gate the rest
-/// of the app uses for adult actions — not a separate login system.
+/// The app's root. A Family tab — the profile picker → child chart → family
+/// rotation flow the app still opens into (§3.5) — and a Parents tab, gated
+/// behind Face ID / passcode so a child can't reach chore definitions,
+/// balances, or settings. Also kicks off the one-time seed of family data.
 struct RootTabView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var seedingError: Error?
@@ -13,15 +13,14 @@ struct RootTabView: View {
     var body: some View {
         TabView {
             ProfilePickerView()
-                .tabItem { Label("Home", systemImage: "house.fill") }
+                .tabItem { Label("Family", systemImage: "house.fill") }
 
-            // Deliberately not behind the adult gate. This is her own job search
-            // on her own phone — the point is to open the app and see options at
-            // a glance, and a Face ID prompt every time defeats that. (AdultGate
-            // still exists for reward redemption in Phase 5, which is genuinely
-            // adult-only and lives on the shared iPad.)
-            JobSearchTabView()
-                .tabItem { Label("Job Search", systemImage: "briefcase.fill") }
+            NavigationStack {
+                AdultGated(reason: "Open the parents area to change chores, tickets, and settings") {
+                    ParentDashboardView()
+                }
+            }
+            .tabItem { Label("Parents", systemImage: "gearshape.fill") }
         }
         .task {
             do {
