@@ -14,18 +14,23 @@ import SwiftUI
 struct ParentDashboardView: View {
     @Query(sort: \Child.name) private var children: [Child]
     @Query private var ticketEntries: [TicketLedgerEntry]
+    @Query private var assignments: [ChoreAssignment]
+    @Query private var chores: [Chore]
 
     @AppStorage("rotationEpochISO8601") private var rotationEpochISO8601 = ""
     @AppStorage("hapticsEnabled") private var hapticsEnabled = true
     @AppStorage("soundEnabled") private var soundEnabled = false
+    @AppStorage("familyCalendar.writeThrough") private var writeChoresToCalendars = false
 
     @State private var draftEpoch = Date.now
+    @State private var calendarService = EventKitCalendarService()
 
     var body: some View {
         Form {
             rotationSection
             childrenSection
             choresSection
+            calendarSyncSection
             feedbackSection
             aboutSection
         }
@@ -101,6 +106,34 @@ struct ParentDashboardView: View {
             .frame(width: 28, height: 28)
             .background(color.fill, in: RoundedRectangle(cornerRadius: 7, style: .continuous))
             .accessibilityHidden(true)
+    }
+
+    private var calendarSyncSection: some View {
+        Section {
+            HStack(spacing: 12) {
+                settingsIcon("calendar", .blue)
+                Toggle("Add chores to each kid's calendar", isOn: $writeChoresToCalendars)
+            }
+            .frame(minHeight: 44)
+            if writeChoresToCalendars {
+                Button("Update calendars now") { syncChoresToCalendars() }
+                    .frame(minHeight: 44)
+            }
+        } header: {
+            Text("Calendar")
+        } footer: {
+            Text("Adds each child's chores to their own calendar (matched by name) as weekly events, so they show in Google Calendar and on every family device. Needs calendar access (grant it on the Calendar tab) and a calendar named for each child on this device. Turn off to remove them.")
+        }
+        .onChange(of: writeChoresToCalendars) { _, _ in syncChoresToCalendars() }
+    }
+
+    /// Pushes the current chore assignments to (or, when off, clears them from)
+    /// each kid's calendar. Only ever touches events the app tagged.
+    private func syncChoresToCalendars() {
+        guard calendarService.access == .granted else { return }
+        _ = calendarService.syncFixedChoreEvents(
+            desired: writeChoresToCalendars ? ChoreEventPlanner.fixedEvents(assignments: assignments, chores: chores) : []
+        )
     }
 
     private var feedbackSection: some View {
