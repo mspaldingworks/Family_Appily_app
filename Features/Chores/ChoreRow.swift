@@ -1,25 +1,28 @@
 import FamilyCore
 import SwiftUI
 
-/// One chore, tappable to toggle complete. Completion changes three things at
-/// once per CLAUDE.md §7.3: the text opacity fades (~45%), the completion
-/// mark draws on, and the card's own background/border responds — the mark is
-/// never the sole signal. The rotation-resolved chore also gets a colored dot
-/// + "rotation" text label (never color alone) per §7.1.
+/// One chore in the weekly chart, tappable to toggle complete. It now carries
+/// the per-kid card's identity directly: a mini coloured tile (the chore's
+/// colour + icon, a small echo of the card) and the ticket value it earns.
+/// Completion still changes three things at once per CLAUDE.md §7.3 — the text
+/// fades, the hand-drawn mark draws on, and the row's background responds — so
+/// colour is never the sole signal.
 struct ChoreRow: View {
     let chore: ResolvedChore
     let isComplete: Bool
     let childTheme: ChildTheme
     let onToggle: () -> Void
 
+    private var choreColor: ChoreColor {
+        chore.colorToken.flatMap(ChoreColor.init(rawValue:)) ?? .default(forID: chore.id)
+    }
+
     var body: some View {
         Button(action: onToggle) {
             ZStack(alignment: .leading) {
-                HStack(spacing: 8) {
-                    Image(systemName: chore.sfSymbol)
-                        .foregroundStyle(SharedTokens.ink)
+                HStack(spacing: 10) {
+                    choreTile
                         .opacity(isComplete ? 0.45 : 1)
-                        .accessibilityHidden(true)
                     VStack(alignment: .leading, spacing: 2) {
                         Text(chore.label)
                             .font(.system(.body, design: .default))
@@ -39,8 +42,11 @@ struct ChoreRow: View {
                         }
                     }
                     Spacer()
+                    ticketBadge
+                        .opacity(isComplete ? 0.45 : 1)
                 }
-                .padding(.trailing, 44)
+                // Clear of the completion-mark zone on the right.
+                .padding(.trailing, 64)
 
                 HStack {
                     Spacer()
@@ -61,27 +67,60 @@ struct ChoreRow: View {
         .accessibilityAddTraits(.isButton)
     }
 
+    /// A miniature of the chore's card tile: the icon on its colour. `onColor`
+    /// keeps the icon legible on every palette colour (unlike tinting a bare
+    /// glyph, which would fail on the pale yellow against white paper).
+    private var choreTile: some View {
+        RoundedRectangle(cornerRadius: 9, style: .continuous)
+            .fill(choreColor.fill)
+            .frame(width: 36, height: 36)
+            .overlay(
+                Image(systemName: chore.sfSymbol)
+                    .font(.callout)
+                    .foregroundStyle(choreColor.onColor)
+            )
+            .accessibilityHidden(true)
+    }
+
+    private var ticketBadge: some View {
+        HStack(spacing: 3) {
+            Image(systemName: "star.fill")
+                .font(.caption2)
+            Text("\(chore.ticketValue)")
+                .font(.subheadline)
+                .fontWeight(.semibold)
+        }
+        // Fixed muted ink: always legible on the white paper card, regardless of
+        // the chore's colour (which the tile already carries).
+        .foregroundStyle(SharedTokens.inkSecondary)
+        .accessibilityHidden(true)
+    }
+
     private var accessibilityLabel: String {
-        "Mark \(chore.label) complete"
+        let tickets = "\(chore.ticketValue) ticket\(chore.ticketValue == 1 ? "" : "s")"
+        return "\(chore.label), \(tickets)"
     }
 }
 
 #Preview {
     VStack {
-        ChoreRow(chore: ResolvedChore(id: "1", label: "Empty Dishwasher", sfSymbol: "dishwasher", isRotationResolved: false), isComplete: false, childTheme: .finley, onToggle: {})
-        ChoreRow(chore: ResolvedChore(id: "2", label: "Collect Trash & Take Out", sfSymbol: "trash", isRotationResolved: true), isComplete: true, childTheme: .arthur, onToggle: {})
+        ChoreRow(chore: ResolvedChore(id: "1", label: "Empty Dishwasher", sfSymbol: "dishwasher.fill", isRotationResolved: false, ticketValue: 3, colorToken: ChoreColor.blue.rawValue), isComplete: false, childTheme: .finley, onToggle: {})
+        ChoreRow(chore: ResolvedChore(id: "2", label: "Wipe down sinks + Vacuum Living Room", sfSymbol: "sink.fill", isRotationResolved: true, ticketValue: 2, colorToken: ChoreColor.green.rawValue), isComplete: true, childTheme: .arthur, onToggle: {})
     }
     .padding()
+    .background(SharedTokens.paper)
 }
 
 #Preview("AX5", traits: .sizeThatFitsLayout) {
-    ChoreRow(chore: ResolvedChore(id: "1", label: "Empty Dishwasher", sfSymbol: "dishwasher", isRotationResolved: false), isComplete: false, childTheme: .finley, onToggle: {})
+    ChoreRow(chore: ResolvedChore(id: "1", label: "Empty Dishwasher", sfSymbol: "dishwasher.fill", isRotationResolved: false, ticketValue: 3, colorToken: ChoreColor.red.rawValue), isComplete: false, childTheme: .finley, onToggle: {})
         .dynamicTypeSize(.accessibility5)
         .padding()
+        .background(SharedTokens.paper)
 }
 
 #Preview("Dark mode") {
-    ChoreRow(chore: ResolvedChore(id: "1", label: "Empty Dishwasher", sfSymbol: "dishwasher", isRotationResolved: false), isComplete: true, childTheme: .maryn, onToggle: {})
+    ChoreRow(chore: ResolvedChore(id: "1", label: "Empty Dishwasher", sfSymbol: "dishwasher.fill", isRotationResolved: false, ticketValue: 4, colorToken: ChoreColor.yellow.rawValue), isComplete: true, childTheme: .maryn, onToggle: {})
         .padding()
+        .background(SharedTokens.paper)
         .preferredColorScheme(.dark)
 }

@@ -6,18 +6,36 @@ import Foundation
 public struct ChoreOccurrence: Identifiable, Hashable, Sendable {
     public let id: String
     public let childID: ChildID
+    public let choreID: String
     public let label: String
     public let sfSymbol: String
     public let date: Date
     public let isRotationResolved: Bool
+    /// Tickets earned and the chore's colour token, so the calendar can show the
+    /// same mini card tile as the weekly chart. Filled from the child's ChoreCard.
+    public let ticketValue: Int
+    public let colorToken: String?
 
-    public init(id: String, childID: ChildID, label: String, sfSymbol: String, date: Date, isRotationResolved: Bool) {
+    public init(
+        id: String,
+        childID: ChildID,
+        choreID: String,
+        label: String,
+        sfSymbol: String,
+        date: Date,
+        isRotationResolved: Bool,
+        ticketValue: Int = 1,
+        colorToken: String? = nil
+    ) {
         self.id = id
         self.childID = childID
+        self.choreID = choreID
         self.label = label
         self.sfSymbol = sfSymbol
         self.date = date
         self.isRotationResolved = isRotationResolved
+        self.ticketValue = ticketValue
+        self.colorToken = colorToken
     }
 }
 
@@ -54,10 +72,13 @@ public enum ChoreCalendarProjector {
                         result.append(ChoreOccurrence(
                             id: "\(child.rawValue)|\(chore.id)|\(day.timeIntervalSince1970)",
                             childID: child,
+                            choreID: chore.id,
                             label: chore.label,
                             sfSymbol: chore.sfSymbol,
                             date: day,
-                            isRotationResolved: chore.isRotationResolved
+                            isRotationResolved: chore.isRotationResolved,
+                            ticketValue: chore.ticketValue,
+                            colorToken: chore.colorToken
                         ))
                     }
                 }
