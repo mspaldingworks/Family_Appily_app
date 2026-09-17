@@ -23,7 +23,9 @@ struct FamilyCalendarView: View {
     @State private var access: EventKitCalendarService.Access = .notDetermined
     @State private var events: [CalendarEventItem] = []
     @State private var sources: [CalendarSource] = []
-    @State private var hiddenCalendarIDs: Set<String> = []
+    @State private var lastSync: ChoreSyncSummary?
+    @AppStorage("familyCalendar.hiddenIDs") private var hiddenIDsCSV = ""
+    @AppStorage("familyCalendar.writeThrough") private var writeThroughEnabled = false
 
     private let horizonDays = 14
 
@@ -31,6 +33,9 @@ struct FamilyCalendarView: View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 20) {
                 if access != .granted { connectBanner }
+                if writeThroughEnabled, let sync = lastSync, !sync.skippedChildren.isEmpty {
+                    writeThroughWarning(sync.skippedChildren)
+                }
 
                 let days = buildDays()
                 if days.isEmpty {
@@ -56,8 +61,10 @@ struct FamilyCalendarView: View {
         }
         .task {
             access = service.access
-            if access == .granted { await reload() }
+            if access == .granted { await reload(); syncChoreEvents() }
         }
+        .onAppear { syncChoreEvents() }
+        .onChange(of: writeThroughEnabled) { _, _ in syncChoreEvents() }
     }
 
     // MARK: Data
@@ -90,6 +97,33 @@ struct FamilyCalendarView: View {
 
     private var childByID: [ChildID: Child] {
         Dictionary(children.compactMap { child in child.childID.map { ($0, child) } }, uniquingKeysWith: { first, _ in first })
+    }
+
+    /// Calendars the family has hidden, persisted so the curation sticks across
+    /// launches (it was previously in-memory `@State` and reset every time).
+    private var hiddenCalendarIDs: Set<String> {
+        Set(hiddenIDsCSV.split(separator: ",").map(String.init))
+    }
+
+    private func hideCalendar(_ id: String) {
+        var ids = hiddenCalendarIDs
+        ids.insert(id)
+        hiddenIDsCSV = ids.sorted().joined(separator: ",")
+        Task { await reload() }
+    }
+
+    private func showAllCalendars() {
+        hiddenIDsCSV = ""
+        Task { await reload() }
+    }
+
+    /// Writes (or, when the toggle is off, clears) each kid's chores in their
+    /// own calendar. No-op unless calendar access has been granted.
+    @MainActor private func syncChoreEvents() {
+        guard access == .granted else { return }
+        lastSync = service.syncFixedChoreEvents(
+            desired: writeThroughEnabled ? ChoreEventPlanner.fixedEvents(assignments: assignments, chores: chores) : []
+        )
     }
 
     @MainActor private func reload() async {
@@ -237,18 +271,39 @@ struct FamilyCalendarView: View {
 
     private var calendarFilterMenu: some View {
         Menu {
-            ForEach(sources) { source in
+            // Only the calendars currently shown are listed; tapping one removes
+            // it. Hidden calendars are deliberately not offered here — the single
+            // "Show all calendars" reset is the only way back, so this stays a
+            // short list of just the family's chosen calendars.
+            ForEach(sources.filter { !hiddenCalendarIDs.contains($0.id) }) { source in
                 Button {
-                    if hiddenCalendarIDs.contains(source.id) { hiddenCalendarIDs.remove(source.id) }
-                    else { hiddenCalendarIDs.insert(source.id) }
-                    Task { await reload() }
+                    hideCalendar(source.id)
                 } label: {
-                    Label(source.title, systemImage: hiddenCalendarIDs.contains(source.id) ? "square" : "checkmark.square.fill")
+                    Label(source.title, systemImage: "checkmark.square.fill")
+                }
+            }
+            if !hiddenCalendarIDs.isEmpty {
+                Divider()
+                Button {
+                    showAllCalendars()
+                } label: {
+                    Label("Show all calendars", systemImage: "arrow.counterclockwise")
                 }
             }
         } label: {
             Label("Calendars", systemImage: "line.3.horizontal.decrease.circle")
         }
+    }
+
+    private func writeThroughWarning(_ kids: [ChildID]) -> some View {
+        let names = kids.map { childByID[$0]?.name ?? $0.rawValue.capitalized }.joined(separator: ", ")
+        return Label(
+            "Add a calendar named \(names) to this device to sync their chores.",
+            systemImage: "exclamationmark.triangle"
+        )
+        .font(.footnote)
+        .foregroundStyle(.secondary)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     // MARK: Formatting

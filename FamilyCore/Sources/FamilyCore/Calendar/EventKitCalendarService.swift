@@ -93,6 +93,81 @@ public final class EventKitCalendarService {
         #endif
     }
 
+    private static let markerPrefix = "[FAMILYAPPILY:"
+
+    /// Reconciles weekly recurring all-day chore events in each child's own
+    /// calendar (matched by name) to `desired`: creates missing ones, removes
+    /// stale ones, and refreshes changed titles — touching **only** events this
+    /// app tagged (never the family's real events). Requires full (write)
+    /// access; a no-op that returns zeros otherwise. Pass `desired: []` to
+    /// remove everything write-through added (i.e. when the adult turns it off).
+    public func syncFixedChoreEvents(desired: [FixedChoreEvent], now: Date = .now) -> ChoreSyncSummary {
+        #if canImport(EventKit)
+        guard access == .granted else { return ChoreSyncSummary(created: 0, removed: 0, skippedChildren: []) }
+        let calendar = Calendar.current
+        let start = calendar.startOfDay(for: now)
+        let end = calendar.date(byAdding: .day, value: 35, to: start) ?? start
+
+        // Writable calendars matched to a child by name (skip read-only ones
+        // like holidays/subscriptions, and any calendar not named for a child).
+        var calByChild: [ChildID: EKCalendar] = [:]
+        for cal in store.calendars(for: .event) where cal.allowsContentModifications {
+            if let child = CalendarSource.child(forCalendarTitle: cal.title) { calByChild[child] = cal }
+        }
+
+        let desiredByChild = Dictionary(grouping: desired, by: \.childID)
+        var created = 0
+        var removed = 0
+        let skipped = Set(desired.map(\.childID)).filter { calByChild[$0] == nil }
+
+        for (child, cal) in calByChild {
+            let wantByMarker = Dictionary(
+                (desiredByChild[child] ?? []).map { ($0.marker, $0) },
+                uniquingKeysWith: { first, _ in first }
+            )
+
+            // Our previously-written events in this calendar, within the window.
+            let predicate = store.predicateForEvents(withStart: start, end: end, calendars: [cal])
+            var existingByMarker: [String: EKEvent] = [:]
+            for event in store.events(matching: predicate) {
+                guard let marker = Self.marker(in: event.notes), existingByMarker[marker] == nil else { continue }
+                existingByMarker[marker] = event
+            }
+
+            // Create the ones we want but don't have yet.
+            for (marker, want) in wantByMarker where existingByMarker[marker] == nil {
+                let event = EKEvent(eventStore: store)
+                event.calendar = cal
+                event.title = want.label
+                event.isAllDay = true
+                let day = Self.nextDate(weekday: want.weekday, from: start, calendar: calendar)
+                event.startDate = day
+                event.endDate = day
+                event.notes = "Family Appily chore\n\(Self.markerPrefix)\(marker)]"
+                event.addRecurrenceRule(EKRecurrenceRule(recurrenceWith: .weekly, interval: 1, end: nil))
+                if (try? store.save(event, span: .thisEvent, commit: false)) != nil { created += 1 }
+            }
+
+            // Remove ours that are no longer wanted; refresh changed titles.
+            for (marker, event) in existingByMarker {
+                if let want = wantByMarker[marker] {
+                    if event.title != want.label {
+                        event.title = want.label
+                        try? store.save(event, span: .futureEvents, commit: false)
+                    }
+                } else if (try? store.remove(event, span: .futureEvents, commit: false)) != nil {
+                    removed += 1
+                }
+            }
+        }
+
+        try? store.commit()
+        return ChoreSyncSummary(created: created, removed: removed, skippedChildren: Array(skipped))
+        #else
+        return ChoreSyncSummary(created: 0, removed: 0, skippedChildren: [])
+        #endif
+    }
+
     #if canImport(EventKit)
     private static func rgba(_ cgColor: CGColor?) -> CalendarRGBA? {
         guard let cgColor, let components = cgColor.components else { return nil }
@@ -105,6 +180,25 @@ public final class EventKitCalendarService {
         default:
             return nil
         }
+    }
+
+    private static func marker(in notes: String?) -> String? {
+        guard let notes, let open = notes.range(of: markerPrefix) else { return nil }
+        let rest = notes[open.upperBound...]
+        guard let close = rest.firstIndex(of: "]") else { return nil }
+        return String(rest[..<close])
+    }
+
+    private static func nextDate(weekday: Int, from: Date, calendar: Calendar) -> Date {
+        let targetFoundationWeekday = weekday + 1  // 0…6 → 1…7 (Sun…Sat)
+        let start = calendar.startOfDay(for: from)
+        for offset in 0..<7 {
+            if let day = calendar.date(byAdding: .day, value: offset, to: start),
+               calendar.component(.weekday, from: day) == targetFoundationWeekday {
+                return day
+            }
+        }
+        return start
     }
     #endif
 }
