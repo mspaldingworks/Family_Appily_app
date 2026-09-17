@@ -99,17 +99,7 @@ struct ChoreDefinitionCard: View {
             }
 
             labelled("Icon") {
-                HStack(spacing: 8) {
-                    Image(systemName: displaySymbol)
-                        .frame(width: 24)
-                        .accessibilityHidden(true)
-                    TextField("SF Symbol name", text: $chore.sfSymbol)
-                        .textFieldStyle(.roundedBorder)
-                        .autocorrectionDisabled()
-                        #if os(iOS)
-                        .textInputAutocapitalization(.never)
-                        #endif
-                }
+                ChoreIconPicker(selection: $chore.sfSymbol, tint: chore.choreColor.fill)
             }
 
             VStack(alignment: .leading, spacing: 6) {
@@ -219,6 +209,74 @@ struct ChoreDefinitionCard: View {
             get: { chore.dueDate ?? Calendar.current.startOfDay(for: .now) },
             set: { chore.dueDate = $0 }
         )
+    }
+}
+
+/// A horizontal, scrollable icon chooser — the adult scrolls through chore
+/// icons and taps one, rather than typing an SF Symbol name. The current pick is
+/// shown three ways (never colour alone, CLAUDE.md §3.2): a checkmark badge, a
+/// ring, and the big tile preview above. The strip scrolls to the current icon
+/// on appear so it's in view. A chore whose stored symbol isn't in the catalog
+/// (e.g. a seeded one) is kept as the first choice so nothing is lost.
+private struct ChoreIconPicker: View {
+    @Binding var selection: String
+    let tint: Color
+
+    private var icons: [ChoreIconCatalog.Icon] {
+        var list = ChoreIconCatalog.all
+        if !selection.isEmpty, !list.contains(where: { $0.symbol == selection }) {
+            list.insert(ChoreIconCatalog.Icon(symbol: selection, label: ChoreIconCatalog.label(for: selection)), at: 0)
+        }
+        return list
+    }
+
+    var body: some View {
+        ScrollViewReader { proxy in
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(icons) { icon in
+                        iconButton(icon).id(icon.symbol)
+                    }
+                }
+                .padding(.vertical, 2)
+            }
+            .onAppear { proxy.scrollTo(selection, anchor: .center) }
+        }
+        .accessibilityLabel("Chore icon")
+    }
+
+    private func iconButton(_ icon: ChoreIconCatalog.Icon) -> some View {
+        let isSelected = icon.symbol == selection
+        return Button {
+            selection = icon.symbol
+        } label: {
+            Image(systemName: icon.symbol)
+                .font(.title3)
+                // Fixed .primary so every glyph stays legible regardless of the
+                // chore's tint (a pale yellow tint would fail as a foreground).
+                .foregroundStyle(.primary)
+                .frame(width: 44, height: 44)
+                .background(
+                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                        .fill(isSelected ? tint.opacity(0.22) : Color.secondary.opacity(0.12))
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                        .strokeBorder(isSelected ? tint : .clear, lineWidth: 2)
+                )
+                .overlay(alignment: .topTrailing) {
+                    if isSelected {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.caption2)
+                            .foregroundStyle(tint)
+                            .background(Circle().fill(.background))
+                            .padding(2)
+                    }
+                }
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(icon.label)
+        .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
     }
 }
 

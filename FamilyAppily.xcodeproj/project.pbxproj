@@ -21,12 +21,14 @@
 		6922498929EEB6BCF50935F1 /* ParentDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB67EA9D432085D898854D95 /* ParentDashboardView.swift */; };
 		6AEA55B280AFAFEAD5D53378 /* AdultGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D541C681A6D6A7A05DDD8DED /* AdultGate.swift */; };
 		6BC49A4E31EC6BCE749D9FEE /* FamilyCore in Frameworks */ = {isa = PBXBuildFile; productRef = 709889DB199DB2ACFC990A52 /* FamilyCore */; };
+		6ED49D89F4E4C2BB3E189B99 /* FamilyCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9635644266EF5976C8636731 /* FamilyCalendarView.swift */; };
 		6FD034B18CF36C832698AA9D /* FamilyCore in Frameworks */ = {isa = PBXBuildFile; productRef = F545B5D6CC3867011FCE9116 /* FamilyCore */; };
 		7674564C10883A38E9D2335D /* ChildSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BBE5CCB205BA2A3C195358E /* ChildSettingsView.swift */; };
 		7C398F2F383C9854DFA02A04 /* FamilyAppilyMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE1BDF3089BDC4EDEC3ADC6 /* FamilyAppilyMacApp.swift */; };
 		7F34F9AEA5A1B7D50F3A62FD /* CompletionMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797A6D1BE6092083000FD565 /* CompletionMark.swift */; };
 		8001D4C5CFD009D898F0B874 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6CDEA4ADF710D0F021B7F928 /* Assets.xcassets */; };
 		97704E02238759216108DE5C /* FamilyAppilyMacRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85173E294DAE5E1B2FCDE94D /* FamilyAppilyMacRootView.swift */; };
+		9E9BDD09F8DA309D832A694A /* FamilyCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9635644266EF5976C8636731 /* FamilyCalendarView.swift */; };
 		A78C4B5399A2C61E5C75BF0B /* DayCardFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7B74C9AF7E2B971FF63974 /* DayCardFrame.swift */; };
 		A9230F7DA3889BF3D860D0FD /* ChoreAssignmentEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A23975051C05B005F9D0829 /* ChoreAssignmentEditorView.swift */; };
 		AB5E1D7FA5512623BA01C677 /* ParentDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB67EA9D432085D898854D95 /* ParentDashboardView.swift */; };
@@ -58,6 +60,7 @@
 		7B591FBE8ACDE04735D44DC1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		85173E294DAE5E1B2FCDE94D /* FamilyAppilyMacRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyAppilyMacRootView.swift; sourceTree = "<group>"; };
 		85CA6CDA8B621E8B1D074158 /* RewardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardsView.swift; sourceTree = "<group>"; };
+		9635644266EF5976C8636731 /* FamilyCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyCalendarView.swift; sourceTree = "<group>"; };
 		A9B76C9F6C1C03A5BC1C639D /* ProfilePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePickerView.swift; sourceTree = "<group>"; };
 		BE76F14258725A26F800D6CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		BFE1BDF3089BDC4EDEC3ADC6 /* FamilyAppilyMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyAppilyMacApp.swift; sourceTree = "<group>"; };
@@ -153,6 +156,7 @@
 		78CCBF3FF1A6EDC7745E1ABE = {
 			isa = PBXGroup;
 			children = (
+				C1E41608A169755C49BC8F48 /* Calendar */,
 				6F27524961344C3BABB9519B /* Chores */,
 				AA8C9766A0BEFF0F4462E780 /* iOS */,
 				6D1132918D15029B0C7792BF /* macOS */,
@@ -192,6 +196,15 @@
 			);
 			name = iOS;
 			path = Platforms/iOS;
+			sourceTree = "<group>";
+		};
+		C1E41608A169755C49BC8F48 /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				9635644266EF5976C8636731 /* FamilyCalendarView.swift */,
+			);
+			name = Calendar;
+			path = Features/Calendar;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -312,6 +325,7 @@
 				A78C4B5399A2C61E5C75BF0B /* DayCardFrame.swift in Sources */,
 				7C398F2F383C9854DFA02A04 /* FamilyAppilyMacApp.swift in Sources */,
 				97704E02238759216108DE5C /* FamilyAppilyMacRootView.swift in Sources */,
+				9E9BDD09F8DA309D832A694A /* FamilyCalendarView.swift in Sources */,
 				D450DE8DC59C95FF6730DF5C /* FamilyRotationView.swift in Sources */,
 				6922498929EEB6BCF50935F1 /* ParentDashboardView.swift in Sources */,
 				C9F21AE4201F199DED7A12C2 /* ProfilePickerView.swift in Sources */,
@@ -333,6 +347,7 @@
 				E5A279CF04022173CDE6A62F /* CompletionMark.swift in Sources */,
 				0DE29FBAF82C9B92C66260F0 /* DayCardFrame.swift in Sources */,
 				5D22A8B90448C3D88604B57D /* FamilyAppilyApp.swift in Sources */,
+				6ED49D89F4E4C2BB3E189B99 /* FamilyCalendarView.swift in Sources */,
 				B90FE73C4EEC12FAB96DD8A2 /* FamilyRotationView.swift in Sources */,
 				AB5E1D7FA5512623BA01C677 /* ParentDashboardView.swift in Sources */,
 				003504C2D80C562C0B0CA9C5 /* ProfilePickerView.swift in Sources */,
