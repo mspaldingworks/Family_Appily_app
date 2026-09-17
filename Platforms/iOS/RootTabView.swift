@@ -16,6 +16,11 @@ struct RootTabView: View {
                 .tabItem { Label("Family", systemImage: "house.fill") }
 
             NavigationStack {
+                FamilyCalendarView()
+            }
+            .tabItem { Label("Calendar", systemImage: "calendar") }
+
+            NavigationStack {
                 AdultGated(reason: "Open the parents area to change chores, tickets, and settings") {
                     ParentDashboardView()
                 }

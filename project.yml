@@ -20,11 +20,14 @@ targets:
       - path: Features/Chores
       - path: Features/Rewards
       - path: Features/Parents
+      - path: Features/Calendar
     dependencies:
       - package: FamilyCore
     info:
       path: Platforms/iOS/Info.plist
       properties:
+        NSCalendarsFullAccessUsageDescription: "Family Appily shows your family's calendars next to each kid's chores in one place. It reads events only from the calendars you choose."
+        NSCalendarsUsageDescription: "Family Appily shows your family's calendars next to each kid's chores in one place. It reads events only from the calendars you choose."
         UILaunchScreen: {}
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
@@ -60,12 +63,15 @@ targets:
       - path: Features/Chores
       - path: Features/Rewards
       - path: Features/Parents
+      - path: Features/Calendar
     dependencies:
       - package: FamilyCore
     info:
       path: Platforms/macOS/Info.plist
       properties:
         LSUIElement: false
+        NSCalendarsFullAccessUsageDescription: "Family Appily shows your family's calendars next to each kid's chores in one place. It reads events only from the calendars you choose."
+        NSCalendarsUsageDescription: "Family Appily shows your family's calendars next to each kid's chores in one place. It reads events only from the calendars you choose."
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.mspaldingworks.FamilyAppily
@@ -84,6 +90,7 @@ targets:
       path: Platforms/macOS/FamilyAppilyMac.entitlements
       properties:
         com.apple.security.app-sandbox: true
+        com.apple.security.personal-information.calendars: true
 
 schemes:
   FamilyAppily:

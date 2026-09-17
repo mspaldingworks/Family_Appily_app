@@ -20,5 +20,9 @@
 	<string>1</string>
 	<key>LSUIElement</key>
 	<false/>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>Family Appily shows your family's calendars next to each kid's chores in one place. It reads events only from the calendars you choose.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Family Appily shows your family's calendars next to each kid's chores in one place. It reads events only from the calendars you choose.</string>
 </dict>
 </plist>
