@@ -33,13 +33,18 @@ public struct ProfilePickerView: View {
     public var body: some View {
         NavigationStack {
             ScrollView {
-                let board = board
+                let occurrences = weekOccurrences
+                let rotation = occurrences.filter { $0.isRotationResolved }
+                let board = WeeklyChoreBoard.build(
+                    occurrences: occurrences.filter { !$0.isRotationResolved },
+                    doneKeys: doneKeys, today: today
+                )
                 VStack(alignment: .leading, spacing: 22) {
                     rotationButton
 
                     section("Today") {
                         ForEach(children) { child in
-                            kidRow(child, chores: todayChores(child, from: board))
+                            kidRow(child, chores: todayChores(child, from: board), weekly: weeklyChore(child, from: rotation))
                         }
                     }
 
@@ -48,7 +53,7 @@ public struct ProfilePickerView: View {
                         section("This week") {
                             ForEach(children) { child in
                                 let week = weekChores(child, from: board)
-                                if !week.isEmpty { kidRow(child, chores: week) }
+                                if !week.isEmpty { kidRow(child, chores: week, weekly: nil) }
                             }
                         }
                     }
@@ -94,31 +99,39 @@ public struct ProfilePickerView: View {
 
     // MARK: One kid's row
 
-    private func kidRow(_ child: Child, chores dashes: [DashChore]) -> some View {
+    private func kidRow(_ child: Child, chores dashes: [DashChore], weekly: DashChore?) -> some View {
         let theme = ChildTheme.theme(for: child.childID ?? .finley)
-        return HStack(spacing: 12) {
-            Group {
-                if dashes.isEmpty {
-                    HStack {
-                        Spacer()
-                        Label("All done", systemImage: "checkmark.seal.fill")
-                            .font(.subheadline).foregroundStyle(.secondary)
-                        Spacer()
-                    }
-                } else {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 12) {
-                            ForEach(dashes) { dash in
-                                ChoreTile(dash: dash, childName: child.name) { toggle(dash) }
-                            }
+        return VStack(spacing: 10) {
+            // The weekly (rotation) chore is anchored to the top of the card,
+            // with a white glow, and stays until it's checked off.
+            if let weekly {
+                WeeklyChoreButton(dash: weekly, childName: child.name) { toggle(weekly) }
+            }
+
+            HStack(spacing: 12) {
+                Group {
+                    if dashes.isEmpty {
+                        HStack {
+                            Spacer()
+                            Label("All done", systemImage: "checkmark.seal.fill")
+                                .font(.subheadline).foregroundStyle(.secondary)
+                            Spacer()
                         }
-                        .padding(8) // room for the red glow, and breathing space
+                    } else {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 12) {
+                                ForEach(dashes) { dash in
+                                    ChoreTile(dash: dash, childName: child.name) { toggle(dash) }
+                                }
+                            }
+                            .padding(8) // room for the red glow, and breathing space
+                        }
                     }
                 }
-            }
-            .frame(maxWidth: .infinity, minHeight: 96)
+                .frame(maxWidth: .infinity, minHeight: 96)
 
-            kidBadge(child)
+                kidBadge(child)
+            }
         }
         .padding(10)
         .background(RoundedRectangle(cornerRadius: 22, style: .continuous).fill(theme.dotFill.opacity(0.18)))
@@ -170,8 +183,8 @@ public struct ProfilePickerView: View {
         return DateInterval(start: sunday, end: saturday)
     }
 
-    private var board: ChoreBoard {
-        let occurrences = ChoreCalendarProjector.occurrences(
+    private var weekOccurrences: [ChoreOccurrence] {
+        ChoreCalendarProjector.occurrences(
             in: weekInterval,
             children: children.compactMap(\.childID),
             assignments: assignments,
@@ -179,7 +192,16 @@ public struct ProfilePickerView: View {
             rotationEpoch: rotationEpoch,
             rotationContract: rotationContract
         ).map(withCardStyle)
-        return WeeklyChoreBoard.build(occurrences: occurrences, doneKeys: doneKeys, today: today)
+    }
+
+    /// The child's weekly (rotation) chore for the week, if any — deduped to the
+    /// earliest slot. Nil when the rotation isn't set up. Never "held over": a
+    /// weekly chore can be done anytime this week.
+    private func weeklyChore(_ child: Child, from rotation: [ChoreOccurrence]) -> DashChore? {
+        guard rotationEpoch != nil, let cid = child.childID,
+              let first = rotation.filter({ $0.childID == cid }).min(by: { $0.date < $1.date }) else { return nil }
+        let done = doneKeys.contains(WeeklyChoreBoard.key(childID: cid.rawValue, choreID: first.choreID, date: first.date))
+        return DashChore(occurrence: first, isDone: done, isHeldOver: false)
     }
 
     private var doneKeys: Set<String> {
@@ -287,5 +309,52 @@ private struct ChoreTile: View {
         .accessibilityValue(dash.isDone ? "Done" : "Not done")
         .accessibilityAddTraits(.isButton)
         .accessibilityHint("Marks the chore \(dash.isDone ? "not done" : "done")")
+    }
+}
+
+/// The child's weekly (rotation) chore, as a thin button anchored to the top of
+/// their card. It carries a **white glow** to set it apart from the regular
+/// chore tiles, and stays prominent until it's checked off — once done it dims
+/// to a struck-through, glow-less state (still tappable to undo, per §3.5).
+private struct WeeklyChoreButton: View {
+    let dash: DashChore
+    let childName: String
+    let onToggle: () -> Void
+
+    private var occ: ChoreOccurrence { dash.occurrence }
+
+    var body: some View {
+        Button(action: onToggle) {
+            HStack(spacing: 8) {
+                Image(systemName: dash.isDone ? "checkmark.circle.fill" : "arrow.triangle.2.circlepath")
+                    .font(.subheadline.weight(.bold))
+                Text(occ.label)
+                    .font(.subheadline.weight(.semibold))
+                    .lineLimit(1)
+                    .strikethrough(dash.isDone, color: .secondary)
+                Spacer(minLength: 6)
+                HStack(spacing: 3) {
+                    Image(systemName: "star.fill").font(.caption2)
+                    Text("\(occ.ticketValue)").font(.caption).fontWeight(.semibold)
+                }
+            }
+            .foregroundStyle(.primary)
+            .opacity(dash.isDone ? 0.55 : 1)
+            .padding(.horizontal, 12)
+            .frame(maxWidth: .infinity, minHeight: 40)
+            .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color.black.opacity(0.20)))
+            .overlay(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .strokeBorder(dash.isDone ? Color.white.opacity(0.15) : Color.white.opacity(0.9), lineWidth: 1.5)
+            )
+            .shadow(color: dash.isDone ? .clear : Color.white.opacity(0.8), radius: dash.isDone ? 0 : 6)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Weekly chore: \(occ.label) for \(childName), \(occ.ticketValue) ticket\(occ.ticketValue == 1 ? "" : "s")")
+        .accessibilityValue(dash.isDone ? "Done" : "Not done")
+        .accessibilityAddTraits(.isButton)
+        .accessibilityHint("Marks the weekly chore \(dash.isDone ? "not done" : "done")")
     }
 }
