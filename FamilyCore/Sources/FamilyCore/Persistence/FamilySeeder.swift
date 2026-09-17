@@ -9,6 +9,53 @@ public enum FamilySeeder {
         try seedChildrenAndChores(context: context, source: source)
         try seedRotationChores(context: context, source: source)
         try seedTicketsCatalog(context: context, source: source)
+        try seedChoreCardsIfNeeded(context: context)
+    }
+
+    /// Backfills a per-kid `ChoreCard` for each (child, fixed-chore) pair that
+    /// has assignments but no card yet — non-destructive and idempotent (creates
+    /// cards, deletes nothing), so existing installs gain cards on first launch.
+    private static func seedChoreCardsIfNeeded(context: ModelContext) throws {
+        let assignments = try context.fetch(FetchDescriptor<ChoreAssignment>())
+        let chores = try context.fetch(FetchDescriptor<Chore>())
+        let choreByID = Dictionary(chores.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+
+        struct Aggregate { var childID: String; var chore: Chore; var mask: Int; var label: String }
+        var byCard: [String: Aggregate] = [:]
+        for assignment in assignments {
+            guard let chore = choreByID[assignment.choreID], chore.choreType != .rotationResolved else { continue }
+            let key = ChoreCard.id(childID: assignment.childID, choreID: assignment.choreID)
+            let bit = 1 << assignment.weekday
+            if var aggregate = byCard[key] {
+                aggregate.mask |= bit
+                byCard[key] = aggregate
+            } else {
+                byCard[key] = Aggregate(
+                    childID: assignment.childID,
+                    chore: chore,
+                    mask: bit,
+                    label: assignment.displayLabelOverride ?? chore.defaultLabel
+                )
+            }
+        }
+
+        for (key, aggregate) in byCard {
+            let descriptor = FetchDescriptor<ChoreCard>(predicate: #Predicate { $0.id == key })
+            guard try context.fetch(descriptor).isEmpty else { continue }
+            context.insert(ChoreCard(
+                id: key,
+                childID: aggregate.childID,
+                choreID: aggregate.chore.id,
+                label: aggregate.label,
+                sfSymbol: aggregate.chore.sfSymbol,
+                colorToken: aggregate.chore.colorToken,
+                ticketValue: aggregate.chore.ticketValue,
+                scheduleIsRecurring: true,
+                weekdaysMask: aggregate.mask,
+                dueDate: nil
+            ))
+        }
+        try context.save()
     }
 
     private static func seedChildrenAndChores(context: ModelContext, source: ContractSource) throws {

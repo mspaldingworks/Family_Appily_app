@@ -16,6 +16,7 @@ struct FamilyCalendarView: View {
     @Query(sort: \Child.name) private var children: [Child]
     @Query private var assignments: [ChoreAssignment]
     @Query private var chores: [Chore]
+    @Query private var choreCards: [ChoreCard]
 
     @AppStorage("rotationEpochISO8601") private var rotationEpochISO8601 = ""
 
@@ -95,6 +96,24 @@ struct FamilyCalendarView: View {
         )
     }
 
+    /// One-off, due-date chores (which keep no recurring assignment rows) shown
+    /// on their date, in the kid's identity colour like any other chore.
+    private var dueDateOccurrences: [ChoreOccurrence] {
+        let calendar = Calendar.current
+        return choreCards.compactMap { card in
+            guard !card.scheduleIsRecurring, let due = card.dueDate,
+                  interval.contains(due), let child = ChildID(rawValue: card.childID) else { return nil }
+            return ChoreOccurrence(
+                id: "due|\(card.id)",
+                childID: child,
+                label: card.label,
+                sfSymbol: card.sfSymbol,
+                date: calendar.startOfDay(for: due),
+                isRotationResolved: false
+            )
+        }
+    }
+
     private var childByID: [ChildID: Child] {
         Dictionary(children.compactMap { child in child.childID.map { ($0, child) } }, uniquingKeysWith: { first, _ in first })
     }
@@ -162,7 +181,7 @@ struct FamilyCalendarView: View {
     private func buildDays() -> [DayBucket] {
         let cal = Calendar.current
         var byDay: [Date: [AgendaItem]] = [:]
-        for occ in occurrences {
+        for occ in occurrences + dueDateOccurrences {
             byDay[cal.startOfDay(for: occ.date), default: []].append(.chore(occ))
         }
         for event in events where interval.contains(event.start) {
@@ -346,7 +365,7 @@ private extension Color {
 
 @MainActor private func previewContainer() -> ModelContainer {
     let container = try! ModelContainer(
-        for: Child.self, Chore.self, ChoreAssignment.self,
+        for: Child.self, Chore.self, ChoreAssignment.self, ChoreCard.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
     let ctx = container.mainContext
