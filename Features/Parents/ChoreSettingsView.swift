@@ -189,8 +189,10 @@ struct ChoreDefinitionCard: View {
             VStack(alignment: .leading, spacing: 16) { previewTile; fields }
         }
         .padding(16)
-        .background(RoundedRectangle(cornerRadius: 20, style: .continuous).fill(choreColor.fill.opacity(0.12)))
-        .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous).strokeBorder(choreColor.fill.opacity(0.28), lineWidth: 1))
+        // Card background is locked to the CHILD's identity colour; only the tile
+        // (icon + tickets) uses the per-chore colour the parent picks.
+        .background(RoundedRectangle(cornerRadius: 20, style: .continuous).fill(theme.dotFill.opacity(0.14)))
+        .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous).strokeBorder(theme.dotFill.opacity(0.32), lineWidth: 1))
         .onChange(of: card.sfSymbol) { _, _ in onEdit() }
         .onChange(of: card.ticketValue) { _, _ in onEdit() }
         .onChange(of: card.weekdaysMask) { _, _ in onEdit() }
