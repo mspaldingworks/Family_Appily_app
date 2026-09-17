@@ -12,17 +12,17 @@ import SwiftData
 /// `dueDate`. Rotation "Weekly Chore" slots are system-managed and have no card.
 @Model
 public final class ChoreCard {
-    @Attribute(.unique) public var id: String   // "childID|choreID"
-    public var childID: String
-    public var choreID: String
-    public var label: String
-    public var sfSymbol: String
+    public var id: String = ""   // "childID|choreID"
+    public var childID: String = ""
+    public var choreID: String = ""
+    public var label: String = ""
+    public var sfSymbol: String = ""
     public var colorToken: String?
-    public var ticketValue: Int
+    public var ticketValue: Int = 1
     /// true → repeats on `weekdaysMask` days; false → one-off on `dueDate`.
-    public var scheduleIsRecurring: Bool
+    public var scheduleIsRecurring: Bool = true
     /// Bitmask of `Weekday` raw values: bit i set ⇒ weekday i is scheduled.
-    public var weekdaysMask: Int
+    public var weekdaysMask: Int = 0
     public var dueDate: Date?
 
     public init(

@@ -8,10 +8,10 @@ public enum ChoreType: String, Codable, Sendable {
 
 @Model
 public final class Chore {
-    @Attribute(.unique) public var id: String
-    public var type: String
-    public var defaultLabel: String
-    public var sfSymbol: String
+    public var id: String = ""
+    public var type: String = ""
+    public var defaultLabel: String = ""
+    public var sfSymbol: String = ""
     public var category: String?
     public var note: String?
 

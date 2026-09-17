@@ -13,10 +13,10 @@ import SwiftData
 /// profile or an adult.
 @Model
 public final class EarnItem {
-    @Attribute(.unique) public var id: String
-    public var label: String
-    public var sfSymbol: String
-    public var isPrivate: Bool
+    public var id: String = ""
+    public var label: String = ""
+    public var sfSymbol: String = ""
+    public var isPrivate: Bool = false
     /// nil = shared across all children.
     public var childID: String?
     public var bonusAmount: Int?

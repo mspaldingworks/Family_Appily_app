@@ -42,7 +42,7 @@ struct FamilyAppilyMacRootView: View {
         }
         .task {
             do {
-                try FamilySeeder.seedIfNeeded(context: modelContext)
+                try await FamilySeeder.seedIfNeeded(context: modelContext)
             } catch {
                 seedingError = error
             }

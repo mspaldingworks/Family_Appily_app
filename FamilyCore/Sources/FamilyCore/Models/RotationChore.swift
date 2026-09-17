@@ -6,10 +6,10 @@ import SwiftData
 /// just holds the catalog entry (label, sfSymbol, offset), not a per-week grid.
 @Model
 public final class RotationChore {
-    @Attribute(.unique) public var id: String
-    public var label: String
-    public var offset: Int
-    public var sfSymbol: String
+    public var id: String = ""
+    public var label: String = ""
+    public var offset: Int = 0
+    public var sfSymbol: String = ""
 
     public init(id: String, label: String, offset: Int, sfSymbol: String) {
         self.id = id

@@ -5,11 +5,51 @@ import SwiftData
 /// safe to call every launch; it only inserts what's missing so an adult's
 /// local edits (once editing exists, in a later phase) are never clobbered.
 public enum FamilySeeder {
-    public static func seedIfNeeded(context: ModelContext, source: ContractSource = BundledContractSource()) throws {
+    /// Bump when the bundled contracts change enough to warrant a re-seed on
+    /// devices that already carry an older seed marker.
+    private static let currentSeedVersion = 1
+
+    /// Seeds the family data once per family, guarded by a synced `SeedMarker`
+    /// so a second device doesn't duplicate everyone (SwiftData + CloudKit can't
+    /// enforce uniqueness). A fresh local store on a CloudKit device briefly
+    /// waits for the initial import to deliver an existing marker before seeding.
+    public static func seedIfNeeded(
+        context: ModelContext,
+        source: ContractSource = BundledContractSource(),
+        cloudActive: Bool = FamilyModelContainer.isCloudActive
+    ) async throws {
+        // Already seeded here, or a marker has synced in from another device.
+        if try hasSeedMarker(context: context) { return }
+
+        let hasLocalData = try !context.fetch(FetchDescriptor<Child>()).isEmpty
+
+        // A fresh local store on a CloudKit device may just be awaiting the
+        // initial import. Give it a brief window to deliver an existing marker
+        // before we seed, so a newly-added device doesn't duplicate the family.
+        // Skipped when this device already has data (it seeded before markers
+        // existed) or CloudKit isn't active (nothing will arrive).
+        if cloudActive && !hasLocalData {
+            for _ in 0..<5 {
+                try await Task.sleep(for: .seconds(1))
+                if try hasSeedMarker(context: context) { return }
+            }
+        }
+
         try seedChildrenAndChores(context: context, source: source)
         try seedRotationChores(context: context, source: source)
         try seedTicketsCatalog(context: context, source: source)
         try seedChoreCardsIfNeeded(context: context)
+        try setSeedMarker(context: context)
+    }
+
+    private static func hasSeedMarker(context: ModelContext) throws -> Bool {
+        try context.fetch(FetchDescriptor<SeedMarker>()).contains { $0.version >= currentSeedVersion }
+    }
+
+    private static func setSeedMarker(context: ModelContext) throws {
+        guard try !hasSeedMarker(context: context) else { return }
+        context.insert(SeedMarker(id: "family-seed", version: currentSeedVersion, seededAt: .now))
+        try context.save()
     }
 
     /// Backfills a per-kid `ChoreCard` for each (child, fixed-chore) pair that

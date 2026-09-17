@@ -29,7 +29,7 @@ struct RootTabView: View {
         }
         .task {
             do {
-                try FamilySeeder.seedIfNeeded(context: modelContext)
+                try await FamilySeeder.seedIfNeeded(context: modelContext)
             } catch {
                 seedingError = error
             }
@@ -44,5 +44,5 @@ struct RootTabView: View {
 
 #Preview {
     RootTabView()
-        .modelContainer(for: [Child.self, Chore.self, ChoreAssignment.self, ChoreCard.self, Completion.self, RotationChore.self, EarnItem.self, SpendTier.self, TicketLedgerEntry.self], inMemory: true)
+        .modelContainer(for: [Child.self, Chore.self, ChoreAssignment.self, ChoreCard.self, Completion.self, RotationChore.self, EarnItem.self, SpendTier.self, TicketLedgerEntry.self, SeedMarker.self], inMemory: true)
 }
