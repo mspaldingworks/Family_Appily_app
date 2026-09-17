@@ -94,6 +94,19 @@ struct FamilyCalendarView: View {
             rotationEpoch: rotationEpoch,
             rotationContract: rotationContract
         )
+        .map(withCardStyle)
+    }
+
+    /// Attaches each chore's card colour + ticket value so the calendar shows the
+    /// same mini card tile as the weekly chart. Rotation slots (no card) keep the
+    /// projector defaults and fall back to a default colour in the row.
+    private func withCardStyle(_ occ: ChoreOccurrence) -> ChoreOccurrence {
+        guard let card = choreCards.first(where: { $0.childID == occ.childID.rawValue && $0.choreID == occ.choreID }) else { return occ }
+        return ChoreOccurrence(
+            id: occ.id, childID: occ.childID, choreID: occ.choreID, label: occ.label,
+            sfSymbol: occ.sfSymbol, date: occ.date, isRotationResolved: occ.isRotationResolved,
+            ticketValue: card.ticketValue, colorToken: card.colorToken
+        )
     }
 
     /// One-off, due-date chores (which keep no recurring assignment rows) shown
@@ -106,10 +119,13 @@ struct FamilyCalendarView: View {
             return ChoreOccurrence(
                 id: "due|\(card.id)",
                 childID: child,
+                choreID: card.choreID,
                 label: card.label,
                 sfSymbol: card.sfSymbol,
                 date: calendar.startOfDay(for: due),
-                isRotationResolved: false
+                isRotationResolved: false,
+                ticketValue: card.ticketValue,
+                colorToken: card.colorToken
             )
         }
     }
@@ -218,28 +234,40 @@ struct FamilyCalendarView: View {
     private func choreRow(_ occ: ChoreOccurrence) -> some View {
         let theme = ChildTheme.theme(for: occ.childID)
         let name = childByID[occ.childID]?.name ?? occ.childID.rawValue.capitalized
+        let choreColor = occ.colorToken.flatMap(ChoreColor.init(rawValue:)) ?? .default(forID: occ.choreID)
         return HStack(spacing: 10) {
-            Capsule().fill(theme.dotFill).frame(width: 5, height: 36)
-            Image(systemName: occ.sfSymbol)
-                .foregroundStyle(.secondary)
-                .frame(width: 22)
+            // Mini card tile (chore colour + icon), matching the weekly chart.
+            RoundedRectangle(cornerRadius: 9, style: .continuous)
+                .fill(choreColor.fill)
+                .frame(width: 34, height: 34)
+                .overlay(
+                    Image(systemName: occ.sfSymbol)
+                        .font(.callout)
+                        .foregroundStyle(choreColor.onColor)
+                )
                 .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 1) {
+                // The child (whose chore) — the calendar mixes kids, so keep it.
                 Text(name)
                     .font(.caption)
                     .fontWeight(.semibold)
+                    .foregroundStyle(.secondary)
                 Text(occ.label)
                     .font(.body)
             }
             Spacer()
-            Text("Chore")
-                .font(.caption2)
-                .foregroundStyle(.secondary)
+            HStack(spacing: 3) {
+                Image(systemName: "star.fill").font(.caption2)
+                Text("\(occ.ticketValue)").font(.subheadline).fontWeight(.semibold)
+            }
+            .foregroundStyle(.secondary)
+            .accessibilityHidden(true)
         }
         .padding(10)
-        .background(RoundedRectangle(cornerRadius: 12).fill(theme.dotFill.opacity(0.10)))
+        // Child-tinted background keeps the "whose chore" context on the calendar.
+        .background(RoundedRectangle(cornerRadius: 12).fill(theme.dotFill.opacity(0.12)))
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(name)'s chore: \(occ.label)")
+        .accessibilityLabel("\(name)'s chore: \(occ.label), \(occ.ticketValue) ticket\(occ.ticketValue == 1 ? "" : "s")")
     }
 
     private func eventRow(_ event: CalendarEventItem) -> some View {

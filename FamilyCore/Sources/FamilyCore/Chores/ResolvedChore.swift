@@ -11,13 +11,17 @@ public struct ResolvedChore: Identifiable, Equatable, Sendable {
     /// Tickets this chore earns for this child — per-kid, from the assignment's
     /// override (a `ChoreCard`) or the base chore's default.
     public let ticketValue: Int
+    /// The chore's colour token (a `ChoreColor` raw value) so the chart tile can
+    /// match the card. Nil falls back to a stable default colour per chore.
+    public let colorToken: String?
 
-    public init(id: String, label: String, sfSymbol: String, isRotationResolved: Bool, ticketValue: Int = 1) {
+    public init(id: String, label: String, sfSymbol: String, isRotationResolved: Bool, ticketValue: Int = 1, colorToken: String? = nil) {
         self.id = id
         self.label = label
         self.sfSymbol = sfSymbol
         self.isRotationResolved = isRotationResolved
         self.ticketValue = ticketValue
+        self.colorToken = colorToken
     }
 }
 

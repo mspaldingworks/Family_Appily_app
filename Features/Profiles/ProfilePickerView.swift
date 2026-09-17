@@ -55,7 +55,11 @@ private struct ProfileCard: View {
             Image(child.primaryAvatar)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(width: 96, height: 96)
+                .frame(width: 92, height: 92)
+                .padding(10)
+                // Light backing so the mascot art (drawn for a white background)
+                // stays crisp on the translucent, child-coloured card.
+                .background(Circle().fill(SharedTokens.paper).shadow(radius: 1))
                 .accessibilityHidden(true)
 
             Text(child.name)

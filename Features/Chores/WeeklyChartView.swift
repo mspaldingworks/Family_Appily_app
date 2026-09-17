@@ -22,6 +22,7 @@ public struct WeeklyChartView: View {
     @Query private var completions: [Completion]
     @Query private var rotationChores: [RotationChore]
     @Query private var ticketEntries: [TicketLedgerEntry]
+    @Query private var choreCards: [ChoreCard]
 
     @Environment(\.modelContext) private var modelContext
 
@@ -104,12 +105,23 @@ public struct WeeklyChartView: View {
             let resolved = ChoreResolver.chores(
                 for: childID, weekday: weekday, assignments: assignments, chores: chores,
                 rotationEpoch: rotationEpoch, rotationContract: rotationContract
-            )
+            ).map(withCardColor)
             DayCardFrame(child: child, weekday: weekday, chores: resolved, completedChoreIDs: completedIDsToday) { chore in
                 toggle(chore: chore)
             }
             .frame(maxWidth: .infinity)
         }
+    }
+
+    /// Attaches the per-kid card's colour to a resolved chore so the chart tile
+    /// matches the card. Rotation slots (which have no card) keep nil and fall
+    /// back to a default colour in `ChoreRow`.
+    private func withCardColor(_ chore: ResolvedChore) -> ResolvedChore {
+        let token = choreCards.first { $0.childID == child.id && $0.choreID == chore.id }?.colorToken
+        return ResolvedChore(
+            id: chore.id, label: chore.label, sfSymbol: chore.sfSymbol,
+            isRotationResolved: chore.isRotationResolved, ticketValue: chore.ticketValue, colorToken: token
+        )
     }
 
     private func toggle(chore: ResolvedChore) {
