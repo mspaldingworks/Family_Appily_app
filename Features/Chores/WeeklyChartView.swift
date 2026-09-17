@@ -125,30 +125,12 @@ public struct WeeklyChartView: View {
     }
 
     private func toggle(chore: ResolvedChore) {
-        let childID = child.id
-        let choreID = chore.id
-        let day = today
-        let existing = completions.first { $0.childID == childID && $0.choreID == choreID && Calendar.current.isDate($0.date, inSameDayAs: day) }
-
-        if let existing {
-            modelContext.delete(existing)
-            // Take back the ticket this completion earned, matching the same
-            // child/chore/day so un-checking is fully reversible per §3.5.
-            if let earned = ticketEntries.first(where: {
-                $0.childID == childID && $0.referenceID == choreID
-                    && $0.kind == TicketLedgerKind.earn.rawValue
-                    && Calendar.current.isDate($0.occurredAt, inSameDayAs: day)
-            }) {
-                modelContext.delete(earned)
-            }
-        } else {
-            modelContext.insert(Completion(childID: childID, choreID: choreID, date: day))
-            // Completing a chore earns this kid's ticket value for it (resolved
-            // per-kid from their ChoreCard; defaults to 1), wired to their action.
-            modelContext.insert(TicketLedgerEntry(childID: childID, amount: max(1, chore.ticketValue), kind: .earn, referenceID: choreID, occurredAt: day))
-            playCompletionFeedback()
-        }
-        try? modelContext.save()
+        let nowComplete = ChoreCompletion.toggle(
+            childID: child.id, choreID: chore.id, date: today,
+            ticketValue: chore.ticketValue, completions: completions,
+            ticketEntries: ticketEntries, context: modelContext
+        )
+        if nowComplete { playCompletionFeedback() }
     }
 
     /// Haptic + optional sound on completion, per §3.7 — each independently
