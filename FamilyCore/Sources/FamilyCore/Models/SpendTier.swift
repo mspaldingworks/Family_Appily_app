@@ -6,10 +6,10 @@ import SwiftData
 /// per-child pricing is the fastest way to make this feel unfair).
 @Model
 public final class SpendTier {
-    @Attribute(.unique) public var id: String
-    public var cost: Int
-    public var label: String
-    public var sfSymbol: String
+    public var id: String = ""
+    public var cost: Int = 0
+    public var label: String = ""
+    public var sfSymbol: String = ""
 
     public init(id: String, cost: Int, label: String, sfSymbol: String) {
         self.id = id

@@ -15,13 +15,13 @@ public enum TicketLedgerKind: String, Codable, Sendable {
 /// never a mutable stored counter, so it can't drift from its own history.
 @Model
 public final class TicketLedgerEntry {
-    public var childID: String
+    public var childID: String = ""
     /// Positive for earn/adult-award, negative for spend.
-    public var amount: Int
-    public var kind: String
+    public var amount: Int = 0
+    public var kind: String = ""
     /// The EarnItem.id or SpendTier.id this entry is for.
-    public var referenceID: String
-    public var occurredAt: Date
+    public var referenceID: String = ""
+    public var occurredAt: Date = Date.distantPast
 
     public init(childID: String, amount: Int, kind: TicketLedgerKind, referenceID: String, occurredAt: Date = .now) {
         self.childID = childID

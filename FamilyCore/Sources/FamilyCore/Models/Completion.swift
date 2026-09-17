@@ -7,11 +7,11 @@ import SwiftData
 /// mutable "isComplete" state to get out of sync.
 @Model
 public final class Completion {
-    public var childID: String
-    public var choreID: String
+    public var childID: String = ""
+    public var choreID: String = ""
     /// Normalized to midnight local time — the calendar day the chore was done, not a timestamp.
-    public var date: Date
-    public var completedAt: Date
+    public var date: Date = Date.distantPast
+    public var completedAt: Date = Date.distantPast
 
     public init(childID: String, choreID: String, date: Date, completedAt: Date = .now) {
         self.childID = childID

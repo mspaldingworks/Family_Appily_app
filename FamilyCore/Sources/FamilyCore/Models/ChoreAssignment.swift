@@ -6,10 +6,10 @@ import SwiftData
 /// the display label to use for this child specifically.
 @Model
 public final class ChoreAssignment {
-    public var childID: String
-    public var choreID: String
+    public var childID: String = ""
+    public var choreID: String = ""
     /// 0 = Sunday ... 6 = Saturday, matching family.json's weekStartsOn: "sunday".
-    public var weekday: Int
+    public var weekday: Int = 0
     public var displayLabelOverride: String?
     /// Per-kid overrides stamped from the child's `ChoreCard` when it's edited,
     /// so the chart/calendar/tickets show this kid's icon and ticket value.
