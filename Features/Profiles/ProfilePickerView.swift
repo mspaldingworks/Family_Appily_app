@@ -60,7 +60,7 @@ private struct ProfileCard: View {
 
             Text(child.name)
                 .font(.system(.title2, design: .rounded).weight(.bold))
-                .foregroundStyle(theme.textInk)
+                .foregroundStyle(.primary)
 
             HStack(spacing: 4) {
                 Image(systemName: "star.fill")
@@ -68,12 +68,14 @@ private struct ProfileCard: View {
                 Text("\(ticketBalance) tickets")
                     .font(.subheadline)
             }
-            .foregroundStyle(SharedTokens.inkSecondary)
+            .foregroundStyle(.secondary)
         }
         .frame(minWidth: 60, minHeight: 60)
         .padding(20)
         .frame(maxWidth: .infinity)
-        .background(RoundedRectangle(cornerRadius: 26).fill(SharedTokens.paper).shadow(radius: 2))
+        // Semi-transparent, themed to the child's identity colour (was fixed white).
+        .background(RoundedRectangle(cornerRadius: 26).fill(theme.dotFill.opacity(0.20)))
+        .overlay(RoundedRectangle(cornerRadius: 26).strokeBorder(theme.dotFill.opacity(0.45), lineWidth: 1.5))
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(child.name), \(ticketBalance) tickets")
         .accessibilityHint("Opens \(child.name)'s weekly chore chart")
@@ -85,16 +87,18 @@ private struct FamilyRotationCard: View {
         VStack(spacing: 12) {
             Image(systemName: "arrow.triangle.2.circlepath")
                 .font(.system(size: 48))
-                .foregroundStyle(SharedTokens.ink)
+                .foregroundStyle(.primary)
                 .accessibilityHidden(true)
             Text("Family Rotation")
                 .font(.system(.title2, design: .rounded).weight(.bold))
-                .foregroundStyle(SharedTokens.ink)
+                .foregroundStyle(.primary)
         }
         .frame(minWidth: 60, minHeight: 60)
         .padding(20)
         .frame(maxWidth: .infinity)
-        .background(RoundedRectangle(cornerRadius: 26).fill(SharedTokens.paper).shadow(radius: 2))
+        // Neutral semi-transparent (not a child), consistent with the themed cards.
+        .background(RoundedRectangle(cornerRadius: 26).fill(Color.secondary.opacity(0.15)))
+        .overlay(RoundedRectangle(cornerRadius: 26).strokeBorder(Color.secondary.opacity(0.30), lineWidth: 1.5))
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Family Rotation")
         .accessibilityHint("Opens the shared family chore rotation")
