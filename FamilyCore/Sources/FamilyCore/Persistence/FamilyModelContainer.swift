@@ -12,6 +12,7 @@ public enum FamilyModelContainer {
             Child.self,
             Chore.self,
             ChoreAssignment.self,
+            ChoreCard.self,
             Completion.self,
             RotationChore.self,
             EarnItem.self,

@@ -21,15 +21,6 @@ struct ChildSettingsView: View {
                 TextField("Name", text: $child.name)
             }
 
-            Section("Chores") {
-                NavigationLink {
-                    ChoreAssignmentEditorView(child: child)
-                } label: {
-                    Label("Chores each day", systemImage: "calendar")
-                }
-                .frame(minHeight: 44)
-            }
-
             Section {
                 LabeledContent("Balance") {
                     Label("\(balance) tickets", systemImage: "star.fill")

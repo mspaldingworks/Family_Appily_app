@@ -11,12 +11,26 @@ public final class ChoreAssignment {
     /// 0 = Sunday ... 6 = Saturday, matching family.json's weekStartsOn: "sunday".
     public var weekday: Int
     public var displayLabelOverride: String?
+    /// Per-kid overrides stamped from the child's `ChoreCard` when it's edited,
+    /// so the chart/calendar/tickets show this kid's icon and ticket value.
+    /// Nil falls back to the base chore (e.g. rotation slots, which have no card).
+    public var sfSymbolOverride: String?
+    public var ticketValueOverride: Int?
 
-    public init(childID: String, choreID: String, weekday: Weekday, displayLabelOverride: String?) {
+    public init(
+        childID: String,
+        choreID: String,
+        weekday: Weekday,
+        displayLabelOverride: String?,
+        sfSymbolOverride: String? = nil,
+        ticketValueOverride: Int? = nil
+    ) {
         self.childID = childID
         self.choreID = choreID
         self.weekday = weekday.rawValue
         self.displayLabelOverride = displayLabelOverride
+        self.sfSymbolOverride = sfSymbolOverride
+        self.ticketValueOverride = ticketValueOverride
     }
 }
 

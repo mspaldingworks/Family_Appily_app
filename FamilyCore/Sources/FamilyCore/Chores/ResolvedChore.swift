@@ -8,12 +8,16 @@ public struct ResolvedChore: Identifiable, Equatable, Sendable {
     public let label: String
     public let sfSymbol: String
     public let isRotationResolved: Bool
+    /// Tickets this chore earns for this child — per-kid, from the assignment's
+    /// override (a `ChoreCard`) or the base chore's default.
+    public let ticketValue: Int
 
-    public init(id: String, label: String, sfSymbol: String, isRotationResolved: Bool) {
+    public init(id: String, label: String, sfSymbol: String, isRotationResolved: Bool, ticketValue: Int = 1) {
         self.id = id
         self.label = label
         self.sfSymbol = sfSymbol
         self.isRotationResolved = isRotationResolved
+        self.ticketValue = ticketValue
     }
 }
 
@@ -50,11 +54,17 @@ public enum ChoreResolver {
                 guard !assignedRotationChores.isEmpty else { return nil }
                 let label = assignedRotationChores.map(\.label).joined(separator: " + ")
                 let symbol = assignedRotationChores.first?.sfSymbol ?? chore.sfSymbol
-                return ResolvedChore(id: chore.id, label: label, sfSymbol: symbol, isRotationResolved: true)
+                return ResolvedChore(id: chore.id, label: label, sfSymbol: symbol, isRotationResolved: true, ticketValue: assignment.ticketValueOverride ?? chore.ticketValue)
             }
 
             let label = assignment.displayLabelOverride ?? chore.defaultLabel
-            return ResolvedChore(id: chore.id, label: label, sfSymbol: chore.sfSymbol, isRotationResolved: false)
+            return ResolvedChore(
+                id: chore.id,
+                label: label,
+                sfSymbol: assignment.sfSymbolOverride ?? chore.sfSymbol,
+                isRotationResolved: false,
+                ticketValue: assignment.ticketValueOverride ?? chore.ticketValue
+            )
         }
     }
 }
