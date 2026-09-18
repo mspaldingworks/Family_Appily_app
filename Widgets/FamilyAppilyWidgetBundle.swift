@@ -5,5 +5,6 @@ import WidgetKit
 struct FamilyAppilyWidgetBundle: WidgetBundle {
     var body: some Widget {
         ChoresWidget()
+        AgendaWidget()
     }
 }

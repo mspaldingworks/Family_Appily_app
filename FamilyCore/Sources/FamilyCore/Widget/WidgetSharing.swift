@@ -59,12 +59,41 @@ public struct WidgetSnapshot: Codable, Equatable, Sendable {
         }
     }
 
+    /// One of today's calendar events, flattened for the agenda widget. Fetched
+    /// by the app (which already has EventKit access) and carried in the snapshot,
+    /// so the widget never touches EventKit itself.
+    public struct Event: Codable, Equatable, Sendable, Identifiable {
+        public let id: String
+        public let title: String
+        public let start: Date
+        public let isAllDay: Bool
+        public let color: CalendarRGBA?
+        public init(id: String, title: String, start: Date, isAllDay: Bool, color: CalendarRGBA?) {
+            self.id = id
+            self.title = title
+            self.start = start
+            self.isAllDay = isAllDay
+            self.color = color
+        }
+    }
+
     public let kids: [Kid]
+    public let events: [Event]
     public let generatedAt: Date
 
-    public init(kids: [Kid], generatedAt: Date = .now) {
+    public init(kids: [Kid], events: [Event] = [], generatedAt: Date = .now) {
         self.kids = kids
+        self.events = events
         self.generatedAt = generatedAt
+    }
+
+    // Decode tolerantly so a snapshot written by an older build (before events
+    // existed) still loads — the widget shows chores while events default empty.
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        kids = try c.decode([Kid].self, forKey: .kids)
+        events = try c.decodeIfPresent([Event].self, forKey: .events) ?? []
+        generatedAt = try c.decodeIfPresent(Date.self, forKey: .generatedAt) ?? .now
     }
 
     /// Family total of today's remaining chores — the headline number.
@@ -72,10 +101,18 @@ public struct WidgetSnapshot: Codable, Equatable, Sendable {
 
     /// Sample data for widget placeholders and previews.
     public static var sample: WidgetSnapshot {
-        WidgetSnapshot(kids: [
-            .init(id: "finley", name: "Finley", colorHex: "#1B4F9C", emblemSymbol: "", choresToday: 4, choresDone: 2, tickets: 12),
-            .init(id: "arthur", name: "Arthur", colorHex: "#5CB85C", emblemSymbol: "", choresToday: 3, choresDone: 3, tickets: 8),
-            .init(id: "maryn", name: "Maryn", colorHex: "#E04E2C", emblemSymbol: "", choresToday: 5, choresDone: 1, tickets: 20),
-        ])
+        let now = Calendar.current.startOfDay(for: .now)
+        return WidgetSnapshot(
+            kids: [
+                .init(id: "finley", name: "Finley", colorHex: "#1B4F9C", emblemSymbol: "", choresToday: 4, choresDone: 2, tickets: 12),
+                .init(id: "arthur", name: "Arthur", colorHex: "#5CB85C", emblemSymbol: "", choresToday: 3, choresDone: 3, tickets: 8),
+                .init(id: "maryn", name: "Maryn", colorHex: "#E04E2C", emblemSymbol: "", choresToday: 5, choresDone: 1, tickets: 20),
+            ],
+            events: [
+                .init(id: "e1", title: "Soccer practice", start: now.addingTimeInterval(15 * 3600), isAllDay: false, color: CalendarRGBA(red: 0.11, green: 0.31, blue: 0.61, alpha: 1)),
+                .init(id: "e2", title: "Dentist — Maryn", start: now.addingTimeInterval(16.5 * 3600), isAllDay: false, color: CalendarRGBA(red: 0.88, green: 0.31, blue: 0.17, alpha: 1)),
+                .init(id: "e3", title: "Library books due", start: now, isAllDay: true, color: CalendarRGBA(red: 0.36, green: 0.72, blue: 0.36, alpha: 1)),
+            ]
+        )
     }
 }

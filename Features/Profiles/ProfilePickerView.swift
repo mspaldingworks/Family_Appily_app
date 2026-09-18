@@ -42,6 +42,11 @@ public struct ProfilePickerView: View {
     /// completed. Keyed by `ChildID.rawValue`; incrementing it plays the burst.
     @State private var burstTrigger: [String: Int] = [:]
 
+    /// Read-only EventKit access for the widget snapshot's "today" events. Never
+    /// prompts here — `events(in:)` returns [] unless access was already granted
+    /// on the Calendar tab, so the home screen never surfaces a permission ask.
+    @State private var calendarService = EventKitCalendarService()
+
     public init() {}
 
     public var body: some View {
@@ -313,8 +318,22 @@ public struct ProfilePickerView: View {
                 tickets: balance(for: child)
             )
         }
-        FamilyWidgetSharing.write(WidgetSnapshot(kids: kids))
+        let events = todaysEvents()
+        FamilyWidgetSharing.write(WidgetSnapshot(kids: kids, events: events))
         WidgetCenter.shared.reloadAllTimelines()
+    }
+
+    /// Today's events for the agenda widget — all-day first, then by start time.
+    /// Empty unless calendar access was already granted (no prompt from here).
+    private func todaysEvents() -> [WidgetSnapshot.Event] {
+        guard calendarService.access == .granted else { return [] }
+        let calendar = Calendar.current
+        let start = calendar.startOfDay(for: .now)
+        let end = calendar.date(byAdding: .day, value: 1, to: start) ?? start
+        return calendarService.events(in: DateInterval(start: start, end: end), calendarIDs: nil)
+            .sorted { ($0.isAllDay ? 0 : 1, $0.start) < ($1.isAllDay ? 0 : 1, $1.start) }
+            .prefix(8)
+            .map { WidgetSnapshot.Event(id: $0.id, title: $0.title, start: $0.start, isAllDay: $0.isAllDay, color: $0.color) }
     }
 }
 

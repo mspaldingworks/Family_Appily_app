@@ -3,7 +3,7 @@ import Foundation
 /// An RGBA colour captured from a source calendar, kept as plain `Double`s so
 /// these value types stay `Sendable` and free of any UI framework (CLAUDE.md §8:
 /// nothing below the view layer imports SwiftUI/UIKit/AppKit).
-public struct CalendarRGBA: Hashable, Sendable {
+public struct CalendarRGBA: Hashable, Codable, Sendable {
     public let red: Double
     public let green: Double
     public let blue: Double
