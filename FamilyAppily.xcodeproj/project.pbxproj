@@ -11,6 +11,7 @@
 		0A79732C03639AD4C322F904 /* AdultGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D541C681A6D6A7A05DDD8DED /* AdultGate.swift */; };
 		0DE29FBAF82C9B92C66260F0 /* DayCardFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7B74C9AF7E2B971FF63974 /* DayCardFrame.swift */; };
 		293CEEB19916BD4411A601FE /* WeeklyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F630409DD2005551010D5B /* WeeklyChartView.swift */; };
+		3650DD30F28584565C6F5F57 /* AgendaWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A26166F1892F2D624EB8F0 /* AgendaWidget.swift */; };
 		3BF558E8083FE151ECCC2179 /* RewardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CA6CDA8B621E8B1D074158 /* RewardsView.swift */; };
 		41EADF806F147A3FC781DBFF /* ChoreRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4383D3E29DD6623D29A72597 /* ChoreRow.swift */; };
 		4874BFF89E8F74CA384DEB29 /* WeeklyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F630409DD2005551010D5B /* WeeklyChartView.swift */; };
@@ -86,6 +87,7 @@
 		4D5761873673424874C6E5CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5838CB35CBFE479FFB9AE584 /* ChoreSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoreSettingsView.swift; sourceTree = "<group>"; };
 		61E3A16D7A582B3A9E3D3DF1 /* FamilyCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = FamilyCore; path = FamilyCore; sourceTree = SOURCE_ROOT; };
+		69A26166F1892F2D624EB8F0 /* AgendaWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgendaWidget.swift; sourceTree = "<group>"; };
 		6A23975051C05B005F9D0829 /* ChoreAssignmentEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoreAssignmentEditorView.swift; sourceTree = "<group>"; };
 		6CDEA4ADF710D0F021B7F928 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7340364D4930DB53E623E83E /* RewardChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardChartView.swift; sourceTree = "<group>"; };
@@ -257,6 +259,7 @@
 		DD03119B109C238FF8F03493 /* Widgets */ = {
 			isa = PBXGroup;
 			children = (
+				69A26166F1892F2D624EB8F0 /* AgendaWidget.swift */,
 				B963806AE8EC420C78348443 /* ChoresWidget.swift */,
 				03C978D43BE3F185DBFE074F /* FamilyAppilyWidgetBundle.swift */,
 				47CD2A0E7229480FE213D0D6 /* FamilyAppilyWidgets.entitlements */,
@@ -400,6 +403,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3650DD30F28584565C6F5F57 /* AgendaWidget.swift in Sources */,
 				823A03B8B4A231348DD45FDE /* ChoresWidget.swift in Sources */,
 				E007E68050B382EDDF04C3A6 /* FamilyAppilyWidgetBundle.swift in Sources */,
 			);
