@@ -72,6 +72,14 @@ public struct ChildTheme: Equatable, Sendable {
         ChildTheme(id: nil, dotFill: hex, textInk: hex, titleColor: hex)
     }
 
+    /// A child's identity colour as a hex string — the legend colour for the
+    /// three originals, the chosen (or default) palette colour for others. Used
+    /// where a `Color` can't cross a boundary, e.g. the widget snapshot.
+    public static func identityHex(for child: Child) -> String {
+        if let id = child.childID { return referenceHex[id]?.dotFill ?? "#3A6EA5" }
+        return child.colorHex.isEmpty ? KidPalette.color(for: child.id) : child.colorHex
+    }
+
     /// Raw hex values, exposed only for unit-testing the theme against tokens.json —
     /// not for use in views. Use `dotFill`/`textInk` (Color) in view code.
     public static let referenceHex: [ChildID: (dotFill: String, textInk: String)] = [
