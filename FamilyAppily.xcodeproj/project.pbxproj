@@ -14,6 +14,7 @@
 		3BF558E8083FE151ECCC2179 /* RewardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CA6CDA8B621E8B1D074158 /* RewardsView.swift */; };
 		41EADF806F147A3FC781DBFF /* ChoreRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4383D3E29DD6623D29A72597 /* ChoreRow.swift */; };
 		4874BFF89E8F74CA384DEB29 /* WeeklyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F630409DD2005551010D5B /* WeeklyChartView.swift */; };
+		4A6E68B263D2202A7D4AD9AB /* ChildAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EFB0C5E89F3501D7053AEB /* ChildAvatarView.swift */; };
 		564A6EDA6B2512DD8F97CC8C /* ChoreRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4383D3E29DD6623D29A72597 /* ChoreRow.swift */; };
 		59B50ABC46C61208C97CACC6 /* ChildSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BBE5CCB205BA2A3C195358E /* ChildSettingsView.swift */; };
 		5D22A8B90448C3D88604B57D /* FamilyAppilyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F57BD65D1E4586B0E4B39AE2 /* FamilyAppilyApp.swift */; };
@@ -27,6 +28,7 @@
 		7C398F2F383C9854DFA02A04 /* FamilyAppilyMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE1BDF3089BDC4EDEC3ADC6 /* FamilyAppilyMacApp.swift */; };
 		7F34F9AEA5A1B7D50F3A62FD /* CompletionMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797A6D1BE6092083000FD565 /* CompletionMark.swift */; };
 		8001D4C5CFD009D898F0B874 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6CDEA4ADF710D0F021B7F928 /* Assets.xcassets */; };
+		84EF496251E8448C84B46110 /* ChildAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EFB0C5E89F3501D7053AEB /* ChildAvatarView.swift */; };
 		97704E02238759216108DE5C /* FamilyAppilyMacRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85173E294DAE5E1B2FCDE94D /* FamilyAppilyMacRootView.swift */; };
 		9E9BDD09F8DA309D832A694A /* FamilyCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9635644266EF5976C8636731 /* FamilyCalendarView.swift */; };
 		A78C4B5399A2C61E5C75BF0B /* DayCardFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7B74C9AF7E2B971FF63974 /* DayCardFrame.swift */; };
@@ -61,6 +63,7 @@
 		85173E294DAE5E1B2FCDE94D /* FamilyAppilyMacRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyAppilyMacRootView.swift; sourceTree = "<group>"; };
 		85CA6CDA8B621E8B1D074158 /* RewardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardsView.swift; sourceTree = "<group>"; };
 		9635644266EF5976C8636731 /* FamilyCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyCalendarView.swift; sourceTree = "<group>"; };
+		A2EFB0C5E89F3501D7053AEB /* ChildAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildAvatarView.swift; sourceTree = "<group>"; };
 		A9B76C9F6C1C03A5BC1C639D /* ProfilePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePickerView.swift; sourceTree = "<group>"; };
 		BE76F14258725A26F800D6CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		BFE1BDF3089BDC4EDEC3ADC6 /* FamilyAppilyMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyAppilyMacApp.swift; sourceTree = "<group>"; };
@@ -109,6 +112,7 @@
 			isa = PBXGroup;
 			children = (
 				D541C681A6D6A7A05DDD8DED /* AdultGate.swift */,
+				A2EFB0C5E89F3501D7053AEB /* ChildAvatarView.swift */,
 				A9B76C9F6C1C03A5BC1C639D /* ProfilePickerView.swift */,
 			);
 			name = Profiles;
@@ -317,6 +321,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6AEA55B280AFAFEAD5D53378 /* AdultGate.swift in Sources */,
+				84EF496251E8448C84B46110 /* ChildAvatarView.swift in Sources */,
 				7674564C10883A38E9D2335D /* ChildSettingsView.swift in Sources */,
 				A9230F7DA3889BF3D860D0FD /* ChoreAssignmentEditorView.swift in Sources */,
 				564A6EDA6B2512DD8F97CC8C /* ChoreRow.swift in Sources */,
@@ -340,6 +345,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0A79732C03639AD4C322F904 /* AdultGate.swift in Sources */,
+				4A6E68B263D2202A7D4AD9AB /* ChildAvatarView.swift in Sources */,
 				59B50ABC46C61208C97CACC6 /* ChildSettingsView.swift in Sources */,
 				E8C8B2CB5057F415BAEA86E4 /* ChoreAssignmentEditorView.swift in Sources */,
 				41EADF806F147A3FC781DBFF /* ChoreRow.swift in Sources */,

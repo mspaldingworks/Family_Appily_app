@@ -16,9 +16,12 @@ struct ParentDashboardView: View {
     @Query private var ticketEntries: [TicketLedgerEntry]
     @Query private var assignments: [ChoreAssignment]
     @Query private var chores: [Chore]
+    @Environment(\.modelContext) private var modelContext
 
     @AppStorage("rotationEpochISO8601") private var rotationEpochISO8601 = ""
     @AppStorage("weeklyChoreTicketValue") private var weeklyChoreTicketValue = 5
+    @AppStorage("rotationName") private var rotationName = "Rotation"
+    @AppStorage("rotationIcon") private var rotationIcon = "arrow.triangle.2.circlepath"
     @AppStorage("hapticsEnabled") private var hapticsEnabled = true
     @AppStorage("soundEnabled") private var soundEnabled = false
     @AppStorage("familyCalendar.writeThrough") private var writeChoresToCalendars = false
@@ -45,6 +48,20 @@ struct ParentDashboardView: View {
 
     private var rotationSection: some View {
         Section {
+            HStack(spacing: 12) {
+                settingsIcon(rotationIcon, .purple)
+                TextField("Rotation name", text: $rotationName)
+                Menu {
+                    Picker("Icon", selection: $rotationIcon) {
+                        ForEach(rotationIconChoices, id: \.self) { symbol in
+                            Label(symbol, systemImage: symbol).tag(symbol)
+                        }
+                    }
+                } label: {
+                    Image(systemName: "chevron.up.chevron.down").foregroundStyle(.secondary)
+                }
+            }
+            .frame(minHeight: 44)
             DatePicker("Week 1 started", selection: $draftEpoch, displayedComponents: .date)
             Button("Save rotation start") {
                 rotationEpochISO8601 = ISO8601DateFormatter().string(from: Calendar.current.startOfDay(for: draftEpoch))
@@ -59,34 +76,53 @@ struct ParentDashboardView: View {
         } header: {
             Text("Family rotation")
         } footer: {
-            Text((storedEpoch.map {
+            Text("Name the rotation and pick its icon — it shows beside the Family header on the home screen.\n\n"
+            + (storedEpoch.map {
                 "The Weekly Chore slots fill from the rotation that began \($0.formatted(date: .abbreviated, time: .omitted)). Change this only if Week 1 on the wall chart was a different Sunday."
             } ?? "Set the Sunday your family rotation's Week 1 began. This fills every child's Weekly Chore slot automatically — you never type it in weekly.")
             + "\n\nEvery weekly (rotation) chore is worth this many tickets when a child checks it off. Applies to all kids.")
         }
     }
 
+    private let rotationIconChoices = [
+        "arrow.triangle.2.circlepath", "arrow.2.circlepath", "repeat",
+        "person.3.fill", "house.fill", "star.fill", "calendar", "sparkles",
+    ]
+
     private var childrenSection: some View {
-        Section("Children") {
+        Section {
             ForEach(children) { child in
                 NavigationLink {
                     ChildSettingsView(child: child)
                 } label: {
                     HStack(spacing: 12) {
-                        Image(child.primaryAvatar)
-                            .resizable().aspectRatio(contentMode: .fit)
-                            .frame(width: 30, height: 30)
-                            .accessibilityHidden(true)
-                        Text(child.name)
+                        ChildAvatarView(child: child, size: 30)
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text(child.name)
+                            if child.age > 0 {
+                                Text("Age \(child.age)").font(.caption).foregroundStyle(.secondary)
+                            }
+                        }
                         Spacer()
                         Label("\(TicketService.balance(for: child.id, in: ticketEntries))", systemImage: "star.fill")
                             .labelStyle(.titleAndIcon)
-                            .foregroundStyle(ChildTheme.theme(for: child.childID ?? .finley).dotFill)
+                            .foregroundStyle(ChildTheme.theme(for: child).dotFill)
                             .fontWeight(.semibold)
                     }
                 }
                 .frame(minHeight: 44)
             }
+            Button {
+                let child = FamilyRoster.addChild(context: modelContext, existing: children)
+                _ = child
+            } label: {
+                Label("Add child", systemImage: "plus.circle.fill")
+            }
+            .frame(minHeight: 44)
+        } header: {
+            Text("Children")
+        } footer: {
+            Text("Add your kids and set their names and ages. Tap a child to edit them or remove them. New children get a colour you pick; the original three keep their wall-chart look.")
         }
     }
 

@@ -12,7 +12,7 @@ struct DayCardFrame: View {
     let onToggle: (ResolvedChore) -> Void
 
     private var theme: ChildTheme {
-        ChildTheme.theme(for: child.childID ?? .finley)
+        ChildTheme.theme(for: child)
     }
 
     var body: some View {

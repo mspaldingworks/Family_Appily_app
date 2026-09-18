@@ -23,7 +23,7 @@ struct RewardsView: View {
     @StateObject private var gate = AdultGate()
     @State private var flash: String?
 
-    private var theme: ChildTheme { ChildTheme.theme(for: child.childID ?? .finley) }
+    private var theme: ChildTheme { ChildTheme.theme(for: child) }
     private var balance: Int { TicketService.balance(for: child.id, in: ticketEntries) }
     private var chart: TicketsContract.RewardChart? { try? BundledContractSource().loadTickets().rewardChart }
 
