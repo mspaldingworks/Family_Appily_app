@@ -19,6 +19,7 @@ struct FamilyCalendarView: View {
     @Query private var choreCards: [ChoreCard]
 
     @AppStorage("rotationEpochISO8601") private var rotationEpochISO8601 = ""
+    @AppStorage("weeklyChoreTicketValue") private var weeklyChoreTicketValue = 5
 
     @State private var service = EventKitCalendarService()
     @State private var access: EventKitCalendarService.Access = .notDetermined
@@ -92,7 +93,8 @@ struct FamilyCalendarView: View {
             assignments: assignments,
             chores: chores,
             rotationEpoch: rotationEpoch,
-            rotationContract: rotationContract
+            rotationContract: rotationContract,
+            weeklyTicketValue: weeklyChoreTicketValue
         )
         .map(withCardStyle)
     }

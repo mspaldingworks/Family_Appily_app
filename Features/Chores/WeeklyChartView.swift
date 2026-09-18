@@ -29,6 +29,7 @@ public struct WeeklyChartView: View {
     private var ticketBalance: Int { TicketService.balance(for: child.id, in: ticketEntries) }
 
     @AppStorage("rotationEpochISO8601") private var rotationEpochISO8601: String = ""
+    @AppStorage("weeklyChoreTicketValue") private var weeklyChoreTicketValue = 5
     @AppStorage("hapticsEnabled") private var hapticsEnabled = true
     @AppStorage("soundEnabled") private var soundEnabled = false
     @State private var showingRotationSetup = false
@@ -104,7 +105,8 @@ public struct WeeklyChartView: View {
         if let rotationContract, let childID = child.childID {
             let resolved = ChoreResolver.chores(
                 for: childID, weekday: weekday, assignments: assignments, chores: chores,
-                rotationEpoch: rotationEpoch, rotationContract: rotationContract
+                rotationEpoch: rotationEpoch, rotationContract: rotationContract,
+                weeklyTicketValue: weeklyChoreTicketValue
             ).map(withCardColor)
             DayCardFrame(child: child, weekday: weekday, chores: resolved, completedChoreIDs: completedIDsToday) { chore in
                 toggle(chore: chore)
