@@ -1,6 +1,7 @@
 import FamilyCore
 import SwiftData
 import SwiftUI
+import WidgetKit
 #if canImport(UIKit)
 import UIKit
 #endif
@@ -77,6 +78,13 @@ public struct ProfilePickerView: View {
             .toolbar {
                 ToolbarItem(placement: .primaryAction) { rotationToolbarLink }
             }
+            // Keep the home-screen/lock-screen widgets in step with the family's
+            // chores and tickets. Writes a small snapshot to the shared App Group
+            // and asks WidgetKit to reload (see FamilyWidgetSharing).
+            .task { writeWidgetSnapshot() }
+            .onChange(of: completions.count) { _, _ in writeWidgetSnapshot() }
+            .onChange(of: ticketEntries.count) { _, _ in writeWidgetSnapshot() }
+            .onChange(of: children.count) { _, _ in writeWidgetSnapshot() }
         }
     }
 
@@ -283,6 +291,30 @@ public struct ProfilePickerView: View {
 
     private func balance(for child: Child) -> Int {
         ticketEntries.filter { $0.childID == child.id }.reduce(0) { $0 + $1.amount }
+    }
+
+    /// Builds the glanceable per-kid summary from the same board the home screen
+    /// shows and hands it to the widgets. Reuses the existing computed data, so
+    /// it's cheap and always consistent with what's on screen.
+    private func writeWidgetSnapshot() {
+        let board = WeeklyChoreBoard.build(
+            occurrences: weekOccurrences.filter { !$0.isRotationResolved },
+            doneKeys: doneKeys, today: today
+        )
+        let kids = children.map { child -> WidgetSnapshot.Kid in
+            let todays = todayChores(child, from: board)
+            return WidgetSnapshot.Kid(
+                id: child.id,
+                name: child.name,
+                colorHex: ChildTheme.identityHex(for: child),
+                emblemSymbol: child.childID == nil ? child.avatarSymbol : "",
+                choresToday: todays.count,
+                choresDone: todays.filter(\.isDone).count,
+                tickets: balance(for: child)
+            )
+        }
+        FamilyWidgetSharing.write(WidgetSnapshot(kids: kids))
+        WidgetCenter.shared.reloadAllTimelines()
     }
 }
 

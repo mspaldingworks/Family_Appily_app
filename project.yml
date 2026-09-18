@@ -23,6 +23,8 @@ targets:
       - path: Features/Calendar
     dependencies:
       - package: FamilyCore
+      - target: FamilyAppilyWidgets
+        embed: true
     info:
       path: Platforms/iOS/Info.plist
       properties:
@@ -52,6 +54,35 @@ targets:
           - iCloud.com.mspaldingworks.FamilyAppily
         com.apple.developer.icloud-services:
           - CloudKit
+        com.apple.security.application-groups:
+          - group.com.mspaldingworks.FamilyAppily
+
+  FamilyAppilyWidgets:
+    type: app-extension
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: Widgets
+    dependencies:
+      - package: FamilyCore
+    info:
+      path: Widgets/Info.plist
+      properties:
+        CFBundleDisplayName: Family Appily
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.mspaldingworks.FamilyAppily.widgets
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SWIFT_VERSION: "5.10"
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: MNR8M8K86K
+    entitlements:
+      path: Widgets/FamilyAppilyWidgets.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.mspaldingworks.FamilyAppily
 
   FamilyAppilyMac:
     type: application

@@ -28,7 +28,9 @@
 		7C398F2F383C9854DFA02A04 /* FamilyAppilyMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFE1BDF3089BDC4EDEC3ADC6 /* FamilyAppilyMacApp.swift */; };
 		7F34F9AEA5A1B7D50F3A62FD /* CompletionMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797A6D1BE6092083000FD565 /* CompletionMark.swift */; };
 		8001D4C5CFD009D898F0B874 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6CDEA4ADF710D0F021B7F928 /* Assets.xcassets */; };
+		823A03B8B4A231348DD45FDE /* ChoresWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = B963806AE8EC420C78348443 /* ChoresWidget.swift */; };
 		84EF496251E8448C84B46110 /* ChildAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EFB0C5E89F3501D7053AEB /* ChildAvatarView.swift */; };
+		8F69E2861D95C561CBECA3B4 /* FamilyAppilyWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AD4CF0ADFA19123BACA0766C /* FamilyAppilyWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		97704E02238759216108DE5C /* FamilyAppilyMacRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85173E294DAE5E1B2FCDE94D /* FamilyAppilyMacRootView.swift */; };
 		9E9BDD09F8DA309D832A694A /* FamilyCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9635644266EF5976C8636731 /* FamilyCalendarView.swift */; };
 		A78C4B5399A2C61E5C75BF0B /* DayCardFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7B74C9AF7E2B971FF63974 /* DayCardFrame.swift */; };
@@ -40,6 +42,8 @@
 		C9F21AE4201F199DED7A12C2 /* ProfilePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B76C9F6C1C03A5BC1C639D /* ProfilePickerView.swift */; };
 		CB21A7C0782880982CD00E81 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DCC1D7D827A0856AED8FFE09 /* Assets.xcassets */; };
 		D450DE8DC59C95FF6730DF5C /* FamilyRotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A69B939AD964E1FECE5A7D0 /* FamilyRotationView.swift */; };
+		E007E68050B382EDDF04C3A6 /* FamilyAppilyWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C978D43BE3F185DBFE074F /* FamilyAppilyWidgetBundle.swift */; };
+		E0B4C9230ED14FCB1B219F89 /* FamilyCore in Frameworks */ = {isa = PBXBuildFile; productRef = BA8909571F7F2BCDB74FBB60 /* FamilyCore */; };
 		E5A279CF04022173CDE6A62F /* CompletionMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797A6D1BE6092083000FD565 /* CompletionMark.swift */; };
 		E8C8B2CB5057F415BAEA86E4 /* ChoreAssignmentEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A23975051C05B005F9D0829 /* ChoreAssignmentEditorView.swift */; };
 		EB5641838E64D896E7A5F019 /* RewardChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7340364D4930DB53E623E83E /* RewardChartView.swift */; };
@@ -47,12 +51,39 @@
 		F8A5FBCF8318E249F80A8293 /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F63A131F244EAA4D6D8D4E8D /* RootTabView.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		7F576943B3BC42AAFCAB0065 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A95B84594E87C259AE46FC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 57DF6E1ED5ED7B620097F3FC;
+			remoteInfo = FamilyAppilyWidgets;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		116FC4672C9A9C4B88C6FCA0 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				8F69E2861D95C561CBECA3B4 /* FamilyAppilyWidgets.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		03C978D43BE3F185DBFE074F /* FamilyAppilyWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyAppilyWidgetBundle.swift; sourceTree = "<group>"; };
 		0A69B939AD964E1FECE5A7D0 /* FamilyRotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyRotationView.swift; sourceTree = "<group>"; };
 		2BBE5CCB205BA2A3C195358E /* ChildSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildSettingsView.swift; sourceTree = "<group>"; };
 		3B47836CD54B8ECDFA6923D5 /* FamilyAppily.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FamilyAppily.entitlements; sourceTree = "<group>"; };
 		4383D3E29DD6623D29A72597 /* ChoreRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoreRow.swift; sourceTree = "<group>"; };
+		47CD2A0E7229480FE213D0D6 /* FamilyAppilyWidgets.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FamilyAppilyWidgets.entitlements; sourceTree = "<group>"; };
 		4A7B74C9AF7E2B971FF63974 /* DayCardFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCardFrame.swift; sourceTree = "<group>"; };
+		4D5761873673424874C6E5CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5838CB35CBFE479FFB9AE584 /* ChoreSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoreSettingsView.swift; sourceTree = "<group>"; };
 		61E3A16D7A582B3A9E3D3DF1 /* FamilyCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = FamilyCore; path = FamilyCore; sourceTree = SOURCE_ROOT; };
 		6A23975051C05B005F9D0829 /* ChoreAssignmentEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoreAssignmentEditorView.swift; sourceTree = "<group>"; };
@@ -65,6 +96,8 @@
 		9635644266EF5976C8636731 /* FamilyCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyCalendarView.swift; sourceTree = "<group>"; };
 		A2EFB0C5E89F3501D7053AEB /* ChildAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildAvatarView.swift; sourceTree = "<group>"; };
 		A9B76C9F6C1C03A5BC1C639D /* ProfilePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePickerView.swift; sourceTree = "<group>"; };
+		AD4CF0ADFA19123BACA0766C /* FamilyAppilyWidgets.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = FamilyAppilyWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		B963806AE8EC420C78348443 /* ChoresWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoresWidget.swift; sourceTree = "<group>"; };
 		BE76F14258725A26F800D6CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		BFE1BDF3089BDC4EDEC3ADC6 /* FamilyAppilyMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FamilyAppilyMacApp.swift; sourceTree = "<group>"; };
 		D3F630409DD2005551010D5B /* WeeklyChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyChartView.swift; sourceTree = "<group>"; };
@@ -84,6 +117,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				6FD034B18CF36C832698AA9D /* FamilyCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3796271BE969842432B92369 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E0B4C9230ED14FCB1B219F89 /* FamilyCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -168,6 +209,7 @@
 				6EB7961BD81A9C35309FEADF /* Parents */,
 				4B581CD0194AEAE794A2544E /* Profiles */,
 				14166B3F833FADC45E401629 /* Rewards */,
+				DD03119B109C238FF8F03493 /* Widgets */,
 				992302F166E08F38043C59A8 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -185,6 +227,7 @@
 			children = (
 				FF1CA6C19D4406965A9F4595 /* FamilyAppily.app */,
 				F1250A36FCB54C419D3511BA /* FamilyAppilyMac.app */,
+				AD4CF0ADFA19123BACA0766C /* FamilyAppilyWidgets.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -211,6 +254,17 @@
 			path = Features/Calendar;
 			sourceTree = "<group>";
 		};
+		DD03119B109C238FF8F03493 /* Widgets */ = {
+			isa = PBXGroup;
+			children = (
+				B963806AE8EC420C78348443 /* ChoresWidget.swift */,
+				03C978D43BE3F185DBFE074F /* FamilyAppilyWidgetBundle.swift */,
+				47CD2A0E7229480FE213D0D6 /* FamilyAppilyWidgets.entitlements */,
+				4D5761873673424874C6E5CF /* Info.plist */,
+			);
+			path = Widgets;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -234,6 +288,25 @@
 			productReference = F1250A36FCB54C419D3511BA /* FamilyAppilyMac.app */;
 			productType = "com.apple.product-type.application";
 		};
+		57DF6E1ED5ED7B620097F3FC /* FamilyAppilyWidgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 856860E7CB422A90B6E61822 /* Build configuration list for PBXNativeTarget "FamilyAppilyWidgets" */;
+			buildPhases = (
+				223F64B620C5E13B30A66194 /* Sources */,
+				3796271BE969842432B92369 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FamilyAppilyWidgets;
+			packageProductDependencies = (
+				BA8909571F7F2BCDB74FBB60 /* FamilyCore */,
+			);
+			productName = FamilyAppilyWidgets;
+			productReference = AD4CF0ADFA19123BACA0766C /* FamilyAppilyWidgets.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		6EB7297C1A8246726D91EABB /* FamilyAppily */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4CD47EC5CB3C6385B68C107F /* Build configuration list for PBXNativeTarget "FamilyAppily" */;
@@ -241,10 +314,12 @@
 				C655B63B3403EDE624B00C0E /* Sources */,
 				3550CB2A17D350BC0B6B5095 /* Resources */,
 				3315B8E763862C0F50D76CCF /* Frameworks */,
+				116FC4672C9A9C4B88C6FCA0 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				C42D1E6518F67B9C2C57DA67 /* PBXTargetDependency */,
 			);
 			name = FamilyAppily;
 			packageProductDependencies = (
@@ -264,6 +339,10 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					07508B521E15E44F45982B46 = {
+						DevelopmentTeam = MNR8M8K86K;
+						ProvisioningStyle = Automatic;
+					};
+					57DF6E1ED5ED7B620097F3FC = {
 						DevelopmentTeam = MNR8M8K86K;
 						ProvisioningStyle = Automatic;
 					};
@@ -291,6 +370,7 @@
 			projectRoot = "";
 			targets = (
 				6EB7297C1A8246726D91EABB /* FamilyAppily */,
+				57DF6E1ED5ED7B620097F3FC /* FamilyAppilyWidgets */,
 				07508B521E15E44F45982B46 /* FamilyAppilyMac */,
 			);
 		};
@@ -316,6 +396,15 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		223F64B620C5E13B30A66194 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				823A03B8B4A231348DD45FDE /* ChoresWidget.swift in Sources */,
+				E007E68050B382EDDF04C3A6 /* FamilyAppilyWidgetBundle.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C12D05597D4CE80FDC3CD388 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -366,6 +455,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		C42D1E6518F67B9C2C57DA67 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 57DF6E1ED5ED7B620097F3FC /* FamilyAppilyWidgets */;
+			targetProxy = 7F576943B3BC42AAFCAB0065 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
 		0B2E8B5807B8513EE898FE86 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -389,6 +486,26 @@
 				SWIFT_VERSION = 5.10;
 			};
 			name = Debug;
+		};
+		229EA2607179851B8E388B69 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Widgets/FamilyAppilyWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = MNR8M8K86K;
+				INFOPLIST_FILE = Widgets/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.mspaldingworks.FamilyAppily.widgets;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.10;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
 		};
 		77DB99C153A487AFBB522585 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -445,6 +562,26 @@
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
+		};
+		800BFE9367B07890EACD5159 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Widgets/FamilyAppilyWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = MNR8M8K86K;
+				INFOPLIST_FILE = Widgets/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.mspaldingworks.FamilyAppily.widgets;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.10;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
 		};
 		8B99CE2242F9F2BFD3F21877 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -604,6 +741,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
+		856860E7CB422A90B6E61822 /* Build configuration list for PBXNativeTarget "FamilyAppilyWidgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				800BFE9367B07890EACD5159 /* Debug */,
+				229EA2607179851B8E388B69 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
@@ -615,6 +761,10 @@
 
 /* Begin XCSwiftPackageProductDependency section */
 		709889DB199DB2ACFC990A52 /* FamilyCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FamilyCore;
+		};
+		BA8909571F7F2BCDB74FBB60 /* FamilyCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = FamilyCore;
 		};
