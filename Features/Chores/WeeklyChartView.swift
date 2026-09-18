@@ -28,11 +28,16 @@ public struct WeeklyChartView: View {
 
     private var ticketBalance: Int { TicketService.balance(for: child.id, in: ticketEntries) }
 
-    @AppStorage("rotationEpochISO8601") private var rotationEpochISO8601: String = ""
-    @AppStorage("weeklyChoreTicketValue") private var weeklyChoreTicketValue = 5
+    @Query private var familySettings: [FamilySettings]
     @AppStorage("hapticsEnabled") private var hapticsEnabled = true
     @AppStorage("soundEnabled") private var soundEnabled = false
     @State private var showingRotationSetup = false
+
+    // Synced family-wide settings (see FamilySettings); same names as the old
+    // per-device @AppStorage so the rest of the view is untouched.
+    private var settings: FamilySettings? { familySettings.first }
+    private var rotationEpochISO8601: String { settings?.rotationEpochISO8601 ?? "" }
+    private var weeklyChoreTicketValue: Int { settings?.weeklyChoreTicketValue ?? 5 }
 
     public init(child: Child) {
         self.child = child
@@ -149,7 +154,7 @@ public struct WeeklyChartView: View {
     }
 
     private func setRotationEpoch(_ date: Date) {
-        rotationEpochISO8601 = ISO8601DateFormatter().string(from: Calendar.current.startOfDay(for: date))
+        FamilySettings.ensure(in: modelContext).rotationEpochISO8601 = ISO8601DateFormatter().string(from: Calendar.current.startOfDay(for: date))
     }
 }
 

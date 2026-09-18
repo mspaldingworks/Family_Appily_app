@@ -20,6 +20,9 @@ public final class Child {
     /// A parent-added child's chosen identity colour (hex). Empty for the three
     /// legend-locked originals, whose colour comes from `ChildTheme`/`childID`.
     public var colorHex: String = ""
+    /// A parent-added child's emblem — an SF Symbol shown in their colour as a
+    /// mascot stand-in. Empty falls back to a monogram of their name.
+    public var avatarSymbol: String = ""
 
     /// Non-nil only for the three legend originals (id == a `ChildID` case).
     /// A parent-added child has a fresh slug id, so this is nil — which is how
@@ -37,7 +40,8 @@ public final class Child {
         bottomCornerMotif: String,
         titleColorToken: String,
         age: Int = 0,
-        colorHex: String = ""
+        colorHex: String = "",
+        avatarSymbol: String = ""
     ) {
         self.id = id
         self.name = name
@@ -50,5 +54,6 @@ public final class Child {
         self.titleColorToken = titleColorToken
         self.age = age
         self.colorHex = colorHex
+        self.avatarSymbol = avatarSymbol
     }
 }

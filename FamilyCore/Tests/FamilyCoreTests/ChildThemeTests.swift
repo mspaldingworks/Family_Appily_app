@@ -53,4 +53,9 @@ struct ChildThemeTests {
         #expect(a == b)
         #expect(KidPalette.colors.contains(a))
     }
+
+    @Test func kidEmblemsAvailable() {
+        #expect(!KidEmblem.symbols.isEmpty)
+        #expect(KidEmblem.symbols.contains("star.fill"))
+    }
 }

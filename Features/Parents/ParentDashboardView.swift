@@ -18,10 +18,7 @@ struct ParentDashboardView: View {
     @Query private var chores: [Chore]
     @Environment(\.modelContext) private var modelContext
 
-    @AppStorage("rotationEpochISO8601") private var rotationEpochISO8601 = ""
-    @AppStorage("weeklyChoreTicketValue") private var weeklyChoreTicketValue = 5
-    @AppStorage("rotationName") private var rotationName = "Rotation"
-    @AppStorage("rotationIcon") private var rotationIcon = "arrow.triangle.2.circlepath"
+    @Query private var familySettings: [FamilySettings]
     @AppStorage("hapticsEnabled") private var hapticsEnabled = true
     @AppStorage("soundEnabled") private var soundEnabled = false
     @AppStorage("familyCalendar.writeThrough") private var writeChoresToCalendars = false
@@ -39,20 +36,44 @@ struct ParentDashboardView: View {
             aboutSection
         }
         .navigationTitle("Parents")
-        .onAppear { if let existing = storedEpoch { draftEpoch = existing } }
+        .onAppear {
+            FamilySettings.ensure(in: modelContext)
+            if let existing = storedEpoch { draftEpoch = existing }
+        }
     }
 
+    // Family-wide settings are a synced FamilySettings row (see FamilySettings),
+    // not per-device @AppStorage. Reads fall back to defaults if the row hasn't
+    // materialised yet; writes go through `ensure`, which creates it on demand.
+    private var settings: FamilySettings? { familySettings.first }
+    private var rotationIcon: String { settings?.rotationIcon ?? "arrow.triangle.2.circlepath" }
+    private var weeklyChoreTicketValue: Int { settings?.weeklyChoreTicketValue ?? 5 }
+
     private var storedEpoch: Date? {
-        rotationEpochISO8601.isEmpty ? nil : ISO8601DateFormatter().date(from: rotationEpochISO8601)
+        let iso = settings?.rotationEpochISO8601 ?? ""
+        return iso.isEmpty ? nil : ISO8601DateFormatter().date(from: iso)
+    }
+
+    private var rotationNameBinding: Binding<String> {
+        Binding(get: { settings?.rotationName ?? "Rotation" },
+                set: { FamilySettings.ensure(in: modelContext).rotationName = $0 })
+    }
+    private var rotationIconBinding: Binding<String> {
+        Binding(get: { settings?.rotationIcon ?? "arrow.triangle.2.circlepath" },
+                set: { FamilySettings.ensure(in: modelContext).rotationIcon = $0 })
+    }
+    private var ticketValueBinding: Binding<Int> {
+        Binding(get: { settings?.weeklyChoreTicketValue ?? 5 },
+                set: { FamilySettings.ensure(in: modelContext).weeklyChoreTicketValue = $0 })
     }
 
     private var rotationSection: some View {
         Section {
             HStack(spacing: 12) {
                 settingsIcon(rotationIcon, .purple)
-                TextField("Rotation name", text: $rotationName)
+                TextField("Rotation name", text: rotationNameBinding)
                 Menu {
-                    Picker("Icon", selection: $rotationIcon) {
+                    Picker("Icon", selection: rotationIconBinding) {
                         ForEach(rotationIconChoices, id: \.self) { symbol in
                             Label(symbol, systemImage: symbol).tag(symbol)
                         }
@@ -64,10 +85,10 @@ struct ParentDashboardView: View {
             .frame(minHeight: 44)
             DatePicker("Week 1 started", selection: $draftEpoch, displayedComponents: .date)
             Button("Save rotation start") {
-                rotationEpochISO8601 = ISO8601DateFormatter().string(from: Calendar.current.startOfDay(for: draftEpoch))
+                FamilySettings.ensure(in: modelContext).rotationEpochISO8601 = ISO8601DateFormatter().string(from: Calendar.current.startOfDay(for: draftEpoch))
             }
             .frame(minHeight: 44)
-            Stepper(value: $weeklyChoreTicketValue, in: 1...20) {
+            Stepper(value: ticketValueBinding, in: 1...20) {
                 Label("Weekly chore tickets: \(weeklyChoreTicketValue)", systemImage: "star.fill")
                     .labelStyle(.titleAndIcon)
             }

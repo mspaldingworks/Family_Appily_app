@@ -23,6 +23,7 @@ public enum FamilyModelContainer {
             SpendTier.self,
             TicketLedgerEntry.self,
             SeedMarker.self,
+            FamilySettings.self,
         ])
     }
 

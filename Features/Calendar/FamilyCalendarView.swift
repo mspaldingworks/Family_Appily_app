@@ -18,8 +18,13 @@ struct FamilyCalendarView: View {
     @Query private var chores: [Chore]
     @Query private var choreCards: [ChoreCard]
 
-    @AppStorage("rotationEpochISO8601") private var rotationEpochISO8601 = ""
-    @AppStorage("weeklyChoreTicketValue") private var weeklyChoreTicketValue = 5
+    @Query private var familySettings: [FamilySettings]
+
+    // Synced family-wide settings (see FamilySettings); same names as the old
+    // per-device @AppStorage so the rest of the view is untouched.
+    private var settings: FamilySettings? { familySettings.first }
+    private var rotationEpochISO8601: String { settings?.rotationEpochISO8601 ?? "" }
+    private var weeklyChoreTicketValue: Int { settings?.weeklyChoreTicketValue ?? 5 }
 
     @State private var service = EventKitCalendarService()
     @State private var access: EventKitCalendarService.Access = .notDetermined
@@ -395,7 +400,7 @@ private extension Color {
 
 @MainActor private func previewContainer() -> ModelContainer {
     let container = try! ModelContainer(
-        for: Child.self, Chore.self, ChoreAssignment.self, ChoreCard.self,
+        for: Child.self, Chore.self, ChoreAssignment.self, ChoreCard.self, FamilySettings.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
     let ctx = container.mainContext
