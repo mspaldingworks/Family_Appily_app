@@ -142,7 +142,7 @@ private struct ChoreGroupView: View {
 
     private func kidChip(_ child: Child) -> some View {
         let on = isAssigned(child)
-        let theme = ChildTheme.theme(for: child.childID ?? .finley)
+        let theme = ChildTheme.theme(for: child)
         return Button {
             onToggleChild(child, !on)
         } label: {

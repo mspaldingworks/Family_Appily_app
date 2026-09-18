@@ -12,12 +12,14 @@ import SwiftUI
 /// "Finley's color" to tint text can't accidentally grab a decorative value —
 /// see `RotationEngineTests` and `ChildThemeTests` for the regression guard.
 public struct ChildTheme: Equatable, Sendable {
-    public let id: ChildID
+    /// The legend child this theme belongs to, or nil for a parent-added child's
+    /// custom colour (which isn't one of the three wall-chart originals).
+    public let id: ChildID?
     public let dotFill: Color
     public let textInk: Color
     public let titleColor: Color
 
-    private init(id: ChildID, dotFill: String, textInk: String, titleColor: String) {
+    private init(id: ChildID?, dotFill: String, textInk: String, titleColor: String) {
         self.id = id
         self.dotFill = Color(hex: dotFill)
         self.textInk = Color(hex: textInk)
@@ -53,6 +55,23 @@ public struct ChildTheme: Equatable, Sendable {
         }
     }
 
+    /// The theme for any child: the legend theme for the three originals, or a
+    /// custom colour for a parent-added child (§7.1 keeps the originals locked;
+    /// this only ever colours *new* kids). Falls back to a stable palette colour
+    /// if a new child hasn't been given one yet.
+    public static func theme(for child: Child) -> ChildTheme {
+        if let id = child.childID { return theme(for: id) }
+        let hex = child.colorHex.isEmpty ? KidPalette.color(for: child.id) : child.colorHex
+        return custom(hex: hex)
+    }
+
+    /// A single-colour theme for a parent-added child. `dotFill` == `textInk` so
+    /// the chosen colour both fills and labels; `KidPalette` keeps the choices
+    /// legible so this stays AA-safe (§3.2).
+    public static func custom(hex: String) -> ChildTheme {
+        ChildTheme(id: nil, dotFill: hex, textInk: hex, titleColor: hex)
+    }
+
     /// Raw hex values, exposed only for unit-testing the theme against tokens.json —
     /// not for use in views. Use `dotFill`/`textInk` (Color) in view code.
     public static let referenceHex: [ChildID: (dotFill: String, textInk: String)] = [
@@ -66,6 +85,32 @@ public enum ChildID: String, CaseIterable, Codable, Sendable {
     case finley
     case arthur
     case maryn
+}
+
+/// Identity colours a parent can assign to a child who isn't one of the three
+/// legend-locked originals (§7.1). Chosen to stay legible both as a fill and as
+/// text on the light paper card, so `ChildTheme.custom` stays AA-safe. The three
+/// originals never use these — their colours come from the wall-chart legend.
+public enum KidPalette {
+    public static let colors: [String] = [
+        "#1B4F9C", // blue
+        "#5CB85C", // green
+        "#E04E2C", // red-orange
+        "#7A4FC0", // purple
+        "#0E8C86", // teal
+        "#C0397B", // magenta
+        "#B8791B", // amber
+        "#3A6EA5", // steel
+    ]
+
+    /// A deterministic default colour for a child that hasn't been given one,
+    /// derived from their id so it's stable across launches (String.hashValue
+    /// is not — a scalar fold is).
+    public static func color(for id: String) -> String {
+        guard !colors.isEmpty else { return "#3A6EA5" }
+        let fold = id.unicodeScalars.reduce(0) { $0 + Int($1.value) }
+        return colors[fold % colors.count]
+    }
 }
 
 /// Decorative-only colors from the mascot artwork. FAIL text contrast on white

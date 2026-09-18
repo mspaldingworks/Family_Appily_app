@@ -28,6 +28,8 @@ public struct ProfilePickerView: View {
     @AppStorage("hapticsEnabled") private var hapticsEnabled = true
     @AppStorage("soundEnabled") private var soundEnabled = false
     @AppStorage("weeklyChoreTicketValue") private var weeklyChoreTicketValue = 5
+    @AppStorage("rotationName") private var rotationName = "Rotation"
+    @AppStorage("rotationIcon") private var rotationIcon = "arrow.triangle.2.circlepath"
 
     /// Per-child counter that fires the +N ticket burst when a weekly chore is
     /// completed. Keyed by `ChildID.rawValue`; incrementing it plays the burst.
@@ -45,8 +47,6 @@ public struct ProfilePickerView: View {
                     doneKeys: doneKeys, today: today
                 )
                 VStack(alignment: .leading, spacing: 22) {
-                    rotationButton
-
                     section("Today") {
                         ForEach(children) { child in
                             kidRow(child, chores: todayChores(child, from: board),
@@ -68,7 +68,22 @@ public struct ProfilePickerView: View {
                 .padding()
             }
             .navigationTitle("Family")
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) { rotationToolbarLink }
+            }
         }
+    }
+
+    /// The rotation entry, moved up beside the "Family" header. Its name and icon
+    /// are parent-customisable (Parents ▸ Family rotation).
+    private var rotationToolbarLink: some View {
+        NavigationLink {
+            FamilyRotationView()
+        } label: {
+            Label(rotationName, systemImage: rotationIcon)
+        }
+        .accessibilityLabel(rotationName)
+        .accessibilityHint("Opens the shared family chore rotation")
     }
 
     // MARK: Sections
@@ -81,33 +96,10 @@ public struct ProfilePickerView: View {
         }
     }
 
-    private var rotationButton: some View {
-        NavigationLink {
-            FamilyRotationView()
-        } label: {
-            HStack(spacing: 10) {
-                Image(systemName: "arrow.triangle.2.circlepath")
-                    .font(.title3.weight(.semibold))
-                Text("Rotation")
-                    .font(.system(.title3, design: .rounded).weight(.bold))
-                Spacer()
-                Image(systemName: "chevron.right").font(.footnote).foregroundStyle(.secondary)
-            }
-            .padding(.horizontal, 16)
-            .frame(minHeight: 52)
-            .frame(maxWidth: .infinity)
-            .background(RoundedRectangle(cornerRadius: 16).fill(Color.secondary.opacity(0.15)))
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel("Family Rotation")
-        .accessibilityHint("Opens the shared family chore rotation")
-    }
-
     // MARK: One kid's row
 
     private func kidRow(_ child: Child, chores dashes: [DashChore], weekly: DashChore?, burst: Int? = nil) -> some View {
-        let theme = ChildTheme.theme(for: child.childID ?? .finley)
+        let theme = ChildTheme.theme(for: child)
         return VStack(spacing: 10) {
             // The weekly (rotation) chore is anchored to the top of the card,
             // with a white glow, and vanishes the moment it's checked off — a
@@ -159,16 +151,15 @@ public struct ProfilePickerView: View {
             WeeklyChartView(child: child)
         } label: {
             VStack(spacing: 4) {
-                Image(child.primaryAvatar)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 48, height: 48)
-                    .padding(6)
-                    .background(Circle().fill(SharedTokens.paper).shadow(radius: 1))
-                    .accessibilityHidden(true)
+                ChildAvatarView(child: child, size: 48)
                 Text(child.name)
                     .font(.system(.subheadline, design: .rounded).weight(.bold))
                     .foregroundStyle(.primary)
+                if child.age > 0 {
+                    Text("Age \(child.age)")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                }
                 HStack(spacing: 3) {
                     Image(systemName: "star.fill").font(.caption2)
                     Text("\(balance(for: child))").font(.caption)

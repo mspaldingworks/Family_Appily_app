@@ -16,6 +16,12 @@ A single app that replaces three things our household currently juggles:
 
 **The north star:** any family member should be able to walk up to any device in the house, see what's theirs, act on it, and see the result — without help, without instructions, and without a login screen. The physical chart works because it's glanceable and requires zero explanation. The app has to clear that same bar.
 
+### From our family to a product
+
+This is built for our family first, but the deliberate direction is a **distributable product** other families can use. So anything hard-coded to *our* family — the three specific children, their names, our calendars — is a starting seed to generalize, not a fixed assumption. The child roster is already parent-managed (add / rename / set age / remove); see §7.1.
+
+**Platform reality (read before planning "the product").** Today this is a native-Apple app — SwiftUI + SwiftData + CloudKit + EventKit (§2) — which ships only to the **Apple App Store**. The **Google Play Store is Android**, and none of that stack runs there. Reaching Play Store is not an increment on this codebase; it's a cross-platform rewrite (Compose / Flutter / KMP) plus replacing CloudKit with a real cross-platform backend. This is an open strategic decision, tracked in §11 — the current code is not on a path to it.
+
 ### Non-goals (say no to these)
 - Accounts, sign-ups, cloud user management, or anything requiring an email address for a child.
 - Gamification we didn't design. The existing reward system is the spec. No streaks, badges, or leaderboards unless they exist on the physical chart.
@@ -169,6 +175,8 @@ Every child owns a complete visual world, not just a mascot. Identity must be co
 
 Finley's open-book frame holds exactly two chores. That constraint is inherited from the physical chart — either respect it or change the frame, but don't let a third chore overflow the metaphor.
 
+**The roster is parent-managed (2026-09-18).** These three are the built-in *originals* — their mascots and legend colours are fixed, bespoke art. Parents can now add more children, rename any child, set ages, and remove any of them (Parents ▸ Children). A parent-added child has no `ChildID`, so instead of a mascot they get a parent-chosen palette colour (`KidPalette`) and a monogram avatar, and they don't join the 3-kid rotation cycle (§7.7). The three originals stay legend-locked — new children never recolour them. For the product direction (§1), the three are effectively the default seed a new family can delete and replace with their own. (New kids currently reuse the mascot *frames* in the detailed chart/reward views — bespoke per-family art is still open.)
+
 ### 7.2 The chart layout
 
 Seven day cards, **four in the top row, three in the bottom, week beginning Sunday.** This is what the family already reads at a glance and it is preserved on iPad and Mac. Collapse to a vertical list only on iPhone and Watch, where the grid genuinely doesn't fit.
@@ -277,6 +285,7 @@ That last item is the real acceptance criterion. The rest are how we get there.
 
 ## 11. Still needed
 
+- [ ] **Play Store / Android is an open product decision, not a current capability.** The app is native-Apple end to end (D1 SwiftUI, D4 CloudKit, §6 EventKit) and ships only to the Apple App Store. Android / Play Store needs a cross-platform rewrite (Compose / Flutter / KMP) and replacing CloudKit with a real cross-platform backend — at which point §5's "nothing leaves Apple's ecosystem" no longer holds, and a children's app on Play Store triggers Google Play's Families policy + COPPA / GDPR-K obligations. Decide Apple-first vs. cross-platform before building further toward "product."
 - [ ] Confirm the oldest device in the house meets the D5 minimums
 - [ ] **`rotationEpoch`** — the Sunday that WK1 began. Hard blocker for Phase 5; the app cannot compute the current rotation week without it.
 - [x] **Backend decision — resolved 2026-08-31.** D4 stands for all data: local SwiftData + CloudKit private database, no server. The companion `Famiy_Appily_api` repo holds only versioned static JSON contracts (chores, rotation, tickets) served as files — no running service. See `ARCHITECTURE_DECISION.md` in the API repo.

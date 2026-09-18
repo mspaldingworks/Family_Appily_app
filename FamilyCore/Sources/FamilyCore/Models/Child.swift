@@ -15,7 +15,15 @@ public final class Child {
     public var topCornerMotif: String = ""
     public var bottomCornerMotif: String = ""
     public var titleColorToken: String = ""
+    /// Adult-set age. 0 = unset (kept as a defaulted Int for CloudKit).
+    public var age: Int = 0
+    /// A parent-added child's chosen identity colour (hex). Empty for the three
+    /// legend-locked originals, whose colour comes from `ChildTheme`/`childID`.
+    public var colorHex: String = ""
 
+    /// Non-nil only for the three legend originals (id == a `ChildID` case).
+    /// A parent-added child has a fresh slug id, so this is nil — which is how
+    /// the app knows to give them a colour + monogram and no rotation slot.
     public var childID: ChildID? { ChildID(rawValue: id) }
 
     public init(
@@ -27,7 +35,9 @@ public final class Child {
         alternateAvatar: String?,
         topCornerMotif: String,
         bottomCornerMotif: String,
-        titleColorToken: String
+        titleColorToken: String,
+        age: Int = 0,
+        colorHex: String = ""
     ) {
         self.id = id
         self.name = name
@@ -38,5 +48,7 @@ public final class Child {
         self.topCornerMotif = topCornerMotif
         self.bottomCornerMotif = bottomCornerMotif
         self.titleColorToken = titleColorToken
+        self.age = age
+        self.colorHex = colorHex
     }
 }
