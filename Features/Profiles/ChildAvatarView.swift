@@ -14,11 +14,19 @@ struct ChildAvatarView: View {
     var body: some View {
         Group {
             if child.childID == nil {
-                Text(initial)
-                    .font(.system(size: size * 0.42, weight: .heavy, design: .rounded))
-                    .foregroundStyle(.white)
-                    .frame(width: size, height: size)
-                    .background(Circle().fill(theme.dotFill).shadow(radius: 1))
+                ZStack {
+                    Circle().fill(theme.dotFill).shadow(radius: 1)
+                    if child.avatarSymbol.isEmpty {
+                        Text(initial)
+                            .font(.system(size: size * 0.42, weight: .heavy, design: .rounded))
+                            .foregroundStyle(.white)
+                    } else {
+                        Image(systemName: child.avatarSymbol)
+                            .font(.system(size: size * 0.48, weight: .bold))
+                            .foregroundStyle(.white)
+                    }
+                }
+                .frame(width: size, height: size)
             } else {
                 Image(child.primaryAvatar)
                     .resizable()

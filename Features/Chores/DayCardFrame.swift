@@ -24,15 +24,22 @@ struct DayCardFrame: View {
                 .foregroundStyle(.secondary)
 
             Group {
-                switch child.cardFrame {
-                case "open-book":
-                    OpenBookFrame(child: child, theme: theme, chores: chores, completedChoreIDs: completedChoreIDs, onToggle: onToggle)
-                case "bamboo-fence":
-                    BambooFenceFrame(child: child, theme: theme, chores: chores, completedChoreIDs: completedChoreIDs, onToggle: onToggle)
-                case "held-sign":
-                    HeldSignFrame(child: child, theme: theme, chores: chores, completedChoreIDs: completedChoreIDs, onToggle: onToggle)
-                default:
-                    PlainFrame(theme: theme, chores: chores, completedChoreIDs: completedChoreIDs, onToggle: onToggle)
+                if child.childID == nil {
+                    // A parent-added child has no legend mascot/frame — give them a
+                    // themed card carrying their own emblem + colour instead of the
+                    // bare fallback, so their chart feels bespoke like the originals'.
+                    EmblemFrame(child: child, theme: theme, chores: chores, completedChoreIDs: completedChoreIDs, onToggle: onToggle)
+                } else {
+                    switch child.cardFrame {
+                    case "open-book":
+                        OpenBookFrame(child: child, theme: theme, chores: chores, completedChoreIDs: completedChoreIDs, onToggle: onToggle)
+                    case "bamboo-fence":
+                        BambooFenceFrame(child: child, theme: theme, chores: chores, completedChoreIDs: completedChoreIDs, onToggle: onToggle)
+                    case "held-sign":
+                        HeldSignFrame(child: child, theme: theme, chores: chores, completedChoreIDs: completedChoreIDs, onToggle: onToggle)
+                    default:
+                        PlainFrame(theme: theme, chores: chores, completedChoreIDs: completedChoreIDs, onToggle: onToggle)
+                    }
                 }
             }
         }
@@ -136,6 +143,36 @@ private struct HeldSignFrame: View {
                     .frame(width: 32, height: 32)
                     .accessibilityHidden(true)
                 Spacer()
+            }
+        }
+        .padding(8)
+        .background(RoundedRectangle(cornerRadius: 16).fill(SharedTokens.paper).shadow(radius: 1))
+    }
+}
+
+/// A parent-added child's day card: their emblem (chosen symbol or monogram, in
+/// their colour) over a coloured rail, then the chores. No legend mascot, but a
+/// deliberate, consistent look rather than the bare fallback.
+private struct EmblemFrame: View {
+    let child: Child
+    let theme: ChildTheme
+    let chores: [ResolvedChore]
+    let completedChoreIDs: Set<String>
+    let onToggle: (ResolvedChore) -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                ChildAvatarView(child: child, size: 34)
+                Spacer()
+            }
+            Rectangle()
+                .fill(theme.dotFill.opacity(0.4))
+                .frame(height: 3)
+            VStack(spacing: 4) {
+                ForEach(chores) { chore in
+                    ChoreRow(chore: chore, isComplete: completedChoreIDs.contains(chore.id), childTheme: theme, onToggle: { onToggle(chore) })
+                }
             }
         }
         .padding(8)

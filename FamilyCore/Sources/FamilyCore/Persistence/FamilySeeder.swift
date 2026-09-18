@@ -18,28 +18,51 @@ public enum FamilySeeder {
         source: ContractSource = BundledContractSource(),
         cloudActive: Bool = FamilyModelContainer.isCloudActive
     ) async throws {
-        // Already seeded here, or a marker has synced in from another device.
-        if try hasSeedMarker(context: context) { return }
-
         let hasLocalData = try !context.fetch(FetchDescriptor<Child>()).isEmpty
+        let markerAlreadyPresent = try hasSeedMarker(context: context)
 
         // A fresh local store on a CloudKit device may just be awaiting the
         // initial import. Give it a brief window to deliver an existing marker
-        // before we seed, so a newly-added device doesn't duplicate the family.
-        // Skipped when this device already has data (it seeded before markers
-        // existed) or CloudKit isn't active (nothing will arrive).
-        if cloudActive && !hasLocalData {
+        // (and the family-settings row) before we create anything, so a
+        // newly-added device doesn't duplicate the family. Skipped when this
+        // device already has data or CloudKit isn't active.
+        if cloudActive && !hasLocalData && !markerAlreadyPresent {
             for _ in 0..<5 {
                 try await Task.sleep(for: .seconds(1))
-                if try hasSeedMarker(context: context) { return }
+                if try hasSeedMarker(context: context) { break }
             }
         }
+
+        // Family-wide settings: move them off per-device UserDefaults into a
+        // synced row, once. Runs BEFORE the marker early-return so an
+        // already-seeded device (which has a marker but no settings row yet)
+        // still migrates its saved rotation start / ticket value / name / icon
+        // instead of losing them.
+        try migrateFamilySettingsIfNeeded(context: context)
+
+        // Already seeded here, or a marker has synced in from another device.
+        if try hasSeedMarker(context: context) { return }
 
         try seedChildrenAndChores(context: context, source: source)
         try seedRotationChores(context: context, source: source)
         try seedTicketsCatalog(context: context, source: source)
         try seedChoreCardsIfNeeded(context: context)
         try setSeedMarker(context: context)
+    }
+
+    /// Creates the single `FamilySettings` row if absent, carrying over any values
+    /// the family had already set in the old per-device `@AppStorage` keys so the
+    /// upgrade preserves their rotation start, ticket value, name, and icon.
+    private static func migrateFamilySettingsIfNeeded(context: ModelContext) throws {
+        guard try context.fetch(FetchDescriptor<FamilySettings>()).isEmpty else { return }
+        let defaults = UserDefaults.standard
+        context.insert(FamilySettings(
+            rotationEpochISO8601: defaults.string(forKey: "rotationEpochISO8601") ?? "",
+            weeklyChoreTicketValue: (defaults.object(forKey: "weeklyChoreTicketValue") as? Int) ?? 5,
+            rotationName: defaults.string(forKey: "rotationName") ?? "Rotation",
+            rotationIcon: defaults.string(forKey: "rotationIcon") ?? "arrow.triangle.2.circlepath"
+        ))
+        try context.save()
     }
 
     private static func hasSeedMarker(context: ModelContext) throws -> Bool {

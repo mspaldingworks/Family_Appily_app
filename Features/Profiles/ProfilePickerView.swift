@@ -24,12 +24,18 @@ public struct ProfilePickerView: View {
     @Query private var completions: [Completion]
     @Environment(\.modelContext) private var modelContext
 
-    @AppStorage("rotationEpochISO8601") private var rotationEpochISO8601 = ""
+    @Query private var familySettings: [FamilySettings]
     @AppStorage("hapticsEnabled") private var hapticsEnabled = true
     @AppStorage("soundEnabled") private var soundEnabled = false
-    @AppStorage("weeklyChoreTicketValue") private var weeklyChoreTicketValue = 5
-    @AppStorage("rotationName") private var rotationName = "Rotation"
-    @AppStorage("rotationIcon") private var rotationIcon = "arrow.triangle.2.circlepath"
+
+    // Family-wide settings now live in a synced FamilySettings record (D4), not
+    // per-device @AppStorage, so they match across the family's devices. Kept
+    // under the same names so the rest of the view is unchanged.
+    private var settings: FamilySettings? { familySettings.first }
+    private var rotationEpochISO8601: String { settings?.rotationEpochISO8601 ?? "" }
+    private var weeklyChoreTicketValue: Int { settings?.weeklyChoreTicketValue ?? 5 }
+    private var rotationName: String { settings?.rotationName ?? "Rotation" }
+    private var rotationIcon: String { settings?.rotationIcon ?? "arrow.triangle.2.circlepath" }
 
     /// Per-child counter that fires the +N ticket burst when a weekly chore is
     /// completed. Keyed by `ChildID.rawValue`; incrementing it plays the burst.

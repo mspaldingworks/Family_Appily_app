@@ -44,5 +44,5 @@ struct RootTabView: View {
 
 #Preview {
     RootTabView()
-        .modelContainer(for: [Child.self, Chore.self, ChoreAssignment.self, ChoreCard.self, Completion.self, RotationChore.self, EarnItem.self, SpendTier.self, TicketLedgerEntry.self, SeedMarker.self], inMemory: true)
+        .modelContainer(for: [Child.self, Chore.self, ChoreAssignment.self, ChoreCard.self, Completion.self, RotationChore.self, EarnItem.self, SpendTier.self, TicketLedgerEntry.self, SeedMarker.self, FamilySettings.self], inMemory: true)
 }

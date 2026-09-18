@@ -39,6 +39,13 @@ struct ChildSettingsView: View {
                 } footer: {
                     Text("This child's colour everywhere they appear.")
                 }
+                Section {
+                    emblemPicker
+                } header: {
+                    Text("Emblem")
+                } footer: {
+                    Text("A symbol for \(child.name), shown in their colour — or use their initial.")
+                }
             }
 
             Section {
@@ -111,6 +118,46 @@ struct ChildSettingsView: View {
             }
         }
         .padding(.vertical, 4)
+    }
+
+    /// The child's current colour, resolved the same way `ChildAvatarView` does,
+    /// so the emblem swatches preview in the exact colour they'll render.
+    private var emblemColor: Color {
+        ChildTheme.custom(hex: child.colorHex.isEmpty ? KidPalette.color(for: child.id) : child.colorHex).dotFill
+    }
+
+    /// Emblem chooser: a monogram cell (empty symbol) plus the `KidEmblem` set.
+    /// The pick is shown three ways (fill, ring, and the big avatar above), never
+    /// colour alone (§3.2); each is a 44pt tap target. Custom kids only.
+    private var emblemPicker: some View {
+        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 6), spacing: 8) {
+            emblemCell(symbol: "")
+            ForEach(KidEmblem.symbols, id: \.self) { emblemCell(symbol: $0) }
+        }
+        .padding(.vertical, 4)
+    }
+
+    private func emblemCell(symbol: String) -> some View {
+        let selected = child.avatarSymbol == symbol
+        return ZStack {
+            Circle().fill(emblemColor.opacity(selected ? 1 : 0.22))
+            if symbol.isEmpty {
+                Text(String(child.name.first ?? "?").uppercased())
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(selected ? .white : .primary)
+            } else {
+                Image(systemName: symbol)
+                    .font(.footnote.weight(.bold))
+                    .foregroundStyle(selected ? .white : .primary)
+            }
+        }
+        .frame(width: 34, height: 34)
+        .overlay(Circle().strokeBorder(Color.primary.opacity(selected ? 0.9 : 0.15), lineWidth: 2))
+        .frame(minWidth: 44, minHeight: 44)
+        .contentShape(Rectangle())
+        .onTapGesture { child.avatarSymbol = symbol }
+        .accessibilityLabel(symbol.isEmpty ? "Initial" : "Emblem \(symbol)")
+        .accessibilityAddTraits(selected ? [.isButton, .isSelected] : .isButton)
     }
 
     private func adjustButton(_ delta: Int) -> some View {

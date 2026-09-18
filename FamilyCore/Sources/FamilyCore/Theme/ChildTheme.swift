@@ -113,6 +113,19 @@ public enum KidPalette {
     }
 }
 
+/// Emblems a parent can give a child who isn't one of the three legend originals
+/// — a friendly SF Symbol shown in the child's colour as a mascot stand-in. All
+/// exist on the iOS 17 / macOS 14 minimum. An empty choice means "use a monogram
+/// of the name" instead.
+public enum KidEmblem {
+    public static let symbols: [String] = [
+        "star.fill", "heart.fill", "pawprint.fill", "soccerball", "bicycle",
+        "airplane", "leaf.fill", "tortoise.fill", "hare.fill", "bird.fill",
+        "fish.fill", "gamecontroller.fill", "paintbrush.fill", "music.note",
+        "sun.max.fill", "moon.fill", "sparkles", "flame.fill",
+    ]
+}
+
 /// Decorative-only colors from the mascot artwork. FAIL text contrast on white
 /// per tokens.json and must only be used as illustration fill — never as text
 /// color, tint, or the sole indicator of state. Kept in a separate type from
