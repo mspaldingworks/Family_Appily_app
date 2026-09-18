@@ -58,7 +58,8 @@ public enum ChoreResolver {
                 guard !assignedRotationChores.isEmpty else { return nil }
                 let label = assignedRotationChores.map(\.label).joined(separator: " + ")
                 let symbol = assignedRotationChores.first?.sfSymbol ?? chore.sfSymbol
-                return ResolvedChore(id: chore.id, label: label, sfSymbol: symbol, isRotationResolved: true, ticketValue: assignment.ticketValueOverride ?? chore.ticketValue)
+                // Weekly (rotation) chores are worth 5 tickets, everywhere they show.
+                return ResolvedChore(id: chore.id, label: label, sfSymbol: symbol, isRotationResolved: true, ticketValue: 5)
             }
 
             let label = assignment.displayLabelOverride ?? chore.defaultLabel

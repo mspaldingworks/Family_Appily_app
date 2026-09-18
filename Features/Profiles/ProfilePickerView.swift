@@ -28,6 +28,10 @@ public struct ProfilePickerView: View {
     @AppStorage("hapticsEnabled") private var hapticsEnabled = true
     @AppStorage("soundEnabled") private var soundEnabled = false
 
+    /// Per-child counter that fires the +5 ticket burst when a weekly chore is
+    /// completed. Keyed by `ChildID.rawValue`; incrementing it plays the burst.
+    @State private var burstTrigger: [String: Int] = [:]
+
     public init() {}
 
     public var body: some View {
@@ -44,7 +48,9 @@ public struct ProfilePickerView: View {
 
                     section("Today") {
                         ForEach(children) { child in
-                            kidRow(child, chores: todayChores(child, from: board), weekly: weeklyChore(child, from: rotation))
+                            kidRow(child, chores: todayChores(child, from: board),
+                                   weekly: weeklyChore(child, from: rotation),
+                                   burst: burstTrigger[child.childID?.rawValue ?? ""] ?? 0)
                         }
                     }
 
@@ -99,13 +105,14 @@ public struct ProfilePickerView: View {
 
     // MARK: One kid's row
 
-    private func kidRow(_ child: Child, chores dashes: [DashChore], weekly: DashChore?) -> some View {
+    private func kidRow(_ child: Child, chores dashes: [DashChore], weekly: DashChore?, burst: Int? = nil) -> some View {
         let theme = ChildTheme.theme(for: child.childID ?? .finley)
         return VStack(spacing: 10) {
             // The weekly (rotation) chore is anchored to the top of the card,
-            // with a white glow, and stays until it's checked off.
+            // with a white glow, and vanishes the moment it's checked off — a
+            // +5 ticket burst erupts from the bar in its place.
             if let weekly {
-                WeeklyChoreButton(dash: weekly, childName: child.name) { toggle(weekly) }
+                WeeklyChoreButton(dash: weekly, childName: child.name) { toggleWeekly(weekly) }
             }
 
             HStack(spacing: 12) {
@@ -136,6 +143,14 @@ public struct ProfilePickerView: View {
         .padding(10)
         .background(RoundedRectangle(cornerRadius: 22, style: .continuous).fill(theme.dotFill.opacity(0.18)))
         .overlay(RoundedRectangle(cornerRadius: 22, style: .continuous).strokeBorder(theme.dotFill.opacity(0.4), lineWidth: 1))
+        // The +5 burst plays over the top of the card, where the weekly bar sits.
+        .overlay(alignment: .top) {
+            if let burst {
+                TicketBurst(trigger: burst, tint: theme.dotFill)
+                    .padding(.top, 6)
+                    .allowsHitTesting(false)
+            }
+        }
     }
 
     private func kidBadge(_ child: Child) -> some View {
@@ -196,12 +211,14 @@ public struct ProfilePickerView: View {
 
     /// The child's weekly (rotation) chore for the week, if any — deduped to the
     /// earliest slot. Nil when the rotation isn't set up. Never "held over": a
-    /// weekly chore can be done anytime this week.
+    /// weekly chore can be done anytime this week. Once completed it returns nil
+    /// so the bar disappears (undo is available from the weekly chart, §3.5).
     private func weeklyChore(_ child: Child, from rotation: [ChoreOccurrence]) -> DashChore? {
         guard rotationEpoch != nil, let cid = child.childID,
               let first = rotation.filter({ $0.childID == cid }).min(by: { $0.date < $1.date }) else { return nil }
         let done = doneKeys.contains(WeeklyChoreBoard.key(childID: cid.rawValue, choreID: first.choreID, date: first.date))
-        return DashChore(occurrence: first, isDone: done, isHeldOver: false)
+        if done { return nil }
+        return DashChore(occurrence: first, isDone: false, isHeldOver: false)
     }
 
     private var doneKeys: Set<String> {
@@ -240,6 +257,22 @@ public struct ProfilePickerView: View {
             ticketEntries: ticketEntries, context: modelContext
         )
         if nowComplete { playFeedback() }
+    }
+
+    /// Completing a weekly chore: award its tickets, then fire the +5 burst from
+    /// the bar (which the data change simultaneously removes). Weekly chores are
+    /// only ever shown when not-done, so this always awards.
+    private func toggleWeekly(_ dash: DashChore) {
+        let occ = dash.occurrence
+        let nowComplete = ChoreCompletion.toggle(
+            childID: occ.childID.rawValue, choreID: occ.choreID, date: occ.date,
+            ticketValue: occ.ticketValue, completions: completions,
+            ticketEntries: ticketEntries, context: modelContext
+        )
+        if nowComplete {
+            burstTrigger[occ.childID.rawValue, default: 0] += 1
+            playFeedback()
+        }
     }
 
     private func playFeedback() {
@@ -314,8 +347,8 @@ private struct ChoreTile: View {
 
 /// The child's weekly (rotation) chore, as a thin button anchored to the top of
 /// their card. It carries a **white glow** to set it apart from the regular
-/// chore tiles, and stays prominent until it's checked off — once done it dims
-/// to a struck-through, glow-less state (still tappable to undo, per §3.5).
+/// chore tiles. It only ever renders while incomplete — checking it off removes
+/// it entirely (and fires a +5 ticket burst); undo lives on the weekly chart.
 private struct WeeklyChoreButton: View {
     let dash: DashChore
     let childName: String
@@ -326,12 +359,11 @@ private struct WeeklyChoreButton: View {
     var body: some View {
         Button(action: onToggle) {
             HStack(spacing: 8) {
-                Image(systemName: dash.isDone ? "checkmark.circle.fill" : "arrow.triangle.2.circlepath")
+                Image(systemName: "arrow.triangle.2.circlepath")
                     .font(.subheadline.weight(.bold))
                 Text(occ.label)
                     .font(.subheadline.weight(.semibold))
                     .lineLimit(1)
-                    .strikethrough(dash.isDone, color: .secondary)
                 Spacer(minLength: 6)
                 HStack(spacing: 3) {
                     Image(systemName: "star.fill").font(.caption2)
@@ -339,22 +371,84 @@ private struct WeeklyChoreButton: View {
                 }
             }
             .foregroundStyle(.primary)
-            .opacity(dash.isDone ? 0.55 : 1)
             .padding(.horizontal, 12)
             .frame(maxWidth: .infinity, minHeight: 40)
             .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color.black.opacity(0.20)))
             .overlay(
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .strokeBorder(dash.isDone ? Color.white.opacity(0.15) : Color.white.opacity(0.9), lineWidth: 1.5)
+                    .strokeBorder(Color.white.opacity(0.9), lineWidth: 1.5)
             )
-            .shadow(color: dash.isDone ? .clear : Color.white.opacity(0.8), radius: dash.isDone ? 0 : 6)
+            .shadow(color: Color.white.opacity(0.8), radius: 6)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Weekly chore: \(occ.label) for \(childName), \(occ.ticketValue) ticket\(occ.ticketValue == 1 ? "" : "s")")
-        .accessibilityValue(dash.isDone ? "Done" : "Not done")
         .accessibilityAddTraits(.isButton)
-        .accessibilityHint("Marks the weekly chore \(dash.isDone ? "not done" : "done")")
+        .accessibilityHint("Marks the weekly chore done and awards \(occ.ticketValue) tickets")
+    }
+}
+
+/// The +5 ticket burst that erupts from the weekly bar when a weekly chore is
+/// completed (§3.7). Five stars fly outward and fade while a "+5" pops up; under
+/// Reduce Motion it collapses to a still "+5 ⭐️" cross-fade with no motion.
+/// Purely decorative — hidden from VoiceOver, non-interactive.
+private struct TicketBurst: View {
+    let trigger: Int
+    let tint: Color
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var fire = false
+    @State private var visible = false
+
+    private let starCount = 5
+
+    var body: some View {
+        ZStack {
+            if visible {
+                if reduceMotion {
+                    label.opacity(fire ? 0 : 1)
+                } else {
+                    ForEach(0..<starCount, id: \.self) { i in
+                        let angle = Double(i) / Double(starCount) * 2 * .pi - .pi / 2
+                        Image(systemName: "star.fill")
+                            .font(.system(size: 15, weight: .black))
+                            .foregroundStyle(.yellow)
+                            .shadow(color: .orange.opacity(0.6), radius: 2)
+                            .scaleEffect(fire ? 0.5 : 1)
+                            .opacity(fire ? 0 : 1)
+                            .offset(x: fire ? CGFloat(cos(angle)) * 62 : 0,
+                                    y: fire ? CGFloat(sin(angle)) * 40 : 0)
+                    }
+                    label
+                        .offset(y: fire ? -28 : 0)
+                        .scaleEffect(fire ? 1.15 : 0.7)
+                        .opacity(fire ? 0 : 1)
+                }
+            }
+        }
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+        .onChange(of: trigger) { _, newValue in
+            guard newValue > 0 else { return }
+            let duration = reduceMotion ? 0.3 : 0.45
+            fire = false
+            visible = true
+            DispatchQueue.main.async {
+                withAnimation(.easeOut(duration: duration)) { fire = true }
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + duration + 0.05) { visible = false }
+        }
+    }
+
+    private var label: some View {
+        HStack(spacing: 2) {
+            Text("+5")
+            Image(systemName: "star.fill").font(.caption)
+        }
+        .font(.system(.title3, design: .rounded).weight(.heavy))
+        .foregroundStyle(tint)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 3)
+        .background(Capsule().fill(.ultraThinMaterial))
     }
 }
