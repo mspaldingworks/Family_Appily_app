@@ -27,8 +27,9 @@ public struct ProfilePickerView: View {
     @AppStorage("rotationEpochISO8601") private var rotationEpochISO8601 = ""
     @AppStorage("hapticsEnabled") private var hapticsEnabled = true
     @AppStorage("soundEnabled") private var soundEnabled = false
+    @AppStorage("weeklyChoreTicketValue") private var weeklyChoreTicketValue = 5
 
-    /// Per-child counter that fires the +5 ticket burst when a weekly chore is
+    /// Per-child counter that fires the +N ticket burst when a weekly chore is
     /// completed. Keyed by `ChildID.rawValue`; incrementing it plays the burst.
     @State private var burstTrigger: [String: Int] = [:]
 
@@ -146,7 +147,7 @@ public struct ProfilePickerView: View {
         // The +5 burst plays over the top of the card, where the weekly bar sits.
         .overlay(alignment: .top) {
             if let burst {
-                TicketBurst(trigger: burst, tint: theme.dotFill)
+                TicketBurst(trigger: burst, tint: theme.dotFill, value: weeklyChoreTicketValue)
                     .padding(.top, 6)
                     .allowsHitTesting(false)
             }
@@ -205,7 +206,8 @@ public struct ProfilePickerView: View {
             assignments: assignments,
             chores: chores,
             rotationEpoch: rotationEpoch,
-            rotationContract: rotationContract
+            rotationContract: rotationContract,
+            weeklyTicketValue: weeklyChoreTicketValue
         ).map(withCardStyle)
     }
 
@@ -396,6 +398,7 @@ private struct WeeklyChoreButton: View {
 private struct TicketBurst: View {
     let trigger: Int
     let tint: Color
+    let value: Int
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var fire = false
     @State private var visible = false
@@ -442,7 +445,7 @@ private struct TicketBurst: View {
 
     private var label: some View {
         HStack(spacing: 2) {
-            Text("+5")
+            Text("+\(value)")
             Image(systemName: "star.fill").font(.caption)
         }
         .font(.system(.title3, design: .rounded).weight(.heavy))

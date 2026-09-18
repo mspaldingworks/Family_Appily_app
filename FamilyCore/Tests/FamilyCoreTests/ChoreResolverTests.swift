@@ -28,6 +28,29 @@ struct ChoreResolverTests {
         #expect(resolved.first?.label.contains("Feed Cats") == true)
     }
 
+    @Test func weeklyChoreUsesAdjustableTicketValue() throws {
+        let rotation = try BundledContractSource().loadRotation()
+        let assignment = ChoreAssignment(childID: "finley", choreID: "weekly-chore", weekday: .sunday, displayLabelOverride: nil)
+        let choreCatalog = [Chore(id: "weekly-chore", type: .rotationResolved, defaultLabel: "Weekly Chore", sfSymbol: "star.circle", category: nil, note: nil)]
+        let calendar = Calendar(identifier: .gregorian)
+        let epoch = calendar.date(from: DateComponents(year: 2026, month: 1, day: 4))!
+
+        // Defaults to 5 when unspecified.
+        let defaulted = ChoreResolver.chores(
+            for: .finley, weekday: .sunday, assignments: [assignment], chores: choreCatalog,
+            rotationEpoch: epoch, rotationContract: rotation, on: epoch
+        )
+        #expect(defaulted.first?.ticketValue == 5)
+
+        // Honors the adult-set value everywhere the slot resolves.
+        let custom = ChoreResolver.chores(
+            for: .finley, weekday: .sunday, assignments: [assignment], chores: choreCatalog,
+            rotationEpoch: epoch, rotationContract: rotation, weeklyTicketValue: 8, on: epoch
+        )
+        #expect(custom.first?.isRotationResolved == true)
+        #expect(custom.first?.ticketValue == 8)
+    }
+
     @Test func showsSetupPromptWhenEpochUnset() throws {
         let rotation = try BundledContractSource().loadRotation()
         let assignment = ChoreAssignment(childID: "arthur", choreID: "weekly-chore", weekday: .sunday, displayLabelOverride: nil)

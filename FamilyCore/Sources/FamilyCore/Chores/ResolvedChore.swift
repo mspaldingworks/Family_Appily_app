@@ -37,6 +37,7 @@ public enum ChoreResolver {
         chores: [Chore],
         rotationEpoch: Date?,
         rotationContract: RotationContract,
+        weeklyTicketValue: Int = 5,
         on date: Date = .now,
         engine: RotationEngine = RotationEngine()
     ) -> [ResolvedChore] {
@@ -58,8 +59,9 @@ public enum ChoreResolver {
                 guard !assignedRotationChores.isEmpty else { return nil }
                 let label = assignedRotationChores.map(\.label).joined(separator: " + ")
                 let symbol = assignedRotationChores.first?.sfSymbol ?? chore.sfSymbol
-                // Weekly (rotation) chores are worth 5 tickets, everywhere they show.
-                return ResolvedChore(id: chore.id, label: label, sfSymbol: symbol, isRotationResolved: true, ticketValue: 5)
+                // Weekly (rotation) chores are worth the adult-set weekly value
+                // (Parents ▸ Family rotation; defaults to 5), everywhere they show.
+                return ResolvedChore(id: chore.id, label: label, sfSymbol: symbol, isRotationResolved: true, ticketValue: weeklyTicketValue)
             }
 
             let label = assignment.displayLabelOverride ?? chore.defaultLabel

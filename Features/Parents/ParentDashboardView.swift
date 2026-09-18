@@ -18,6 +18,7 @@ struct ParentDashboardView: View {
     @Query private var chores: [Chore]
 
     @AppStorage("rotationEpochISO8601") private var rotationEpochISO8601 = ""
+    @AppStorage("weeklyChoreTicketValue") private var weeklyChoreTicketValue = 5
     @AppStorage("hapticsEnabled") private var hapticsEnabled = true
     @AppStorage("soundEnabled") private var soundEnabled = false
     @AppStorage("familyCalendar.writeThrough") private var writeChoresToCalendars = false
@@ -49,12 +50,19 @@ struct ParentDashboardView: View {
                 rotationEpochISO8601 = ISO8601DateFormatter().string(from: Calendar.current.startOfDay(for: draftEpoch))
             }
             .frame(minHeight: 44)
+            Stepper(value: $weeklyChoreTicketValue, in: 1...20) {
+                Label("Weekly chore tickets: \(weeklyChoreTicketValue)", systemImage: "star.fill")
+                    .labelStyle(.titleAndIcon)
+            }
+            .frame(minHeight: 44)
+            .accessibilityValue("\(weeklyChoreTicketValue) tickets")
         } header: {
             Text("Family rotation")
         } footer: {
-            Text(storedEpoch.map {
+            Text((storedEpoch.map {
                 "The Weekly Chore slots fill from the rotation that began \($0.formatted(date: .abbreviated, time: .omitted)). Change this only if Week 1 on the wall chart was a different Sunday."
             } ?? "Set the Sunday your family rotation's Week 1 began. This fills every child's Weekly Chore slot automatically — you never type it in weekly.")
+            + "\n\nEvery weekly (rotation) chore is worth this many tickets when a child checks it off. Applies to all kids.")
         }
     }
 

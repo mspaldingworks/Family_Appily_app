@@ -52,6 +52,7 @@ public enum ChoreCalendarProjector {
         chores: [Chore],
         rotationEpoch: Date?,
         rotationContract: RotationContract?,
+        weeklyTicketValue: Int = 5,
         calendar: Calendar = .current
     ) -> [ChoreOccurrence] {
         var result: [ChoreOccurrence] = []
@@ -66,7 +67,8 @@ public enum ChoreCalendarProjector {
                     let resolved = resolvedChores(
                         for: child, weekday: weekday, on: day,
                         assignments: assignments, chores: chores,
-                        rotationEpoch: rotationEpoch, rotationContract: rotationContract
+                        rotationEpoch: rotationEpoch, rotationContract: rotationContract,
+                        weeklyTicketValue: weeklyTicketValue
                     )
                     for chore in resolved {
                         result.append(ChoreOccurrence(
@@ -96,13 +98,15 @@ public enum ChoreCalendarProjector {
         assignments: [ChoreAssignment],
         chores: [Chore],
         rotationEpoch: Date?,
-        rotationContract: RotationContract?
+        rotationContract: RotationContract?,
+        weeklyTicketValue: Int
     ) -> [ResolvedChore] {
         if let rotationContract {
             return ChoreResolver.chores(
                 for: child, weekday: weekday,
                 assignments: assignments, chores: chores,
                 rotationEpoch: rotationEpoch, rotationContract: rotationContract,
+                weeklyTicketValue: weeklyTicketValue,
                 on: day
             )
         }
