@@ -94,6 +94,12 @@ struct ParentDashboardView: View {
             }
             .frame(minHeight: 44)
             .accessibilityValue("\(weeklyChoreTicketValue) tickets")
+            NavigationLink {
+                FamilyRotationView()
+            } label: {
+                Label("View rotation schedule", systemImage: "calendar.badge.clock")
+            }
+            .frame(minHeight: 44)
         } header: {
             Text("Family rotation")
         } footer: {
